@@ -36,12 +36,14 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
     {
         // For reference: https://github.com/turbot/steampipe-plugin-github/blob/main/github/table_github_search_issue.go.
         builder.AddDataProperty()
+            .AddDataProperty()
             .AddProperty("id", p => p.Id, "Issue id.")
             .AddProperty("title", p => p.Title, "Issue title.")
             .AddProperty("body", p => p.Body, "Issue body.")
             .AddProperty("state", p => p.State.StringValue, "Issue state.")
             .AddProperty("author", p => p.User.Login, "Issue author.")
             .AddProperty("comments_count", p => p.Comments, "Number of comments.")
+            .AddProperty("url", p => p.HtmlUrl)
             .AddProperty("repository", p => GitHubUtils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.");
     }
