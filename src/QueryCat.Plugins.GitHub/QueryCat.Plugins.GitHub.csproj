@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <RootNamespace>QueryCat.Plugins.Github</RootNamespace>
     <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <LangVersion>default</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageVersion>0.1.0</PackageVersion>
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
@@ -18,11 +18,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Octokit" Version="4.0.3" />
+    <PackageReference Include="Octokit" Version="4.0.3"  />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Octokit.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

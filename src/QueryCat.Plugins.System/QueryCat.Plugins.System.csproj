@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>default</LangVersion>
     <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>0.1.0</Version>
     <Title>System Functions</Title>
     <Authors>Ivan Kozhin</Authors>
