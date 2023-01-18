@@ -42,9 +42,10 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("body", p => p.Body, "Issue body.")
             .AddProperty("state", p => p.State.StringValue, "Issue state.")
             .AddProperty("author", p => p.User.Login, "Issue author.")
-            .AddProperty("comments_count", p => p.Comments, "Number of comments.")
+            .AddProperty("comments", p => p.Comments, "Number of comments.")
+            .AddProperty("number", p => p.Number, "Issue number.")
             .AddProperty("url", p => p.HtmlUrl)
-            .AddProperty("repository", p => GitHubUtils.ExtractRepositoryFullNameFromUrl(p.Url))
+            .AddProperty("repository_full_name", p => GitHubUtils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.");
     }
 

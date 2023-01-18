@@ -10,6 +10,8 @@ internal abstract class BaseRowsInput<TClass> : ClassEnumerableInput<TClass> whe
 
     protected string Repository { get; } = string.Empty;
 
+    protected string FullRepositoryName => GetFullRepositoryName(Owner, Repository);
+
     protected GitHubClient Client { get; }
 
     public BaseRowsInput(string fullRepositoryName, string? token = null) : this(token)
@@ -26,7 +28,7 @@ internal abstract class BaseRowsInput<TClass> : ClassEnumerableInput<TClass> whe
         }
     }
 
-    private static (string Owner, string Repository) SplitFullRepositoryName(string fullRepositoryName)
+    protected static (string Owner, string Repository) SplitFullRepositoryName(string fullRepositoryName)
     {
         var arr = fullRepositoryName.Split('/', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         if (arr.Length != 2)
@@ -35,4 +37,7 @@ internal abstract class BaseRowsInput<TClass> : ClassEnumerableInput<TClass> whe
         }
         return (arr[0], arr[1]);
     }
+
+    protected static string GetFullRepositoryName(string owner, string repository)
+        => $"{owner}/{repository}";
 }

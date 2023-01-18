@@ -7,7 +7,7 @@ using QueryCat.Backend.Types;
 namespace QueryCat.Plugins.Github;
 
 /// <summary>
-/// GitHub commit input.
+/// GitHub commits input.
 /// </summary>
 /// <remarks>
 /// https://docs.github.com/en/rest/commits/commits.
@@ -37,7 +37,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
         builder
             .AddDataProperty()
             .AddProperty("sha", p => p.Sha, "SHA of the commit.")
-            .AddProperty("author_login", p => p.Author.Login, "The login name of the author of the commit.")
+            .AddProperty("author_name", p => p.Commit.Author.Name, "The login name of the author of the commit.")
             .AddProperty("author_date", p => p.Commit.Author.Date, "Timestamp when the author made this commit.")
             .AddProperty("committer_login", p => p.Committer.Login, "The login name of committer of the commit.")
             .AddProperty("verified", p => p.Commit.Verification.Verified, "True if the commit was verified with a signature.")

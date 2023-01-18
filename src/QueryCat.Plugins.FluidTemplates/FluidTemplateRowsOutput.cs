@@ -133,6 +133,11 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     }
 
     /// <inheritdoc />
+    public void Reset()
+    {
+    }
+
+    /// <inheritdoc />
     public void Write(Row row)
     {
         // Cache here and write all on close.
