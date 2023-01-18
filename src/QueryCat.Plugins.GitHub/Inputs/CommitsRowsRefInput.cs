@@ -4,7 +4,7 @@ using QueryCat.Backend.Functions;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
 
-namespace QueryCat.Plugins.Github;
+namespace QueryCat.Plugins.Github.Inputs;
 
 /// <summary>
 /// GitHub commit SHA input.
@@ -22,7 +22,7 @@ internal class CommitsRowsRefInput : CommitsRowsInput
     {
         var fullRepositoryName = args.GetAt(0).AsString;
         var sha = args.GetAt(1).AsString;
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(GitHubFunctions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
 
         return VariantValue.CreateFromObject(new CommitsRowsRefInput(fullRepositoryName, sha, token));
     }

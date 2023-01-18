@@ -3,7 +3,7 @@ namespace QueryCat.Plugins.Github;
 /// <summary>
 /// GitHub utils.
 /// </summary>
-internal static class GitHubUtils
+internal static class Utils
 {
     public static string ExtractRepositoryFullNameFromUrl(string url)
     {

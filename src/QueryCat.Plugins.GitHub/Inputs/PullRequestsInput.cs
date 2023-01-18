@@ -4,7 +4,7 @@ using QueryCat.Backend.Functions;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
 
-namespace QueryCat.Plugins.Github;
+namespace QueryCat.Plugins.Github.Inputs;
 
 /// <summary>
 /// GitHub pull requests input.
@@ -18,7 +18,7 @@ internal class PullRequestsInput : BaseRowsInput<PullRequest>
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
     public static VariantValue GitHubPullsFunction(FunctionCallInfo args)
     {
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(GitHubFunctions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
         return VariantValue.CreateFromObject(new PullRequestsInput(token));
     }
 

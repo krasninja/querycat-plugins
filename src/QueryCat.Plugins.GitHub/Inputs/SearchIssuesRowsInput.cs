@@ -4,7 +4,7 @@ using QueryCat.Backend.Functions;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
 
-namespace QueryCat.Plugins.Github;
+namespace QueryCat.Plugins.Github.Inputs;
 
 /// <summary>
 /// GitHub search issues input.
@@ -21,7 +21,7 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
     public static VariantValue GitHubSearchIssuesFunction(FunctionCallInfo args)
     {
         var term = args.GetAt(0).AsString;
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(GitHubFunctions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
 
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
@@ -45,7 +45,7 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("comments", p => p.Comments, "Number of comments.")
             .AddProperty("number", p => p.Number, "Issue number.")
             .AddProperty("url", p => p.HtmlUrl)
-            .AddProperty("repository_full_name", p => GitHubUtils.ExtractRepositoryFullNameFromUrl(p.Url))
+            .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.");
     }
 

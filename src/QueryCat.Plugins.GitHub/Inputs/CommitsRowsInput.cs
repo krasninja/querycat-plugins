@@ -4,7 +4,7 @@ using QueryCat.Backend.Functions;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
 
-namespace QueryCat.Plugins.Github;
+namespace QueryCat.Plugins.Github.Inputs;
 
 /// <summary>
 /// GitHub commits input.
@@ -19,7 +19,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     public static VariantValue GitHubCommitsFunction(FunctionCallInfo args)
     {
         var fullRepositoryName = args.GetAt(0).AsString;
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(GitHubFunctions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
 
         return VariantValue.CreateFromObject(new CommitsRowsInput(fullRepositoryName, token));
     }

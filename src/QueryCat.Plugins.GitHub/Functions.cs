@@ -7,7 +7,7 @@ namespace QueryCat.Plugins.Github;
 /// <summary>
 /// GitHub functions.
 /// </summary>
-internal static class GitHubFunctions
+internal static class Functions
 {
     public const string GitHubToken = "github-access-token";
 
