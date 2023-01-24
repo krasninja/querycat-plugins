@@ -14,22 +14,20 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal class CommitsRowsRefInput : CommitsRowsInput
 {
-    private readonly string _sha;
-
     [Description("Return Github commit info of specific repository.")]
-    [FunctionSignature("github_commits_ref(repository: string, sha: string): object<IRowsInput>")]
+    [FunctionSignature("github_commits_ref(): object<IRowsInput>")]
     public static VariantValue GitHubCommitsRefFunction(FunctionCallInfo args)
     {
-        var fullRepositoryName = args.GetAt(0).AsString;
-        var sha = args.GetAt(1).AsString;
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
-
-        return VariantValue.CreateFromObject(new CommitsRowsRefInput(fullRepositoryName, sha, token));
+        return VariantValue.CreateFromObject(new CommitsRowsRefInput(token));
     }
 
-    public CommitsRowsRefInput(string fullRepositoryName, string sha, string token) : base(fullRepositoryName, token)
+    private string _sha = string.Empty;
+    private string _owner = string.Empty;
+    private string _repository = string.Empty;
+
+    public CommitsRowsRefInput(string token) : base(token)
     {
-        _sha = sha;
     }
 
     /// <inheritdoc />
@@ -37,13 +35,27 @@ internal class CommitsRowsRefInput : CommitsRowsInput
     {
         base.Initialize(builder);
         builder
+            .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
+            .AddProperty("sha", _ => _sha, "SHA of the commit.")
             .AddProperty("additions", p => p.Stats.Additions, "The number of additions in the commit.")
             .AddProperty("deletions", p => p.Stats.Deletions, "The number of deletions in the commit.");
     }
 
     /// <inheritdoc />
+    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
+    {
+        inputInfo
+            .AddKeyColumn("repository_full_name",
+                isRequired: true,
+                action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString))
+            .AddKeyColumn("sha",
+                isRequired: true,
+                action: v => _sha = v.AsString);
+    }
+
+    /// <inheritdoc />
     protected override IEnumerable<GitHubCommit> GetData(ClassEnumerableInputFetch<GitHubCommit> fetch)
     {
-        return fetch.FetchOne(async ct => await Client.Repository.Commit.Get(Owner, Repository, _sha));
+        return fetch.FetchOne(async ct => await Client.Repository.Commit.Get(_owner, _repository, _sha));
     }
 }

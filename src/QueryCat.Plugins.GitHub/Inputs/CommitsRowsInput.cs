@@ -15,18 +15,18 @@ namespace QueryCat.Plugins.Github.Inputs;
 internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
 {
     [Description("Return Github commits of specific repository.")]
-    [FunctionSignature("github_commits(repository: string): object<IRowsInput>")]
+    [FunctionSignature("github_commits(): object<IRowsInput>")]
     public static VariantValue GitHubCommitsFunction(FunctionCallInfo args)
     {
-        var fullRepositoryName = args.GetAt(0).AsString;
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
-
-        return VariantValue.CreateFromObject(new CommitsRowsInput(fullRepositoryName, token));
+        return VariantValue.CreateFromObject(new CommitsRowsInput(token));
     }
 
     private readonly CommitRequest _request = new();
+    private string _owner = string.Empty;
+    private string _repository = string.Empty;
 
-    public CommitsRowsInput(string fullRepositoryName, string token) : base(fullRepositoryName, token)
+    public CommitsRowsInput(string token) : base(token)
     {
     }
 
@@ -36,6 +36,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
         // For reference: https://github.com/turbot/steampipe-plugin-github/blob/main/github/table_github_commit.go.
         builder
             .AddDataProperty()
+            .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
             .AddProperty("sha", p => p.Sha, "SHA of the commit.")
             .AddProperty("author_name", p => p.Commit.Author.Name, "The login name of the author of the commit.")
             .AddProperty("author_date", p => p.Commit.Author.Date, "Timestamp when the author made this commit.")
@@ -49,6 +50,9 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     {
         inputInfo
             .SetInputArguments(Owner, Repository)
+            .AddKeyColumn("repository_full_name",
+                isRequired: true,
+                action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString))
             .AddKeyColumn("sha",
                 operation: VariantValue.Operation.GreaterOrEquals, VariantValue.Operation.Greater,
                 action: v => _request.Sha = v.AsString)
@@ -72,8 +76,8 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
         return fetch.FetchPaged(async (page, limit, ct) =>
         {
             return await Client.Repository.Commit.GetAll(
-                Owner,
-                Repository,
+                _owner,
+                _repository,
                 _request,
                 new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
         });
