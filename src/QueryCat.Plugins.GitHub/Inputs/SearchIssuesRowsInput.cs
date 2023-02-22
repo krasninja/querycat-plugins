@@ -17,12 +17,11 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
     private readonly string _term;
 
     [Description("Search Github issues and pull requests.")]
-    [FunctionSignature("github_search_issues(term?: string): object<IRowsInput>")]
+    [FunctionSignature("github_search_issues(term?: string = 'is:open archived:false assignee:@me'): object<IRowsInput>")]
     public static VariantValue GitHubSearchIssuesFunction(FunctionCallInfo args)
     {
         var term = args.GetAt(0).AsString;
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
-
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
 

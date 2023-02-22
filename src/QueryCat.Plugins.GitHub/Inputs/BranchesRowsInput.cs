@@ -9,19 +9,23 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <summary>
 /// GitHub branches input.
 /// </summary>
+/// <remarks>
+/// https://docs.github.com/en/rest/branches/branches.
+/// </remarks>
 internal class BranchesRowsInput : BaseRowsInput<Branch>
 {
     [Description("Return Github branches of specific repository.")]
-    [FunctionSignature("github_branches(repository: string): object<IRowsInput>")]
+    [FunctionSignature("github_branches(): object<IRowsInput>")]
     public static VariantValue GitHubBranchesFunction(FunctionCallInfo args)
     {
-        var fullRepositoryName = args.GetAt(0).AsString;
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
-
-        return VariantValue.CreateFromObject(new BranchesRowsInput(fullRepositoryName, token));
+        return VariantValue.CreateFromObject(new BranchesRowsInput(token));
     }
 
-    public BranchesRowsInput(string fullRepositoryName, string token) : base(fullRepositoryName, token)
+    private string _owner = string.Empty;
+    private string _repository = string.Empty;
+
+    public BranchesRowsInput(string token) : base(token)
     {
     }
 
@@ -30,10 +34,20 @@ internal class BranchesRowsInput : BaseRowsInput<Branch>
     {
         // For reference: https://github.com/turbot/steampipe-plugin-github/blob/main/github/table_github_branch.go.
         builder
+            .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
             .AddProperty("name", p => p.Name, "Branch name.")
             .AddProperty("commit_sha", p => p.Commit.Sha, "Commit SHA the branch refers to.")
             .AddProperty("commit_url", p => p.Commit.Url, "Commit URL the branch refers to.")
             .AddProperty("protected", p => p.Protected, "True if branch is protected.");
+    }
+
+    /// <inheritdoc />
+    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
+    {
+        inputInfo
+            .AddKeyColumn("repository_full_name",
+                isRequired: true,
+                action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
     }
 
     /// <inheritdoc />
@@ -42,7 +56,7 @@ internal class BranchesRowsInput : BaseRowsInput<Branch>
         fetch.PageStart = 1;
         return fetch.FetchPaged(async (page, limit, ct) =>
             {
-                return await Client.Repository.Branch.GetAll(Owner, Repository,
+                return await Client.Repository.Branch.GetAll(_owner, _repository,
                         new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
             });
     }
