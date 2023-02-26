@@ -12,21 +12,21 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <remarks>
 /// https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request.
 /// </remarks>
-internal class PullRequestsInput : BaseRowsInput<PullRequest>
+internal class PullRequestsRowsInput : BaseRowsInput<PullRequest>
 {
     [Description("Return Github pull requests of specific repository.")]
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
     public static VariantValue GitHubPullsFunction(FunctionCallInfo args)
     {
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
-        return VariantValue.CreateFromObject(new PullRequestsInput(token));
+        return VariantValue.CreateFromObject(new PullRequestsRowsInput(token));
     }
 
     private string _owner = string.Empty;
     private string _repository = string.Empty;
     private int _number;
 
-    public PullRequestsInput(string token) : base(token)
+    public PullRequestsRowsInput(string token) : base(token)
     {
     }
 

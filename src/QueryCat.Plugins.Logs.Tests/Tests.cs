@@ -3,7 +3,7 @@ using QueryCat.Backend.Execution;
 
 namespace QueryCat.Plugins.Logs.Tests;
 
-public class Tests
+public sealed class Tests : IDisposable
 {
     private readonly Backend.Tests.TestThread _testThread = new();
 
@@ -24,4 +24,9 @@ public class Tests
     }
 
     public static IEnumerable<object[]> GetData() => Backend.Tests.TestThread.GetTestFiles();
+
+    public void Dispose()
+    {
+        _testThread.Dispose();
+    }
 }

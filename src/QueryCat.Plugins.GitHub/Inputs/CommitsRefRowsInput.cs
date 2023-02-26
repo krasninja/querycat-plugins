@@ -12,21 +12,21 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <remarks>
 /// https://docs.github.com/en/rest/commits/commits#get-a-commit.
 /// </remarks>
-internal class CommitsRowsRefInput : CommitsRowsInput
+internal class CommitsRefRowsInput : CommitsRowsInput
 {
     [Description("Return Github commit info of specific repository.")]
     [FunctionSignature("github_commits_ref(): object<IRowsInput>")]
     public static VariantValue GitHubCommitsRefFunction(FunctionCallInfo args)
     {
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
-        return VariantValue.CreateFromObject(new CommitsRowsRefInput(token));
+        return VariantValue.CreateFromObject(new CommitsRefRowsInput(token));
     }
 
     private string _sha = string.Empty;
     private string _owner = string.Empty;
     private string _repository = string.Empty;
 
-    public CommitsRowsRefInput(string token) : base(token)
+    public CommitsRefRowsInput(string token) : base(token)
     {
     }
 
