@@ -4,25 +4,19 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <LangVersion>default</LangVersion>
-    <PackageVersion>0.1.0</PackageVersion>
-    <Title>Fluid Templates</Title>
-    <Authors>Ivan Kozhin</Authors>
-    <Description>Fluid is an open-source .NET template engine based on the Liquid template language. It's a secure template language that is also very accessible for non-programmer audiences.
-
-Website: https://github.com/sebastienros/fluid</Description>
-    <RepositoryType>git</RepositoryType>
     <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
-    <PackageTags>fluid template querycat</PackageTags>
-    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.1.0</Version>
+    <Title>JIRA Plugin</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>querycat jira</PackageTags>
+    <PackageProjectUrl>https://github.com/krasninja/querycat</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/krasninja/querycat-plugins</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="108.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

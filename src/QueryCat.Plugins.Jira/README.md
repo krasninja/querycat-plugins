@@ -1,0 +1,1 @@
+# QueryCat Plugin for JIRA
