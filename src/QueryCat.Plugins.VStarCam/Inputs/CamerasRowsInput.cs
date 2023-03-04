@@ -30,7 +30,7 @@ internal class CamerasRowsInput : ClassEnumerableInput<Camera>
     {
         return fetch.FetchAll(async ct =>
         {
-            var finder = new CamerasFinder();
+            using var finder = new CamerasFinder();
             return await finder.FindAsync(ct);
         });
     }

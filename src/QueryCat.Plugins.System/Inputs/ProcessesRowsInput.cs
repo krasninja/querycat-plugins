@@ -2,20 +2,14 @@
 using System.Diagnostics;
 using QueryCat.Backend.Functions;
 using QueryCat.Backend.Storage;
-using QueryCat.Backend.Types;
 
-namespace QueryCat.Plugins.System.System;
+namespace QueryCat.Plugins.System.Inputs;
 
-internal class ProcessesRowsInput : ClassEnumerableInput<ProcessesRowsInput.ProcessDto>
+[Description("All running processes on the host system.")]
+[FunctionSignature("sys_processes")]
+internal sealed class ProcessesRowsInput : ClassEnumerableInput<ProcessesRowsInput.ProcessDto>
 {
-    [Description("All running processes on the host system.")]
-    [FunctionSignature("sys_ps(): object<IRowsInput>")]
-    public static VariantValue SystemProcesses(FunctionCallInfo args)
-    {
-        return VariantValue.CreateFromObject(new ProcessesRowsInput());
-    }
-
-    public class ProcessDto
+    internal class ProcessDto
     {
         public int Pid { get; set; }
 
@@ -38,14 +32,15 @@ internal class ProcessesRowsInput : ClassEnumerableInput<ProcessesRowsInput.Proc
     protected override void Initialize(ClassRowsFrameBuilder<ProcessDto> builder)
     {
         // For reference: https://osquery.io/schema/5.5.1/#processes.
-        builder.AddProperty("pid", p => p.Pid, "Process id.");
-        builder.AddProperty("name", p => p.FileName, "Process path.");
-        builder.AddProperty("command", p => p.Command, "Process command line.");
-        builder.AddProperty("base_priority", p => p.BasePriority, "Base process priority.");
-        builder.AddProperty("start_time", p => p.StartTime, "Process start time.");
-        builder.AddProperty("working_set", p => p.WorkingSet, "Amount of physical memory.");
-        builder.AddProperty("private_set", p => p.PrivateSet, "Amount of private memory.");
-        builder.AddProperty("virtual_set", p => p.VirtualSet, "Amount of virtual memory.");
+        builder
+            .AddProperty("pid", p => p.Pid, "Process id.")
+            .AddProperty("name", p => p.FileName, "Process path.")
+            .AddProperty("command", p => p.Command, "Process command line.")
+            .AddProperty("base_priority", p => p.BasePriority, "Base process priority.")
+            .AddProperty("start_time", p => p.StartTime, "Process start time.")
+            .AddProperty("working_set", p => p.WorkingSet, "Amount of physical memory.")
+            .AddProperty("private_set", p => p.PrivateSet, "Amount of private memory.")
+            .AddProperty("virtual_set", p => p.VirtualSet, "Amount of virtual memory.");
     }
 
     /// <inheritdoc />
