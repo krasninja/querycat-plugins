@@ -3,9 +3,9 @@ using QueryCat.Backend.Functions;
 using QueryCat.Backend.Types;
 using QueryCat.Plugins.VStarCam.Domain;
 
-namespace QueryCat.Plugins.VStarCam;
+namespace QueryCat.Plugins.VStarCam.Functions;
 
-internal static class Functions
+internal static class SetIr
 {
     [Description("Set camera IR on/off.")]
     [FunctionSignature("vstar_set_ir(login: string, password: string, camera_id: string, ir: boolean): void")]
@@ -16,12 +16,12 @@ internal static class Functions
         var id = args.GetAt(2).AsString;
         var irState = args.GetAt(3).AsBoolean;
 
-        var camerasFinder = new CamerasFinder();
+        using var camerasFinder = new CamerasFinder();
         var cameras = camerasFinder.FindAsync(CancellationToken.None).GetAwaiter().GetResult();
         var camera = cameras.FirstOrDefault(c => c.Id == id);
         if (camera == null)
         {
-            Serilog.Log.Logger.Error("Cannot find camera with id {Id},", id);
+            Serilog.Log.Logger.Error("Cannot find camera with id {Id}.", id);
             return VariantValue.Null;
         }
 
