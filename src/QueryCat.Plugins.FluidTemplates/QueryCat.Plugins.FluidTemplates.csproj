@@ -19,7 +19,7 @@ Website: https://github.com/sebastienros/fluid</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.3.1" />
+    <PackageReference Include="Fluid.Core" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
