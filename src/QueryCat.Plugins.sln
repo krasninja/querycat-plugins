@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.VStarCam",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Clipboard", "QueryCat.Plugins.Clipboard\QueryCat.Plugins.Clipboard.csproj", "{39A5B2F3-47DA-494E-B353-1563CE137366}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Network", "QueryCat.Plugins.Network\QueryCat.Plugins.Network.csproj", "{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{39A5B2F3-47DA-494E-B353-1563CE137366}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39A5B2F3-47DA-494E-B353-1563CE137366}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39A5B2F3-47DA-494E-B353-1563CE137366}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{939CE72C-CD01-4AA0-B424-E9A669B419A6} = {57FD3CD5-B80B-40B7-97B1-3C5D0A4FDDFF}
