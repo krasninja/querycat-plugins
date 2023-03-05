@@ -18,7 +18,7 @@ internal class BranchesRowsInput : BaseRowsInput<Branch>
     [FunctionSignature("github_branches(): object<IRowsInput>")]
     public static VariantValue GitHubBranchesFunction(FunctionCallInfo args)
     {
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new BranchesRowsInput(token));
     }
 

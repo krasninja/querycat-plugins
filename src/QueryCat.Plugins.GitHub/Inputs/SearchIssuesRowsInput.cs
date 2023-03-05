@@ -21,7 +21,7 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
     public static VariantValue GitHubSearchIssuesFunction(FunctionCallInfo args)
     {
         var term = args.GetAt(0).AsString;
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
 

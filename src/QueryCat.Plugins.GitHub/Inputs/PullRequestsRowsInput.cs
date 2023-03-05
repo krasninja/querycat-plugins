@@ -18,7 +18,7 @@ internal class PullRequestsRowsInput : BaseRowsInput<PullRequest>
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
     public static VariantValue GitHubPullsFunction(FunctionCallInfo args)
     {
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new PullRequestsRowsInput(token));
     }
 

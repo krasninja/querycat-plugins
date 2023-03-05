@@ -18,7 +18,7 @@ internal class CommitsRefRowsInput : CommitsRowsInput
     [FunctionSignature("github_commits_ref(): object<IRowsInput>")]
     public static VariantValue GitHubCommitsRefFunction(FunctionCallInfo args)
     {
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(Functions.GitHubToken);
+        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new CommitsRefRowsInput(token));
     }
 
