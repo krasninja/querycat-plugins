@@ -22,17 +22,17 @@ internal sealed class InterfaceAddressesRowsInput : ClassEnumerableInput<Interfa
 
         public OperationalStatus Status { get; set; }
 
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
-        public string Mask { get; set; }
+        public string Mask { get; set; } = string.Empty;
 
-        public string Broadcast { get; set; }
+        public string Broadcast { get; set; } = string.Empty;
 
-        public string Dns { get; set; }
+        public string Dns { get; set; } = string.Empty;
 
-        public string DnsSuffix { get; set; }
+        public string DnsSuffix { get; set; } = string.Empty;
 
-        public string Gateway { get; set; }
+        public string Gateway { get; set; } = string.Empty;
     }
 
     /// <inheritdoc />

@@ -39,7 +39,7 @@ internal sealed class InterfaceDetailsRowsInput : ClassEnumerableInput<Interface
 
         public long OutgoingPacketsErrors { get; set; }
 
-        public string IpAddresses { get; set; }
+        public string IpAddresses { get; set; } = string.Empty;
     }
 
     /// <inheritdoc />
