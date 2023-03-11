@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Network", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Tests.QueryRunner", "..\backend\src\QueryCat.Tests.QueryRunner\QueryCat.Tests.QueryRunner.csproj", "{A5F84049-4B23-4CED-9B44-F8B87675E2B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.FileSystem", "QueryCat.Plugins.FileSystem\QueryCat.Plugins.FileSystem.csproj", "{C5C833F4-A558-41F9-9509-D2D0A183484F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{A5F84049-4B23-4CED-9B44-F8B87675E2B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5F84049-4B23-4CED-9B44-F8B87675E2B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5F84049-4B23-4CED-9B44-F8B87675E2B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C833F4-A558-41F9-9509-D2D0A183484F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C833F4-A558-41F9-9509-D2D0A183484F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C833F4-A558-41F9-9509-D2D0A183484F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C833F4-A558-41F9-9509-D2D0A183484F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{939CE72C-CD01-4AA0-B424-E9A669B419A6} = {57FD3CD5-B80B-40B7-97B1-3C5D0A4FDDFF}
