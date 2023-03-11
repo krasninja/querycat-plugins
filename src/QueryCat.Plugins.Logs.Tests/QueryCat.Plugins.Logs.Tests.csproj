@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\backend\src\QueryCat.Tests.QueryRunner\QueryCat.Tests.QueryRunner.csproj" />
     <ProjectReference Include="..\..\backend\src\QueryCat.Cli\QueryCat.Cli.csproj" />
     <ProjectReference Include="..\QueryCat.Plugins.Logs\QueryCat.Plugins.Logs.csproj" />
   </ItemGroup>

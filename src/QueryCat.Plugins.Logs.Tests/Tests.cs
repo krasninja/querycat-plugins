@@ -1,11 +1,12 @@
 using Xunit;
 using QueryCat.Backend.Execution;
+using QueryCat.Tests.QueryRunner;
 
 namespace QueryCat.Plugins.Logs.Tests;
 
 public sealed class Tests : IDisposable
 {
-    private readonly Backend.Tests.TestThread _testThread = new();
+    private readonly TestThread _testThread = new();
 
     [Theory]
     [MemberData(nameof(GetData))]
@@ -13,7 +14,7 @@ public sealed class Tests : IDisposable
     {
         // Arrange.
         new ExecutionThreadBootstrapper().Bootstrap(_testThread);
-        var data = Backend.Tests.TestThread.GetQueryData(fileName);
+        var data = TestThread.GetQueryData(fileName);
         _testThread.Run(data.Query);
 
         // Act.
@@ -23,7 +24,7 @@ public sealed class Tests : IDisposable
         Assert.Equal(data.Expected, result);
     }
 
-    public static IEnumerable<object[]> GetData() => Backend.Tests.TestThread.GetTestFiles();
+    public static IEnumerable<object[]> GetData() => TestThread.GetTestFiles();
 
     public void Dispose()
     {
