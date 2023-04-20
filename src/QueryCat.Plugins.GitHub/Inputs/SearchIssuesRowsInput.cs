@@ -49,7 +49,7 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<Issue> GetData(ClassEnumerableInputFetch<Issue> fetch)
+    protected override IEnumerable<Issue> GetData(Fetcher<Issue> fetch)
     {
         var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest();
         return fetch.FetchPaged(async (page, limit, ct) =>

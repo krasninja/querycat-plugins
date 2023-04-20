@@ -70,7 +70,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<GitHubCommit> GetData(ClassEnumerableInputFetch<GitHubCommit> fetch)
+    protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetch)
     {
         fetch.PageStart = 1;
         return fetch.FetchPaged(async (page, limit, ct) =>

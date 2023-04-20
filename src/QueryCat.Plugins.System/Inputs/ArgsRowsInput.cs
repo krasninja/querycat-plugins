@@ -6,7 +6,7 @@ namespace QueryCat.Plugins.System.Inputs;
 
 [Description("A key/value table of command line arguments.")]
 [FunctionSignature("sys_args")]
-internal sealed class ArgsRowsInput : ClassEnumerableInput<ArgsRowsInput.ArgDto>
+internal sealed class ArgsRowsInput : FetchInput<ArgsRowsInput.ArgDto>
 {
     internal class ArgDto
     {
@@ -21,7 +21,7 @@ internal sealed class ArgsRowsInput : ClassEnumerableInput<ArgsRowsInput.ArgDto>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<ArgDto> GetData(ClassEnumerableInputFetch<ArgDto> fetch)
+    protected override IEnumerable<ArgDto> GetData(Fetcher<ArgDto> fetch)
     {
         var list = new List<ArgDto>();
         var args = Environment.GetCommandLineArgs();

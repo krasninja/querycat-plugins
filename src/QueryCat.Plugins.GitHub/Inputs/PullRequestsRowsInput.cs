@@ -75,7 +75,7 @@ internal class PullRequestsRowsInput : BaseRowsInput<PullRequest>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<PullRequest> GetData(ClassEnumerableInputFetch<PullRequest> fetch)
+    protected override IEnumerable<PullRequest> GetData(Fetcher<PullRequest> fetch)
     {
         return fetch.FetchOne(async ct => await Client.Repository.PullRequest.Get(_owner, _repository, _number));
     }

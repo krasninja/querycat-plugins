@@ -7,7 +7,7 @@ namespace QueryCat.Plugins.System.Inputs;
 
 [Description("All running processes on the host system.")]
 [FunctionSignature("sys_processes")]
-internal sealed class ProcessesRowsInput : ClassEnumerableInput<ProcessesRowsInput.ProcessDto>
+internal sealed class ProcessesRowsInput : FetchInput<ProcessesRowsInput.ProcessDto>
 {
     internal class ProcessDto
     {
@@ -44,7 +44,7 @@ internal sealed class ProcessesRowsInput : ClassEnumerableInput<ProcessesRowsInp
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<ProcessDto> GetData(ClassEnumerableInputFetch<ProcessDto> fetch)
+    protected override IEnumerable<ProcessDto> GetData(Fetcher<ProcessDto> fetch)
     {
         var processes = Process.GetProcesses();
         foreach (var process in processes)

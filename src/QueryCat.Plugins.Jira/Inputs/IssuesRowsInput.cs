@@ -16,7 +16,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 [Description("Issues are the building blocks of any Jira project.")]
 [FunctionSignature("jira_issue")]
-internal sealed class IssuesRowsInput : ClassEnumerableInput<JsonNode>
+internal sealed class IssuesRowsInput : FetchInput<JsonNode>
 {
     private string _key = string.Empty;
 
@@ -58,7 +58,7 @@ internal sealed class IssuesRowsInput : ClassEnumerableInput<JsonNode>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<JsonNode> GetData(ClassEnumerableInputFetch<JsonNode> fetch)
+    protected override IEnumerable<JsonNode> GetData(Fetcher<JsonNode> fetch)
     {
         var config = General.GetConfiguration(QueryContext.InputConfigStorage);
         var request = new RestRequest("issue/{key}")

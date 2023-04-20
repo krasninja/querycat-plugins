@@ -7,7 +7,7 @@ namespace QueryCat.Plugins.System.Inputs;
 
 [Description("A key/value table of environment variables.")]
 [FunctionSignature("sys_envs")]
-internal sealed class EnvsRowsInput : ClassEnumerableInput<EnvsRowsInput.EnvDto>
+internal sealed class EnvsRowsInput : FetchInput<EnvsRowsInput.EnvDto>
 {
     internal class EnvDto
     {
@@ -26,7 +26,7 @@ internal sealed class EnvsRowsInput : ClassEnumerableInput<EnvsRowsInput.EnvDto>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<EnvDto> GetData(ClassEnumerableInputFetch<EnvDto> fetch)
+    protected override IEnumerable<EnvDto> GetData(Fetcher<EnvDto> fetch)
     {
         var list = new List<EnvDto>();
         var enumerator = Environment.GetEnvironmentVariables().GetEnumerator();

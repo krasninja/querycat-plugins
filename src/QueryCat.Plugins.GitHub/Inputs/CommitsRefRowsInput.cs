@@ -54,7 +54,7 @@ internal class CommitsRefRowsInput : CommitsRowsInput
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<GitHubCommit> GetData(ClassEnumerableInputFetch<GitHubCommit> fetch)
+    protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetch)
     {
         return fetch.FetchOne(async ct => await Client.Repository.Commit.Get(_owner, _repository, _sha));
     }

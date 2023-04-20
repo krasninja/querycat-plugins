@@ -15,7 +15,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 [Description("Search issues using JQL.")]
 [FunctionSignature("jira_issue_search")]
-internal sealed class IssuesSearchRowsInput : ClassEnumerableInput<JsonNode>
+internal sealed class IssuesSearchRowsInput : FetchInput<JsonNode>
 {
     private string _jql = string.Empty;
 
@@ -37,7 +37,7 @@ internal sealed class IssuesSearchRowsInput : ClassEnumerableInput<JsonNode>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<JsonNode> GetData(ClassEnumerableInputFetch<JsonNode> fetch)
+    protected override IEnumerable<JsonNode> GetData(Fetcher<JsonNode> fetch)
     {
         var config = General.GetConfiguration(QueryContext.InputConfigStorage);
         fetch.Limit = 50;

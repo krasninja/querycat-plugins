@@ -4,7 +4,7 @@ using QueryCat.Backend.Storage;
 
 namespace QueryCat.Plugins.Github;
 
-internal abstract class BaseRowsInput<TClass> : ClassEnumerableInput<TClass> where TClass : class
+internal abstract class BaseRowsInput<TClass> : FetchInput<TClass> where TClass : class
 {
     protected string Owner { get; } = string.Empty;
 

@@ -8,7 +8,7 @@ namespace QueryCat.Plugins.Network.Inputs;
 
 [Description("Network interfaces and relevant metadata.")]
 [FunctionSignature("net_interface_addresses")]
-internal sealed class InterfaceAddressesRowsInput : ClassEnumerableInput<InterfaceAddressesRowsInput.InterfaceAddressDto>
+internal sealed class InterfaceAddressesRowsInput : FetchInput<InterfaceAddressesRowsInput.InterfaceAddressDto>
 {
     public class InterfaceAddressDto
     {
@@ -55,7 +55,7 @@ internal sealed class InterfaceAddressesRowsInput : ClassEnumerableInput<Interfa
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<InterfaceAddressDto> GetData(ClassEnumerableInputFetch<InterfaceAddressDto> fetch)
+    protected override IEnumerable<InterfaceAddressDto> GetData(Fetcher<InterfaceAddressDto> fetch)
     {
         var result = new List<InterfaceAddressDto>();
         foreach (NetworkInterface iface in NetworkInterface.GetAllNetworkInterfaces())

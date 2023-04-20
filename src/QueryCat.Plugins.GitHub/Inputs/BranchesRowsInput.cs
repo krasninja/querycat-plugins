@@ -51,7 +51,7 @@ internal class BranchesRowsInput : BaseRowsInput<Branch>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<Branch> GetData(ClassEnumerableInputFetch<Branch> fetch)
+    protected override IEnumerable<Branch> GetData(Fetcher<Branch> fetch)
     {
         fetch.PageStart = 1;
         return fetch.FetchPaged(async (page, limit, ct) =>

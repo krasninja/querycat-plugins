@@ -11,7 +11,7 @@ namespace QueryCat.Plugins.FileSystem.Inputs;
 
 [Description("Return information on files.")]
 [FunctionSignature("fs_files")]
-internal sealed class FilesRowsInput : ClassEnumerableInput<FilesRowsInput.FileDto>
+internal sealed class FilesRowsInput : FetchInput<FilesRowsInput.FileDto>
 {
     public class FileDto
     {
@@ -69,7 +69,7 @@ internal sealed class FilesRowsInput : ClassEnumerableInput<FilesRowsInput.FileD
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<FileDto> GetData(ClassEnumerableInputFetch<FileDto> fetch)
+    protected override IEnumerable<FileDto> GetData(Fetcher<FileDto> fetch)
     {
         var files = _matcher.GetResultsInFullPath("/");
         foreach (var file in files)

@@ -8,7 +8,7 @@ namespace QueryCat.Plugins.VStarCam.Inputs;
 
 record CameraInfo(Camera Camera, CameraParameters CameraParameters);
 
-internal class CameraInfoRowsInput : ClassEnumerableInput<CameraInfo>
+internal class CameraInfoRowsInput : FetchInput<CameraInfo>
 {
     [Description("VStar camera information.")]
     [FunctionSignature("vstar_camera_info(login: string, password: string): object<IRowsInput>")]
@@ -62,7 +62,7 @@ internal class CameraInfoRowsInput : ClassEnumerableInput<CameraInfo>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<CameraInfo> GetData(ClassEnumerableInputFetch<CameraInfo> fetch)
+    protected override IEnumerable<CameraInfo> GetData(Fetcher<CameraInfo> fetch)
     {
         return fetch.FetchAll(async ct =>
         {
