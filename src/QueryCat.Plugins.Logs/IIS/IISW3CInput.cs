@@ -1,4 +1,5 @@
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using QueryCat.Backend;
 using QueryCat.Backend.Relational;
 using QueryCat.Backend.Storage;
@@ -20,6 +21,8 @@ public sealed class IISW3CInput : StreamRowsInput
     private int _timeColumnIndex = -1;
     private int _dateColumnIndex = -1;
     private bool _isInitialized;
+
+    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger<IISW3CInput>();
 
     // https://procodeguide.com/programming/iis-logs/.
     private static readonly Dictionary<string, Column> AvailableFields = new()
@@ -111,7 +114,7 @@ public sealed class IISW3CInput : StreamRowsInput
     /// <inheritdoc />
     public override void Open()
     {
-        Serilog.Log.Debug($"IISW3C: Open {this}.", this);
+        _logger.LogDebug("Open {Input}.", this);
         // Try to find fields header.
         var foundHeaders = false;
         while (ReadNext())
@@ -122,7 +125,7 @@ public sealed class IISW3CInput : StreamRowsInput
                 ParseHeaders(GetRowText().ToString());
                 foundHeaders = true;
                 _isInitialized = true;
-                Serilog.Log.Debug("IISW3C: Found headers.");
+                _logger.LogDebug("Found headers.");
                 break;
             }
         }

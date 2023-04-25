@@ -1,6 +1,7 @@
 using Octokit;
 using QueryCat.Backend;
 using QueryCat.Backend.Storage;
+using Application = QueryCat.Backend.Application;
 
 namespace QueryCat.Plugins.Github;
 
@@ -21,7 +22,7 @@ internal abstract class BaseRowsInput<TClass> : FetchInput<TClass> where TClass 
 
     public BaseRowsInput(string? token = null)
     {
-        Client = new GitHubClient(new ProductHeaderValue(QueryCatApplication.ProductName));
+        Client = new GitHubClient(new ProductHeaderValue(Application.ProductName));
         if (!string.IsNullOrEmpty(token))
         {
             Client.Credentials = new Credentials(token);
