@@ -11,6 +11,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </summary>
 /// <remarks>
 /// https://docs.github.com/en/rest/search#search-issues-and-pull-requests.
+/// https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests.
 /// </remarks>
 internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
 {
@@ -52,12 +53,13 @@ internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
     protected override IEnumerable<Issue> GetData(Fetcher<Issue> fetch)
     {
         var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest();
+        fetch.PageStart = 1;
         return fetch.FetchPaged(async (page, limit, ct) =>
             {
                 request.Page = page;
                 request.PerPage = limit;
-                var data = await Client.Search.SearchIssues(request);
-                return (data.Items, data.IncompleteResults);
+                var data = (await Client.Search.SearchIssues(request)).Items;
+                return data;
             });
     }
 }

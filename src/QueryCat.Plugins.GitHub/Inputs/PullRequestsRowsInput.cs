@@ -35,6 +35,7 @@ internal class PullRequestsRowsInput : BaseRowsInput<PullRequest>
     {
         builder
             .AddDataProperty()
+            .AddProperty("id", p => p.Id, "Pull request id.")
             .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
             .AddProperty("number", p => p.Number, "The pull request issue number.")
             .AddProperty("title", p => p.Title, "Pull request title.")

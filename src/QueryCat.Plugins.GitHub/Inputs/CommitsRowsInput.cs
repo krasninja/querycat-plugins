@@ -70,10 +70,10 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetch)
+    protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetcher)
     {
-        fetch.PageStart = 1;
-        return fetch.FetchPaged(async (page, limit, ct) =>
+        fetcher.PageStart = 1;
+        return fetcher.FetchPaged(async (page, limit, ct) =>
         {
             return await Client.Repository.Commit.GetAll(
                 _owner,
