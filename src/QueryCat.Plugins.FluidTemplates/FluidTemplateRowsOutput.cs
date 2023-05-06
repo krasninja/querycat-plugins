@@ -41,6 +41,13 @@ internal class FluidTemplateRowsOutput : IRowsOutput
 
     private QueryContext _queryContext = new EmptyQueryContext();
 
+    /// <inheritdoc />
+    public QueryContext QueryContext
+    {
+        get => _queryContext;
+        set => _queryContext = value;
+    }
+
     private static readonly FluidParser Parser = new();
 
     static FluidTemplateRowsOutput()
@@ -102,12 +109,6 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     /// <inheritdoc />
     public void Open()
     {
-    }
-
-    /// <inheritdoc />
-    public void SetContext(QueryContext queryContext)
-    {
-        _queryContext = queryContext;
     }
 
     /// <inheritdoc />
