@@ -51,7 +51,7 @@ internal class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewCom
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
         inputInfo
-            .SetInputArguments(Owner, Repository)
+            .SetInputArguments()
             .AddKeyColumn("repository_full_name",
                 isRequired: true,
                 action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString))
