@@ -7,7 +7,7 @@
     <LangVersion>default</LangVersion>
     <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.1.0</Version>
+    <PackageVersion>0.2.0</PackageVersion>
     <Title>Logs Processing</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat iisw3c logs</PackageTags>

@@ -7,7 +7,7 @@
     <LangVersion>default</LangVersion>
     <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.1.0</Version>
+    <PackageVersion>0.2.0</PackageVersion>
     <Title>System Functions</Title>
     <Authors>Ivan Kozhin</Authors>
     <RepositoryType>git</RepositoryType>
