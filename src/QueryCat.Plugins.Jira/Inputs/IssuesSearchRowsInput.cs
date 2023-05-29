@@ -40,12 +40,12 @@ internal sealed class IssuesSearchRowsInput : FetchInput<JsonNode>
     protected override IEnumerable<JsonNode> GetData(Fetcher<JsonNode> fetch)
     {
         var config = General.GetConfiguration(QueryContext.InputConfigStorage);
-        fetch.Limit = 50;
-        return fetch.FetchPaged((page, limit, ct) =>
+        fetch.Limit = 100;
+        return fetch.FetchLimitOffset((limit, offset, ct) =>
         {
             var request = new RestRequest("search")
                 .AddQueryParameter("jql", _jql)
-                .AddQueryParameter("startAt", page)
+                .AddQueryParameter("startAt", offset)
                 .AddQueryParameter("maxResults", limit);
             var json = config.Client.Get(request).ToJson();
             return Task.FromResult(json["issues"]!.AsArray().Select(n => n!));

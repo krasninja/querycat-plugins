@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using QueryCat.Backend.Functions;
 using QueryCat.Backend.Storage;
+using QueryCat.Backend.Utils;
 using QueryCat.Plugins.Jira.Utils;
 using RestSharp;
 
@@ -22,30 +23,27 @@ internal sealed class IssuesRowsInput : FetchInput<JsonNode>
 
     public static void InitializeBasicFields(ClassRowsFrameBuilder<JsonNode> builder)
     {
-#pragma warning disable CS8602
         builder
-            .AddProperty("id", p => p["id"]!.GetValue<string>(), "The issue identifier.")
-            .AddProperty("key", p => p["key"]!.GetValue<string>(), "The issue key.")
-            .AddProperty("project_key", p => p["fields"]["project"]["key"].GetValue<string>(), "The issue project key.")
-            .AddProperty("project_name", p => p["fields"]["project"]["name"].GetValue<string>(), "The issue project name.")
-            .AddProperty("status", p => p["fields"]["status"]["name"].GetValue<string>(), "The issue status.")
-            .AddProperty("created", p => DateTime.Parse(p["fields"]["created"].GetValue<string>()),
+            .AddDataProperty()
+            .AddProperty("id", p => p.GetValueByPath("id").AsString, "The issue identifier.")
+            .AddProperty("key", p => p.GetValueByPath("key").AsString, "The issue key.")
+            .AddProperty("project_key", p => p.GetValueByPath("fields.project.key").AsString, "The issue project key.")
+            .AddProperty("project_name", p => p.GetValueByPath("fields.project.name").AsString, "The issue project name.")
+            .AddProperty("status", p => p.GetValueByPath("fields.status.name").AsString, "The issue status.")
+            .AddProperty("created", p => p.GetValueByPath("fields.created").AsTimestamp,
                 "The issue creation date and time.")
-            .AddProperty("creator_account_id", p => p["fields"]["creator"]["accountId"].GetValue<string>(), "The issue creator account identifier.")
-            .AddProperty("creator_display_name", p => p["fields"]["creator"]["displayName"].GetValue<string>(), "The issue creator name.")
-            .AddProperty("summary", p => p["fields"]["summary"].GetValue<string>(), "The issue summary.")
-            .AddProperty("priority", p => p["fields"]["priority"]["name"].GetValue<string>(), "The issue priority.");
-#pragma warning restore CS8602
+            .AddProperty("creator_account_id", p => p.GetValueByPath("fields.creator.accountId").AsString, "The issue creator account identifier.")
+            .AddProperty("creator_display_name", p => p.GetValueByPath("fields.creator.displayName").AsString, "The issue creator name.")
+            .AddProperty("summary", p => p.GetValueByPath("fields.summary").AsString, "The issue summary.")
+            .AddProperty("priority", p => p.GetValueByPath("fields.priority.name").AsString, "The issue priority.");
     }
 
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<JsonNode> builder)
     {
         InitializeBasicFields(builder);
-#pragma warning disable CS8602
         builder
-            .AddProperty("description", p => p["renderedFields"]["description"].GetValue<string>(), "The issue description.");
-#pragma warning restore CS8602
+            .AddProperty("description", p => p.GetValueByPath("renderedFields.description").AsString, "The issue description.");
     }
 
     /// <inheritdoc />
