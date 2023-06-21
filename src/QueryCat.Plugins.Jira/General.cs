@@ -20,7 +20,7 @@ internal static class General
     {
         if (configStorage.Has(JiraConfig))
         {
-            return configStorage.Get(JiraConfig).GetAsObject<JiraConfiguration>();
+            return configStorage.Get(JiraConfig).As<JiraConfiguration>();
         }
 
         var config = new JiraConfiguration();
