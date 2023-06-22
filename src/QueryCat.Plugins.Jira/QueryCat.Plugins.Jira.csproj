@@ -2,25 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>default</LangVersion>
-    <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>0.2.0</Version>
     <Title>JIRA Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat jira</PackageTags>
-    <PackageProjectUrl>https://github.com/krasninja/querycat</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/krasninja/querycat-plugins</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="110.2.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

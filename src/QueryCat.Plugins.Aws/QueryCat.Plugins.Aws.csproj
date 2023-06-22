@@ -2,18 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <LangVersion>default</LangVersion>
     <PackageVersion>0.1.0</PackageVersion>
     <Title>AWS Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Amazon Web Services plugin.</Description>
-    <RepositoryType>git</RepositoryType>
-    <CodeAnalysisRuleSet>../../tools/QueryCat.ruleset</CodeAnalysisRuleSet>
     <PackageTags>aws querycat</PackageTags>
-    <AssemblyVersion>0.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
