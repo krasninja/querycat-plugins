@@ -49,10 +49,9 @@ internal sealed class IssuesRowsInput : FetchInput<JsonNode>
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .AddKeyColumn("key",
-                isRequired: true,
-                value => _key = value.AsString);
+        AddKeyColumn("key",
+            isRequired: true,
+            set: value => _key = value.AsString);
     }
 
     /// <inheritdoc />

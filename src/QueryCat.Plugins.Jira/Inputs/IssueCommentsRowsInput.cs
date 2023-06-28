@@ -41,10 +41,9 @@ internal sealed class IssueCommentsRowsInput : FetchInput<JsonNode>
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .AddKeyColumn("issue_id",
-                isRequired: true,
-                value => _issueId = value.AsString);
+        AddKeyColumn("issue_id",
+            isRequired: true,
+            set: value => _issueId = value.AsString);
     }
 
     /// <inheritdoc />

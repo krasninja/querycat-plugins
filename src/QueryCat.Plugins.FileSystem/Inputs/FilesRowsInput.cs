@@ -55,10 +55,10 @@ internal sealed class FilesRowsInput : FetchInput<FilesRowsInput.FileDto>
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo.AddKeyColumn("path",
+        AddKeyColumn("path",
             VariantValue.Operation.Like,
             isRequired: true,
-            v => AddInclude(v.AsString));
+            set: v => AddInclude(v.AsString));
     }
 
     private void AddInclude(string path)

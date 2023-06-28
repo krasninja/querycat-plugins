@@ -9,6 +9,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/krasninja/querycat</PackageProjectUrl>
     <RepositoryUrl>https://github.com/krasninja/querycat-plugins</RepositoryUrl>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>

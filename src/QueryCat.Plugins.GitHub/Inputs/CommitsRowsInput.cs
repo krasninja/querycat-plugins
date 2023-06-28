@@ -49,24 +49,24 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
         inputInfo
-            .SetInputArguments()
-            .AddKeyColumn("repository_full_name",
-                isRequired: true,
-                action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString))
-            .AddKeyColumn("sha",
-                operation: VariantValue.Operation.GreaterOrEquals, VariantValue.Operation.Greater,
-                action: v => _request.Sha = v.AsString)
-            .AddKeyColumn("author_date",
-                operation: VariantValue.Operation.Greater,
-                orOperation: VariantValue.Operation.GreaterOrEquals,
-                action: v => _request.Since = v.AsTimestamp)
-            .AddKeyColumn("author_date",
-                operation: VariantValue.Operation.Less,
-                orOperation: VariantValue.Operation.LessOrEquals,
-                action: v => _request.Until = v.AsTimestamp)
-            .AddKeyColumn("author_login",
-                operation: VariantValue.Operation.Equals,
-                action: v => _request.Author = v.AsString);
+            .SetInputArguments();
+        AddKeyColumn("repository_full_name",
+            isRequired: true,
+            set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
+        AddKeyColumn("sha",
+            operation: VariantValue.Operation.GreaterOrEquals, VariantValue.Operation.Greater,
+            set: v => _request.Sha = v.AsString);
+        AddKeyColumn("author_date",
+            operation: VariantValue.Operation.Greater,
+            orOperation: VariantValue.Operation.GreaterOrEquals,
+            set: v => _request.Since = v.AsTimestamp);
+        AddKeyColumn("author_date",
+            operation: VariantValue.Operation.Less,
+            orOperation: VariantValue.Operation.LessOrEquals,
+            set: v => _request.Until = v.AsTimestamp);
+        AddKeyColumn("author_login",
+            operation: VariantValue.Operation.Equals,
+            set: v => _request.Author = v.AsString);
     }
 
     /// <inheritdoc />

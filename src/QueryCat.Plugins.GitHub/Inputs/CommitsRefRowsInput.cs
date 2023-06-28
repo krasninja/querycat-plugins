@@ -44,13 +44,12 @@ internal class CommitsRefRowsInput : CommitsRowsInput
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .AddKeyColumn("repository_full_name",
-                isRequired: true,
-                action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString))
-            .AddKeyColumn("sha",
-                isRequired: true,
-                action: v => _sha = v.AsString);
+        AddKeyColumn("repository_full_name",
+            isRequired: true,
+            set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
+        AddKeyColumn("sha",
+            isRequired: true,
+            set: v => _sha = v.AsString);
     }
 
     /// <inheritdoc />

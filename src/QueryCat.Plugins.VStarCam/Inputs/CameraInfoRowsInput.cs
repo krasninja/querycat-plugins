@@ -54,11 +54,10 @@ internal class CameraInfoRowsInput : FetchInput<CameraInfo>
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .AddKeyColumn(
-                "id",
-                isRequired: true,
-                action: v => _id = v.AsString);
+        AddKeyColumn(
+            "id",
+            isRequired: true,
+            set: v => _id = v.AsString);
     }
 
     /// <inheritdoc />

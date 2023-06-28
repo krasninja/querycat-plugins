@@ -44,10 +44,9 @@ internal class BranchesRowsInput : BaseRowsInput<Branch>
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .AddKeyColumn("repository_full_name",
-                isRequired: true,
-                action: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
+        AddKeyColumn("repository_full_name",
+            isRequired: true,
+            set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
     }
 
     /// <inheritdoc />

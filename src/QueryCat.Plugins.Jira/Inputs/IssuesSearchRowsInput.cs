@@ -30,10 +30,9 @@ internal sealed class IssuesSearchRowsInput : FetchInput<JsonNode>
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .AddKeyColumn("jql",
-                isRequired: true,
-                value => _jql = value.AsString);
+        AddKeyColumn("jql",
+            isRequired: true,
+            set: value => _jql = value.AsString);
     }
 
     /// <inheritdoc />
