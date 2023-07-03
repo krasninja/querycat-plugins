@@ -20,7 +20,7 @@ public sealed class IISW3CFormatter : IRowsFormatter
     }
 
     /// <inheritdoc />
-    public IRowsInput OpenInput(Stream input) => new IISW3CInput(input);
+    public IRowsInput OpenInput(Stream input, string? key = null) => new IISW3CInput(input, key);
 
     /// <inheritdoc />
     public IRowsOutput OpenOutput(Stream output)

@@ -50,8 +50,6 @@ internal class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewCom
     /// <inheritdoc />
     protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
     {
-        inputInfo
-            .SetInputArguments();
         AddKeyColumn("repository_full_name",
             isRequired: true,
             set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));

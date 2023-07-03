@@ -51,13 +51,13 @@ public sealed class IISW3CInput : StreamRowsInput
         ["cs(Referer)"] = new("cs(Referer)", DataType.String, "The site that the user last visited."),
     };
 
-    public IISW3CInput(Stream stream) : base(new StreamReader(stream), new StreamRowsInputOptions
+    public IISW3CInput(Stream stream, string? key = null) : base(new StreamReader(stream), new StreamRowsInputOptions
     {
         DelimiterStreamReaderOptions = new DelimiterStreamReader.ReaderOptions
         {
             Delimiters = new[] { ' ' }
         }
-    })
+    }, key ?? string.Empty)
     {
     }
 
