@@ -50,11 +50,7 @@ internal sealed class FilesRowsInput : FetchInput<FilesRowsInput.FileDto>
             .AddProperty(p => p.LastAccessTime, "Date and time at which the file has been last accessed (in UTC).")
             .AddProperty(p => p.Attributes, "File attributes.")
             .AddProperty(p => p.UnixFileMode, "UNIX file permissions.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("path",
             VariantValue.Operation.Like,
             isRequired: true,

@@ -39,11 +39,7 @@ internal class CommitsRefRowsInput : CommitsRowsInput
             .AddProperty("sha", _ => _sha, "SHA of the commit.")
             .AddProperty("additions", p => p.Stats.Additions, "The number of additions in the commit.")
             .AddProperty("deletions", p => p.Stats.Deletions, "The number of deletions in the commit.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("repository_full_name",
             isRequired: true,
             set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));

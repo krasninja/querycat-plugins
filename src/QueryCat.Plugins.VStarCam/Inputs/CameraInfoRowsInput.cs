@@ -49,11 +49,7 @@ internal class CameraInfoRowsInput : FetchInput<CameraInfo>
             .AddProperty(p => p.CameraParameters.MainStreamHeight)
             .AddProperty(p => p.CameraParameters.Bitrate)
             .AddProperty(p => p.CameraParameters.Ir);
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn(
             "id",
             isRequired: true,

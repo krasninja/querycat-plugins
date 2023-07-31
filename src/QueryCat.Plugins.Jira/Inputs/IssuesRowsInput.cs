@@ -44,11 +44,7 @@ internal sealed class IssuesRowsInput : FetchInput<JsonNode>
         InitializeBasicFields(builder);
         builder
             .AddProperty("description", p => p.GetValueByPath("renderedFields.description").AsString, "The issue description.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("key",
             isRequired: true,
             set: value => _key = value.AsString);

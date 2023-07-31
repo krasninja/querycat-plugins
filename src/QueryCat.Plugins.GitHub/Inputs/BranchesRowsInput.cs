@@ -39,11 +39,7 @@ internal class BranchesRowsInput : BaseRowsInput<Branch>
             .AddProperty("commit_sha", p => p.Commit.Sha, "Commit SHA the branch refers to.")
             .AddProperty("commit_url", p => p.Commit.Url, "Commit URL the branch refers to.")
             .AddProperty("protected", p => p.Protected, "True if branch is protected.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("repository_full_name",
             isRequired: true,
             set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));

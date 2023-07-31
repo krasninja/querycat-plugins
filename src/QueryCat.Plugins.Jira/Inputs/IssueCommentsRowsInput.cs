@@ -36,11 +36,7 @@ internal sealed class IssueCommentsRowsInput : FetchInput<JsonNode>
             .AddProperty("body", p => p.GetValueByPath("renderedBody").AsString, "Comment body.")
             .AddProperty("created", p => p.GetValueByPath("created").AsTimestamp, "Creation date and time.")
             .AddProperty("updated", p => p.GetValueByPath("updated").AsTimestamp, "Update date and time.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("issue_id",
             isRequired: true,
             set: value => _issueId = value.AsString);

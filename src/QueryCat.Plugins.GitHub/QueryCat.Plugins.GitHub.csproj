@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>QueryCat.Plugins.Github</RootNamespace>
-    <PackageVersion>0.2.0</PackageVersion>
+    <PackageVersion>0.3.0</PackageVersion>
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>

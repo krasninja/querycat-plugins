@@ -25,11 +25,6 @@ internal sealed class IssuesSearchRowsInput : FetchInput<JsonNode>
         IssuesRowsInput.InitializeBasicFields(builder);
         builder
             .AddProperty("jql", _ => _jql, "JQL.");
-    }
-
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("jql",
             isRequired: true,
             set: value => _jql = value.AsString);

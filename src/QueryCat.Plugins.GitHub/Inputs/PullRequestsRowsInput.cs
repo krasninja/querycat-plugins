@@ -60,11 +60,7 @@ internal class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             .AddProperty("mergeable_state", p => p.MergeableState, "The mergeability state of the PR.")
             .AddProperty("merged", p => p.Merged, "If true, the PR has been merged.")
             .AddProperty("merged_at", p => p.MergedAt, "The timestamp when the PR was merged.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("repository_full_name",
             isRequired: true,
             set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));

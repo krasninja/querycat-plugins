@@ -45,11 +45,7 @@ internal class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewCom
             .AddProperty("created_by_login", p => p.User.Login, "User login who created the comment.")
             .AddProperty("created_at", p => p.CreatedAt, "Date of comment creation.")
             .AddProperty("updated_at", p => p.UpdatedAt, "Date of comment update.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("repository_full_name",
             isRequired: true,
             set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));

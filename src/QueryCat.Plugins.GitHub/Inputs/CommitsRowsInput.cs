@@ -43,11 +43,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
             .AddProperty("committer_login", p => p.Committer.Login, "The login name of committer of the commit.")
             .AddProperty("verified", p => p.Commit.Verification.Verified, "True if the commit was verified with a signature.")
             .AddProperty("message", p => p.Commit.Message, "Commit message.");
-    }
 
-    /// <inheritdoc />
-    protected override void InitializeInputInfo(QueryContextInputInfo inputInfo)
-    {
         AddKeyColumn("repository_full_name",
             isRequired: true,
             set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
