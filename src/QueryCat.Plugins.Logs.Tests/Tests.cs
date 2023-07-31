@@ -13,7 +13,7 @@ public sealed class Tests : IDisposable
     public void Select(string fileName)
     {
         // Arrange.
-        new ExecutionThreadBootstrapper().Bootstrap(_testThread);
+        new ExecutionThreadBootstrapper().Bootstrap(_testThread, NullPluginsLoader.Instance);
         var data = TestThread.GetQueryData(fileName);
         _testThread.Run(data.Query);
 

@@ -115,7 +115,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     public void Close()
     {
         var templateText = File.ReadAllText(_templateFile);
-        if (Parser.TryParse(templateText, out var template, out string? error))
+        if (Parser.TryParse(templateText, out var template, out var error))
         {
             var subExecutionThread = new ExecutionThread(_executionThread);
             subExecutionThread.Options.DefaultRowsOutput = NullRowsOutput.Instance;
