@@ -1,7 +1,7 @@
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using QueryCat.Backend;
-using QueryCat.Backend.Relational;
+using QueryCat.Backend.Abstractions;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
 using QueryCat.Backend.Utils;

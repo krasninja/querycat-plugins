@@ -1,7 +1,6 @@
-using System.Text.Json.Nodes;
+using QueryCat.Backend.Abstractions;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
-using RestSharp;
 
 namespace QueryCat.Plugins.Jira;
 
