@@ -7,10 +7,17 @@
     <Authors>Ivan Kozhin</Authors>
     <Description>Amazon Web Services plugin.</Description>
     <PackageTags>aws querycat</PackageTags>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
     <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.EC2" Version="3.7.203.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.201.4" />
   </ItemGroup>
 
 </Project>
