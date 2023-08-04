@@ -7,7 +7,6 @@ using QueryCat.Backend;
 using QueryCat.Backend.Abstractions;
 using QueryCat.Backend.Execution;
 using QueryCat.Backend.Functions;
-using QueryCat.Backend.Relational;
 using QueryCat.Backend.Relational.Iterators;
 using QueryCat.Backend.Storage;
 using QueryCat.Backend.Types;
@@ -35,7 +34,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     private readonly string _templateFile;
     private readonly string _outFile;
     private readonly string _varName;
-    private readonly ExecutionThread _executionThread;
+    private readonly IExecutionThread _executionThread;
     private readonly TemplateOptions _templateOptions;
     private readonly List<Row> _rows = new();
 
@@ -71,7 +70,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         });
     }
 
-    public FluidTemplateRowsOutput(string templateFile, string outFile, string varName, ExecutionThread executionThread)
+    public FluidTemplateRowsOutput(string templateFile, string outFile, string varName, IExecutionThread executionThread)
     {
         _templateFile = templateFile;
         _outFile = outFile;
@@ -117,7 +116,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         var templateText = File.ReadAllText(_templateFile);
         if (Parser.TryParse(templateText, out var template, out var error))
         {
-            var subExecutionThread = new ExecutionThread(_executionThread);
+            var subExecutionThread = new ExecutionThread((ExecutionThread)_executionThread); // TODO: not good cast.
             subExecutionThread.Options.DefaultRowsOutput = NullRowsOutput.Instance;
             var context = new TemplateContext(template, _templateOptions);
             context.AmbientValues[QueryCatContextKey] = _queryContext;
