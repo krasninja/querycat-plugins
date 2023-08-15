@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <PackageVersion>0.2.0</PackageVersion>
+    <Title>Numerology</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>querycat numerology</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
+  </ItemGroup>
+
+</Project>
