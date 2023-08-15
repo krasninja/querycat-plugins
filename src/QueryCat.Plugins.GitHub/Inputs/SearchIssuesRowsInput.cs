@@ -13,7 +13,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// https://docs.github.com/en/rest/search#search-issues-and-pull-requests.
 /// https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests.
 /// </remarks>
-internal class SearchIssuesRowsInput : BaseRowsInput<Issue>
+internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
 {
     private readonly string _term;
 

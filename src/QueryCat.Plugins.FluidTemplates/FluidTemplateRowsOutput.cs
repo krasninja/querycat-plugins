@@ -36,7 +36,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     private readonly string _varName;
     private readonly IExecutionThread _executionThread;
     private readonly TemplateOptions _templateOptions;
-    private readonly List<Row> _rows = new();
+    private readonly List<VariantValue[]> _rows = new();
 
     private QueryContext _queryContext = new EmptyQueryContext();
 
@@ -141,10 +141,10 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     public RowsOutputOptions Options { get; } = new();
 
     /// <inheritdoc />
-    public void Write(Row row)
+    public void WriteValues(in VariantValue[] values)
     {
         // Cache here and write all on close.
-        _rows.Add(new Row(row));
+        _rows.Add(values);
     }
 
     private static FluidValue CreateFluidValue(VariantValue variantValue)

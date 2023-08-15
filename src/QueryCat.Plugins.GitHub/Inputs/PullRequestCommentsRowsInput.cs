@@ -13,7 +13,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 [Description("Return Github comments for the specific pull request.")]
 [FunctionSignature("github_pull_comments")]
-internal class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewComment>
+internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewComment>
 {
     private int _pullNumber;
     private string _owner = string.Empty;

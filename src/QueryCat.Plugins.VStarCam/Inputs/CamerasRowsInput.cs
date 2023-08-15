@@ -7,7 +7,7 @@ namespace QueryCat.Plugins.VStarCam.Inputs;
 
 [Description("VStar cameras in local network.")]
 [FunctionSignature("vstar_cameras")]
-internal class CamerasRowsInput : FetchInput<Camera>
+internal sealed class CamerasRowsInput : FetchInput<Camera>
 {
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<Camera> builder)

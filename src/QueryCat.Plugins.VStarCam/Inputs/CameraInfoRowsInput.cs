@@ -8,7 +8,7 @@ namespace QueryCat.Plugins.VStarCam.Inputs;
 
 record CameraInfo(Camera Camera, CameraParameters CameraParameters);
 
-internal class CameraInfoRowsInput : FetchInput<CameraInfo>
+internal sealed class CameraInfoRowsInput : FetchInput<CameraInfo>
 {
     [Description("VStar camera information.")]
     [FunctionSignature("vstar_camera_info(login: string, password: string): object<IRowsInput>")]

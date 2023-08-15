@@ -12,7 +12,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <remarks>
 /// https://docs.github.com/en/rest/branches/branches.
 /// </remarks>
-internal class BranchesRowsInput : BaseRowsInput<Branch>
+internal sealed class BranchesRowsInput : BaseRowsInput<Branch>
 {
     [Description("Return Github branches of specific repository.")]
     [FunctionSignature("github_branches(): object<IRowsInput>")]

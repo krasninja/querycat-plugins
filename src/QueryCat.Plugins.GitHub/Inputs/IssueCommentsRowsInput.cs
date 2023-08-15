@@ -13,7 +13,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 [Description("Return Github comments for the specific issue.")]
 [FunctionSignature("github_issue_comments")]
-internal class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
+internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
 {
     private int _issueNumber;
     private string _owner = string.Empty;

@@ -12,7 +12,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <remarks>
 /// https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request.
 /// </remarks>
-internal class PullRequestsRowsInput : BaseRowsInput<PullRequest>
+internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
 {
     [Description("Return Github pull requests of specific repository.")]
     [FunctionSignature("github_pulls(): object<IRowsInput>")]

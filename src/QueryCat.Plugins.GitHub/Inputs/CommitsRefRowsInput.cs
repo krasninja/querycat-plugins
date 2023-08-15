@@ -12,7 +12,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <remarks>
 /// https://docs.github.com/en/rest/commits/commits#get-a-commit.
 /// </remarks>
-internal class CommitsRefRowsInput : CommitsRowsInput
+internal sealed class CommitsRefRowsInput : CommitsRowsInput
 {
     [Description("Return Github commit info of specific repository.")]
     [FunctionSignature("github_commits_ref(): object<IRowsInput>")]
