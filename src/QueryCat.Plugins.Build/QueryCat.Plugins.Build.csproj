@@ -10,4 +10,8 @@
     <PackageReference Include="Cake.Frosting" Version="3.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\backend\src\QueryCat.Build\QueryCat.Build.csproj" />
+  </ItemGroup>
+
 </Project>

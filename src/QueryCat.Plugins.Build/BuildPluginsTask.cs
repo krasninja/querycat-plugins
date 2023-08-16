@@ -2,6 +2,7 @@ using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Core.IO.Arguments;
 using Cake.Frosting;
+using QueryCat.Build;
 
 namespace QueryCat.Plugins.Build;
 

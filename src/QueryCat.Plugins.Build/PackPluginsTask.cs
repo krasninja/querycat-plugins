@@ -1,6 +1,7 @@
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Frosting;
+using QueryCat.Build;
 
 namespace QueryCat.Plugins.Build;
 
