@@ -9,5 +9,5 @@ The repository contains plugins code that are used for main QueryCat project. Al
 Use the following command to build a plugin.
 
 ```
-dotnet pack ./src/QueryCat.Plugins.NAME/ -c Release --nologo -o ./output
+./build.sh -t build-plugins
 ```

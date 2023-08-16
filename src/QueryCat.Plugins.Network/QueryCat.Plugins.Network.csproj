@@ -9,10 +9,12 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>network querycat</PackageTags>
     <AssemblyVersion>0.1.0</AssemblyVersion>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>qcat-plugins-network-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
+    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
   </ItemGroup>
 
 </Project>

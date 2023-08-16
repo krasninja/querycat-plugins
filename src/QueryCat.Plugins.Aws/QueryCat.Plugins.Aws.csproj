@@ -8,16 +8,16 @@
     <Description>Amazon Web Services plugin.</Description>
     <PackageTags>aws querycat</PackageTags>
     <OutputType>Exe</OutputType>
+    <AssemblyName>qcat-plugins-aws-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
-    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.EC2" Version="3.7.203.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.201.14" />
+    <PackageReference Include="AWSSDK.EC2" Version="3.7.206" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.201.16" />
   </ItemGroup>
 
 </Project>

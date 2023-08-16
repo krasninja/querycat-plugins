@@ -7,6 +7,8 @@
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>qcat-plugins-github-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
-    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
   </ItemGroup>
 
 </Project>

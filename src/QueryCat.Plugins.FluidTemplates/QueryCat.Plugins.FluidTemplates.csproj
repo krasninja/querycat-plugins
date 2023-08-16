@@ -9,6 +9,8 @@
 
 Website: https://github.com/sebastienros/fluid</Description>
     <PackageTags>fluid template querycat</PackageTags>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>qcat-plugins-fluidtemplates-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +18,7 @@ Website: https://github.com/sebastienros/fluid</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
+    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
   </ItemGroup>
 
 </Project>

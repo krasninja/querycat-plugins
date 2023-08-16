@@ -6,6 +6,8 @@
     <Title>VStarCam Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>vstarcam querycat</PackageTags>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
-    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
   </ItemGroup>
 
 </Project>
