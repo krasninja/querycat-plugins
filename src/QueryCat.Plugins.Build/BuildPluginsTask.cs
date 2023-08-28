@@ -29,7 +29,7 @@ public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
                     OutputDirectory = context.OutputDirectory,
                     Runtime = platform,
                     PublishSingleFile = true,
-                    PublishTrimmed = true,
+                    PublishTrimmed = false,
                     Configuration = DotNetConstants.ConfigurationRelease,
                     NoLogo = true,
                     IncludeAllContentForSelfExtract = false,

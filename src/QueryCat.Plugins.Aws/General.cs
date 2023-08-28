@@ -1,8 +1,7 @@
 using Amazon.Runtime;
-using QueryCat.Backend;
-using QueryCat.Backend.Abstractions;
-using QueryCat.Backend.Storage;
-using QueryCat.Backend.Types;
+using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Aws;
 

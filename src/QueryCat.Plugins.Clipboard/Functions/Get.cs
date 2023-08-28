@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Types;
+using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using TextCopy;
 
 namespace QueryCat.Plugins.Clipboard.Functions;

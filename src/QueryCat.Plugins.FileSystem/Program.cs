@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.FileSystem.Functions;
 using QueryCat.Plugins.FileSystem.Inputs;
 

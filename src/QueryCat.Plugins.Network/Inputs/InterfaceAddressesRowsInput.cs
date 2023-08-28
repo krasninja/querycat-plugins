@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using System.Net;
 using System.Net.NetworkInformation;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Storage;
+using QueryCat.Backend.Core.Fetch;
+using QueryCat.Backend.Core.Functions;
 
 namespace QueryCat.Plugins.Network.Inputs;
 

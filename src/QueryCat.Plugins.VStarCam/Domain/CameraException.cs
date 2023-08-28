@@ -1,4 +1,4 @@
-using QueryCat.Backend;
+using QueryCat.Backend.Core;
 
 namespace QueryCat.Plugins.VStarCam.Domain;
 

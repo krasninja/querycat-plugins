@@ -1,5 +1,6 @@
 using System.Text.Json.Nodes;
 using QueryCat.Backend;
+using QueryCat.Backend.Core;
 using RestSharp;
 
 namespace QueryCat.Plugins.Jira.Utils;

@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.Network.Functions;
 using QueryCat.Plugins.Network.Inputs;
 

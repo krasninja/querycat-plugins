@@ -1,3 +1,5 @@
+using QueryCat.Backend.Core.Functions;
+
 namespace QueryCat.Plugins.FluidTemplates;
 
 /// <summary>

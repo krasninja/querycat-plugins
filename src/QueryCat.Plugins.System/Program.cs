@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.System.Inputs;
 
 namespace QueryCat.Plugins.System;

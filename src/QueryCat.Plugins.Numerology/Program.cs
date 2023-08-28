@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.Numerology.Functions;
 
 namespace QueryCat.Plugins.Numerology;

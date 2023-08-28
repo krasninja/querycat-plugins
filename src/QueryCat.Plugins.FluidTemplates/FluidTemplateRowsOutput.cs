@@ -3,13 +3,13 @@ using System.Text;
 using Fluid;
 using Fluid.Ast;
 using Fluid.Values;
-using QueryCat.Backend;
-using QueryCat.Backend.Abstractions;
+using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using QueryCat.Backend.Execution;
-using QueryCat.Backend.Functions;
 using QueryCat.Backend.Relational.Iterators;
 using QueryCat.Backend.Storage;
-using QueryCat.Backend.Types;
 
 namespace QueryCat.Plugins.FluidTemplates;
 
@@ -38,7 +38,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     private readonly TemplateOptions _templateOptions;
     private readonly List<VariantValue[]> _rows = new();
 
-    private QueryContext _queryContext = new EmptyQueryContext();
+    private QueryContext _queryContext = NullQueryContext.Instance;
 
     /// <inheritdoc />
     public QueryContext QueryContext

@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.Github.Functions;
 using QueryCat.Plugins.Github.Inputs;
 

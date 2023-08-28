@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using Amazon.EC2;
 using Amazon.EC2.Model;
-using QueryCat.Backend;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Storage;
+using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Fetch;
+using QueryCat.Backend.Core.Functions;
 
 namespace QueryCat.Plugins.Aws.Inputs;
 

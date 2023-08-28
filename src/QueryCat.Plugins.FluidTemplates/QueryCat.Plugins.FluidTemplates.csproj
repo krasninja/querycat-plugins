@@ -19,6 +19,7 @@ Website: https://github.com/sebastienros/fluid</Description>
 
   <ItemGroup>
     <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
+    <ProjectReference Include="..\..\backend\src\QueryCat.Backend\QueryCat.Backend.csproj" />
   </ItemGroup>
 
 </Project>

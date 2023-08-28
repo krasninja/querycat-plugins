@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using Microsoft.Extensions.Logging;
-using QueryCat.Backend;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Types;
+using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.VStarCam.Domain;
 
 namespace QueryCat.Plugins.VStarCam.Functions;

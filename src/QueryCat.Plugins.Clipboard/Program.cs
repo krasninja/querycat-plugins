@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.Clipboard.Functions;
 
 namespace QueryCat.Plugins.Clipboard;

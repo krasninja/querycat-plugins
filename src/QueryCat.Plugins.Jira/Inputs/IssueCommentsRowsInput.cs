@@ -1,9 +1,8 @@
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using QueryCat.Backend.Core.Fetch;
+using QueryCat.Backend.Core.Functions;
 using RestSharp;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Storage;
-using QueryCat.Backend.Utils;
 using QueryCat.Plugins.Jira.Utils;
 
 namespace QueryCat.Plugins.Jira.Inputs;

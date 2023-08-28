@@ -1,3 +1,4 @@
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.Jira.Functions;
 using QueryCat.Plugins.Jira.Inputs;
 

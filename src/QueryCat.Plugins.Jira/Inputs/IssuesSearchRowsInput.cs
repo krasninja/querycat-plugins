@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Text.Json.Nodes;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Storage;
+using QueryCat.Backend.Core.Fetch;
+using QueryCat.Backend.Core.Functions;
 using QueryCat.Plugins.Jira.Utils;
 using RestSharp;
 

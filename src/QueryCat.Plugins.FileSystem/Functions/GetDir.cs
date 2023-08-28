@@ -1,7 +1,6 @@
 using System.ComponentModel;
-using System.IO;
-using QueryCat.Backend.Functions;
-using QueryCat.Backend.Types;
+using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.FileSystem.Functions;
 
