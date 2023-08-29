@@ -10,7 +10,7 @@
     <PackageTags>network querycat</PackageTags>
     <AssemblyVersion>0.1.0</AssemblyVersion>
     <OutputType>Exe</OutputType>
-    <AssemblyName>qcat-plugins-network-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-network-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

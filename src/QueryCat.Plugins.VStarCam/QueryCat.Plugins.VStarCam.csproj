@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <PackageVersion>0.3.0</PackageVersion>
+    <PackageVersion>0.4.0</PackageVersion>
     <Title>VStarCam Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>vstarcam querycat</PackageTags>
     <OutputType>Exe</OutputType>
-    <AssemblyName>qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

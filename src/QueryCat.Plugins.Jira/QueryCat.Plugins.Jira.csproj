@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <PackageVersion>0.3.0</PackageVersion>
+    <PackageVersion>0.4.0</PackageVersion>
     <Title>JIRA Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat jira</PackageTags>
     <OutputType>Exe</OutputType>
-    <AssemblyName>qcat-plugins-jira-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-jira-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

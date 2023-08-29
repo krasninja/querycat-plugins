@@ -7,7 +7,7 @@
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat numerology</PackageTags>
     <OutputType>Exe</OutputType>
-    <AssemblyName>qcat-plugins-numerology-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-numerology-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

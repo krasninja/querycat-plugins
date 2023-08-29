@@ -23,7 +23,7 @@ public class BuildContext : FrostingContext
         "QueryCat.Plugins.Network",
         "QueryCat.Plugins.Numerology",
         "QueryCat.Plugins.System",
-        "QueryCat.Plugins.VStarCam"
+        "QueryCat.Plugins.VStarCam",
     };
 
     public BuildContext(ICakeContext context) : base(context)

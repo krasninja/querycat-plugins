@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <PackageVersion>0.2.0</PackageVersion>
+    <PackageVersion>0.3.0</PackageVersion>
     <Title>Fluid Templates</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Fluid is an open-source .NET template engine based on the Liquid template language. It's a secure template language that is also very accessible for non-programmer audiences.
@@ -10,7 +10,7 @@
 Website: https://github.com/sebastienros/fluid</Description>
     <PackageTags>fluid template querycat</PackageTags>
     <OutputType>Exe</OutputType>
-    <AssemblyName>qcat-plugins-fluidtemplates-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-fluidtemplates-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <PackageVersion>0.2.0</PackageVersion>
+    <PackageVersion>0.3.0</PackageVersion>
     <Title>Clipboard Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Clipboard plugin.</Description>
     <PackageTags>clipboard querycat</PackageTags>
     <OutputType>Exe</OutputType>
-    <AssemblyName>qcat-plugins-clipboard-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-clipboard-$(PackageVersion)-$(Runtime)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
