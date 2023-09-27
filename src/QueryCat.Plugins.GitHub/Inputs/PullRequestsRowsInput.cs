@@ -41,7 +41,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             .AddProperty("number", p => p.Number, "The pull request issue number.")
             .AddProperty("title", p => p.Title, "Pull request title.")
             .AddProperty("author_login", p => p.User.Login, "The login name of the user that submitted the PR.")
-            .AddProperty("state", p => p.State, "The state or the PR (open, closed).")
+            .AddProperty("state", p => p.State.Value, "The state or the PR (open, closed).")
             .AddProperty("body", p => p.Body, "Pull request title.")
             .AddProperty("additions", p => p.Additions, "The number of additions in this PR.")
             .AddProperty("deletions", p => p.Deletions, "The number of deletions in this PR.")
@@ -58,7 +58,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
                 "If true, people with push access to the upstream repository of a fork owned by a user " +
                 "account can commit to the forked branches.")
             .AddProperty("mergeable", p => p.Mergeable, "If true, the PR can be merged.")
-            .AddProperty("mergeable_state", p => p.MergeableState, "The mergeability state of the PR.")
+            .AddProperty("mergeable_state", p => p.MergeableState?.Value, "The mergeability state of the PR.")
             .AddProperty("merged", p => p.Merged, "If true, the PR has been merged.")
             .AddProperty("merged_at", p => p.MergedAt, "The timestamp when the PR was merged.");
 
