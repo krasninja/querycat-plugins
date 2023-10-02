@@ -11,6 +11,8 @@ namespace QueryCat.Plugins.Build;
 [TaskDescription("Build all plugins target")]
 public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
 {
+    private const bool PublishAotDefault = false;
+
     private readonly string[] _platforms =
     {
         DotNetConstants.RidLinuxX64,
@@ -23,6 +25,8 @@ public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
     {
         var targetPlatform = context.Arguments.GetArgument("Platform");
         var targetProject = context.Arguments.GetArgument("Project");
+        var publishAot = bool.Parse(context.Arguments.GetArgument(DotNetConstants.PublishAotArgument)
+            ?? PublishAotDefault.ToString());
 
         foreach (var project in context.Projects)
         {
@@ -42,15 +46,21 @@ public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
                 {
                     OutputDirectory = context.OutputDirectory,
                     Runtime = platform,
-                    PublishSingleFile = true,
-                    PublishTrimmed = false,
+                    PublishSingleFile = publishAot ? null : true,
+                    PublishTrimmed = publishAot,
                     Configuration = DotNetConstants.ConfigurationRelease,
                     NoLogo = true,
-                    IncludeAllContentForSelfExtract = false,
-                    EnableCompressionInSingleFile = true,
-                    SelfContained = true,
+                    IncludeAllContentForSelfExtract = publishAot ? null : true,
+                    EnableCompressionInSingleFile = publishAot ? null : true,
+                    SelfContained = publishAot ? null : true,
                     ArgumentCustomization = pag =>
                     {
+                        if (publishAot)
+                        {
+                            pag.Append(new TextArgument("-p:PublishAot=true"));
+                            pag.Append(new TextArgument("-p:OptimizationPreference=Speed"));
+                            pag.Append(new TextArgument("-p:StripSymbols=true"));
+                        }
                         pag.Append(new TextArgument($"-p:Runtime={platform}"));
                         pag.Append(new TextArgument("-p:UseAssemblyName=true"));
                         pag.Append(new TextArgument("-p:DebuggerSupport=false"));
