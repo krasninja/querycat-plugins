@@ -13,9 +13,9 @@ public class Program
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(Hostname));
-        client.FunctionsManager.RegisterFromType(typeof(IntToIp));
-        client.FunctionsManager.RegisterFromType(typeof(IpToInt));
+        client.FunctionsManager.RegisterFunction(Hostname.HostnameFunction);
+        client.FunctionsManager.RegisterFunction(IntToIp.IntToIpFunction);
+        client.FunctionsManager.RegisterFunction(IpToInt.IpToIntFunction);
         client.FunctionsManager.RegisterFromType(typeof(InterfaceAddressesRowsInput));
         client.FunctionsManager.RegisterFromType(typeof(InterfaceDetailsRowsInput));
         await client.Start();

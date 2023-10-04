@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using Microsoft.Extensions.FileSystemGlobbing;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;

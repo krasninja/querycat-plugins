@@ -13,7 +13,8 @@ public class Program
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(SetIr));
+        client.FunctionsManager.RegisterFunction(SetIr.VStarSetIrFunction);
+        client.FunctionsManager.RegisterFunction(CameraInfoRowsInput.CameraInfoRowsInputFunction);
         client.FunctionsManager.RegisterFromType(typeof(CameraInfoRowsInput));
         client.FunctionsManager.RegisterFromType(typeof(CamerasRowsInput));
         await client.Start();

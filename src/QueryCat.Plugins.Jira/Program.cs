@@ -13,9 +13,9 @@ public class Program
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(SetBasicAuth));
-        client.FunctionsManager.RegisterFromType(typeof(SetToken));
-        client.FunctionsManager.RegisterFromType(typeof(SetUrl));
+        client.FunctionsManager.RegisterFunction(SetBasicAuth.JiraSetBasicAuthFunction);
+        client.FunctionsManager.RegisterFunction(SetToken.JiraSetTokenAuthFunction);
+        client.FunctionsManager.RegisterFunction(SetUrl.JiraSetUrlFunction);
         client.FunctionsManager.RegisterFromType(typeof(IssueCommentsRowsInput));
         client.FunctionsManager.RegisterFromType(typeof(IssuesRowsInput));
         client.FunctionsManager.RegisterFromType(typeof(IssuesSearchRowsInput));

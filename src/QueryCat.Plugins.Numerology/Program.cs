@@ -12,7 +12,7 @@ public class Program
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(CalcMatrix));
+        client.FunctionsManager.RegisterFunction(CalcMatrix.CalcMatrixFunction);
         await client.Start();
         await client.WaitForParentProcessExitAsync();
     }

@@ -13,7 +13,7 @@ public class Program
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(GetDir));
+        client.FunctionsManager.RegisterFunction(GetDir.GetDirFunction);
         client.FunctionsManager.RegisterFromType(typeof(FilesRowsInput));
         await client.Start();
         await client.WaitForParentProcessExitAsync();

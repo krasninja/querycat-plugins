@@ -12,8 +12,8 @@ public class Program
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(Get));
-        client.FunctionsManager.RegisterFromType(typeof(Set));
+        client.FunctionsManager.RegisterFunction(Get.GetFunction);
+        client.FunctionsManager.RegisterFunction(Set.SetFunction);
         await client.Start();
         await client.WaitForParentProcessExitAsync();
     }
