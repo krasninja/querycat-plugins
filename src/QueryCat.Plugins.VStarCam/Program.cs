@@ -20,8 +20,7 @@ public class Program
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(SetIr.VStarSetIrFunction);
             client.FunctionsManager.RegisterFunction(CameraInfoRowsInput.CameraInfoRowsInputFunction);
-            client.FunctionsManager.RegisterFromType(typeof(CameraInfoRowsInput));
-            client.FunctionsManager.RegisterFromType(typeof(CamerasRowsInput));
+            client.FunctionsManager.RegisterFunction(CamerasRowsInput.CamerasRowsInputFunction);
             await client.StartAsync();
             await client.WaitForServerExitAsync();
         });

@@ -1,14 +1,20 @@
 using System.ComponentModel;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.VStarCam.Domain;
 
 namespace QueryCat.Plugins.VStarCam.Inputs;
 
-[Description("VStar cameras in local network.")]
-[FunctionSignature("vstar_cameras")]
 internal sealed class CamerasRowsInput : FetchInput<Camera>
 {
+    [Description("VStar cameras in local network.")]
+    [FunctionSignature("vstar_cameras(): object<IRowsInput>")]
+    public static VariantValue CamerasRowsInputFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new CamerasRowsInput());
+    }
+
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<Camera> builder)
     {
