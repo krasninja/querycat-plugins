@@ -1,4 +1,7 @@
+using System.Runtime.InteropServices;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Utils;
+using QueryCat.Plugins.Client;
 using QueryCat.Plugins.System.Inputs;
 
 namespace QueryCat.Plugins.System;
@@ -8,14 +11,22 @@ namespace QueryCat.Plugins.System;
 /// </summary>
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static void QueryCatMain(ThriftPluginClientArguments args)
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
-        using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-        client.FunctionsManager.RegisterFromType(typeof(ArgsRowsInput));
-        client.FunctionsManager.RegisterFromType(typeof(EnvsRowsInput));
-        client.FunctionsManager.RegisterFromType(typeof(ProcessesRowsInput));
-        await client.Start();
-        await client.WaitForParentProcessExitAsync();
+        AsyncUtils.RunSync(async () =>
+        {
+            using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
+            client.FunctionsManager.RegisterFromType(typeof(ArgsRowsInput));
+            client.FunctionsManager.RegisterFromType(typeof(EnvsRowsInput));
+            client.FunctionsManager.RegisterFromType(typeof(ProcessesRowsInput));
+            await client.StartAsync();
+            await client.WaitForServerExitAsync();
+        });
     }
+
+    [UnmanagedCallersOnly(EntryPoint = ThriftPluginClient.PluginMainFunctionName)]
+    public static void DllMain(QueryCatPluginArguments args) => QueryCatMain(args.ConvertToPluginClientArguments());
+
+    public static void Main(string[] args) => QueryCatMain(ThriftPluginClient.ConvertCommandLineArguments(args));
 }

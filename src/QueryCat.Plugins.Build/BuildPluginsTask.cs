@@ -65,6 +65,7 @@ public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
                         pag.Append(new TextArgument("-p:UseAssemblyName=true"));
                         pag.Append(new TextArgument("-p:DebuggerSupport=false"));
                         pag.Append(new TextArgument("-p:EnableUnsafeBinaryFormatterSerialization=false"));
+                        pag.Append(new TextArgument("-p:InvariantGlobalization=true"));
                         return pag;
                     },
                 });

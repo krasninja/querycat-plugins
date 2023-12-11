@@ -6,8 +6,8 @@
     <Title>System Functions</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat processes</PackageTags>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-system-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

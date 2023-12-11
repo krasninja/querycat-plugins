@@ -6,7 +6,7 @@ using QueryCat.Plugins.VStarCam.Domain;
 
 namespace QueryCat.Plugins.VStarCam.Inputs;
 
-record CameraInfo(Camera Camera, CameraParameters CameraParameters);
+internal record CameraInfo(Camera Camera, CameraParameters CameraParameters);
 
 internal sealed class CameraInfoRowsInput : FetchInput<CameraInfo>
 {

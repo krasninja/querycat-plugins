@@ -6,8 +6,8 @@
     <Title>JIRA Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat jira</PackageTags>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-jira-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

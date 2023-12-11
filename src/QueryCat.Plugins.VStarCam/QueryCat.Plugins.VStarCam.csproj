@@ -6,8 +6,8 @@
     <Title>VStarCam Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>vstarcam querycat</PackageTags>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

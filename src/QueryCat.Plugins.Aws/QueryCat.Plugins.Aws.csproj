@@ -7,8 +7,8 @@
     <Authors>Ivan Kozhin</Authors>
     <Description>Amazon Web Services plugin.</Description>
     <PackageTags>aws querycat</PackageTags>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-aws-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.EC2" Version="3.7.308" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.304.4" />
+    <PackageReference Include="AWSSDK.EC2" Version="3.7.309" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.304.5" />
   </ItemGroup>
 
 </Project>

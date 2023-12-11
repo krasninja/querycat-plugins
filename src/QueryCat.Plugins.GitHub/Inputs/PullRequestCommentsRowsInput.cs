@@ -29,7 +29,7 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
     protected override void Initialize(ClassRowsFrameBuilder<PullRequestReviewComment> builder)
     {
         builder
-            .AddDataProperty()
+            .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Comment id.")
             .AddProperty("pull_id", p => p.PullRequestReviewId, "Pull request id.")
             .AddProperty("pull_number", p => _pullNumber, "Pull request number.")

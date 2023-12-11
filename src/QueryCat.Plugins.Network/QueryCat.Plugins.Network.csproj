@@ -9,8 +9,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>network querycat</PackageTags>
     <AssemblyVersion>0.1.0</AssemblyVersion>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-network-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,8 +7,8 @@
     <Authors>Ivan Kozhin</Authors>
     <Description>File system plugin.</Description>
     <PackageTags>file directory path querycat</PackageTags>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-filesystem-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

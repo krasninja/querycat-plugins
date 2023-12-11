@@ -36,8 +36,8 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     protected override void Initialize(ClassRowsFrameBuilder<Issue> builder)
     {
         // For reference: https://github.com/turbot/steampipe-plugin-github/blob/main/github/table_github_search_issue.go.
-        builder.AddDataProperty()
-            .AddDataProperty()
+        builder
+            .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Issue id.")
             .AddProperty("title", p => p.Title, "Issue title.")
             .AddProperty("body", p => p.Body, "Issue body.")

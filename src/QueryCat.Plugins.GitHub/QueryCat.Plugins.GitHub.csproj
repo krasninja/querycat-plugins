@@ -7,12 +7,13 @@
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>
-    <OutputType>Exe</OutputType>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-github-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Octokit" Version="9.0.0" />
+    <TrimmerRootAssembly Include="Octokit" />
   </ItemGroup>
 
   <ItemGroup>

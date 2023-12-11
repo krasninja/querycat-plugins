@@ -29,7 +29,7 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     protected override void Initialize(ClassRowsFrameBuilder<IssueComment> builder)
     {
         builder
-            .AddDataProperty()
+            .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Comment id.")
             .AddProperty("issue_number", p => _issueNumber, "Issue number.")
             .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
