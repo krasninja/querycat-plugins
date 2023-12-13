@@ -7,6 +7,9 @@
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat jira</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-jira-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <PublishAot>True</PublishAot>
+    <StripSymbols>True</StripSymbols>
+    <PublishTrimmed>True</PublishTrimmed>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 

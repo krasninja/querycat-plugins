@@ -46,19 +46,14 @@ public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
                 {
                     OutputDirectory = context.OutputDirectory,
                     Runtime = platform,
-                    PublishSingleFile = publishAot ? null : true,
-                    PublishTrimmed = publishAot,
                     Configuration = DotNetConstants.ConfigurationRelease,
                     NoLogo = true,
-                    IncludeAllContentForSelfExtract = publishAot ? null : true,
-                    EnableCompressionInSingleFile = publishAot ? null : true,
-                    SelfContained = publishAot ? null : true,
                     ArgumentCustomization = pag =>
                     {
                         if (publishAot)
                         {
                             pag.Append(new TextArgument("-p:PublishAot=true"));
-                            pag.Append(new TextArgument("-p:OptimizationPreference=Speed"));
+                            pag.Append(new TextArgument("-p:OptimizationPreference=Size"));
                             pag.Append(new TextArgument("-p:StripSymbols=true"));
                         }
                         pag.Append(new TextArgument($"-p:Runtime={platform}"));

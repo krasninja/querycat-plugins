@@ -7,6 +7,9 @@
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>vstarcam querycat</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <PublishAot>True</PublishAot>
+    <StripSymbols>True</StripSymbols>
+    <PublishTrimmed>True</PublishTrimmed>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 

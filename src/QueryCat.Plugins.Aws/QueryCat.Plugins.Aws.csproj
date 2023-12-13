@@ -8,6 +8,9 @@
     <Description>Amazon Web Services plugin.</Description>
     <PackageTags>aws querycat</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-aws-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <PublishSingleFile>True</PublishSingleFile>
+    <SelfContained>True</SelfContained>
+    <PublishAot>False</PublishAot>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
