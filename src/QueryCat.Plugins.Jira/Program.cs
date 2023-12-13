@@ -15,7 +15,7 @@ public class Program
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
-        AsyncUtils.RunSync(async () =>
+        AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(SetBasicAuth.JiraSetBasicAuthFunction);
@@ -24,8 +24,8 @@ public class Program
             client.FunctionsManager.RegisterFromType(typeof(IssueCommentsRowsInput));
             client.FunctionsManager.RegisterFromType(typeof(IssuesRowsInput));
             client.FunctionsManager.RegisterFromType(typeof(IssuesSearchRowsInput));
-            await client.StartAsync();
-            await client.WaitForServerExitAsync();
+            await client.StartAsync(ct);
+            await client.WaitForServerExitAsync(ct);
         });
     }
 

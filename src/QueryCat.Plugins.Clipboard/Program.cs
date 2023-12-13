@@ -14,13 +14,13 @@ public class Program
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
-        AsyncUtils.RunSync(async () =>
+        AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(Get.GetFunction);
             client.FunctionsManager.RegisterFunction(Set.SetFunction);
-            await client.StartAsync();
-            await client.WaitForServerExitAsync();
+            await client.StartAsync(ct);
+            await client.WaitForServerExitAsync(ct);
         });
     }
 

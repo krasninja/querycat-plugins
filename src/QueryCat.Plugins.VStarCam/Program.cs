@@ -15,14 +15,14 @@ public class Program
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
-        AsyncUtils.RunSync(async () =>
+        AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(SetIr.VStarSetIrFunction);
             client.FunctionsManager.RegisterFunction(CameraInfoRowsInput.CameraInfoRowsInputFunction);
             client.FunctionsManager.RegisterFunction(CamerasRowsInput.CamerasRowsInputFunction);
-            await client.StartAsync();
-            await client.WaitForServerExitAsync();
+            await client.StartAsync(ct);
+            await client.WaitForServerExitAsync(ct);
         });
     }
 

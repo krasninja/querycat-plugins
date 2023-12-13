@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using Octokit;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Utils;
 using QueryCat.Plugins.Client;
@@ -16,7 +15,7 @@ internal class Program
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
-        AsyncUtils.RunSync(async () =>
+        AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(SetToken.SetTokenFunction);
@@ -32,8 +31,8 @@ internal class Program
             client.FunctionsManager.RegisterFromType(typeof(PullRequestsRowsInput));
             client.FunctionsManager.RegisterFunction(SearchIssuesRowsInput.GitHubSearchIssuesFunction);
             client.FunctionsManager.RegisterFromType(typeof(SearchIssuesRowsInput));
-            await client.StartAsync();
-            await client.WaitForServerExitAsync();
+            await client.StartAsync(ct);
+            await client.WaitForServerExitAsync(ct);
         });
     }
 
