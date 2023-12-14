@@ -6,10 +6,15 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.FileSystem.Inputs;
 
-[Description("Return information on files.")]
-[FunctionSignature("fs_files")]
 internal sealed class FilesRowsInput : FetchInput<FilesRowsInput.FileDto>
 {
+    [Description("Return information on files.")]
+    [FunctionSignature("fs_files(): object<IRowsInput>")]
+    public static VariantValue FilesFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new FilesRowsInput());
+    }
+
     public class FileDto
     {
         public string Path { get; set; } = string.Empty;

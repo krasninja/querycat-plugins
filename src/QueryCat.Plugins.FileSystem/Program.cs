@@ -19,7 +19,7 @@ public class Program
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(GetDir.GetDirFunction);
-            client.FunctionsManager.RegisterFromType(typeof(FilesRowsInput));
+            client.FunctionsManager.RegisterFunction(FilesRowsInput.FilesFunction);
             await client.StartAsync(ct);
             await client.WaitForServerExitAsync(ct);
         });
