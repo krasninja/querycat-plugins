@@ -2,13 +2,19 @@ using System.ComponentModel;
 using System.Net.NetworkInformation;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Network.Inputs;
 
-[Description("Network interfaces and relevant detailed information.")]
-[FunctionSignature("net_interface_details")]
 internal sealed class InterfaceDetailsRowsInput : FetchInput<InterfaceDetailsRowsInput.InterfaceAddressDto>
 {
+    [Description("Network interfaces and relevant detailed information.")]
+    [FunctionSignature("net_interface_details(): object<IRowsInput>")]
+    public static VariantValue InterfaceDetailsFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new InterfaceDetailsRowsInput());
+    }
+
     public class InterfaceAddressDto
     {
         public string Id { get; set; } = string.Empty;

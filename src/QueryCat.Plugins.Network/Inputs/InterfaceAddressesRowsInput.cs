@@ -3,13 +3,19 @@ using System.Net;
 using System.Net.NetworkInformation;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Network.Inputs;
 
-[Description("Network interfaces and relevant metadata.")]
-[FunctionSignature("net_interface_addresses")]
 internal sealed class InterfaceAddressesRowsInput : FetchInput<InterfaceAddressesRowsInput.InterfaceAddressDto>
 {
+    [Description("Network interfaces and relevant metadata.")]
+    [FunctionSignature("net_interface_addresses(): object<IRowsInput>")]
+    public static VariantValue InterfaceAddressesFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new InterfaceAddressesRowsInput());
+    }
+
     public class InterfaceAddressDto
     {
         public string Id { get; set; } = string.Empty;

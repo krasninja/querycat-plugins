@@ -21,8 +21,8 @@ public class Program
             client.FunctionsManager.RegisterFunction(Hostname.HostnameFunction);
             client.FunctionsManager.RegisterFunction(IntToIp.IntToIpFunction);
             client.FunctionsManager.RegisterFunction(IpToInt.IpToIntFunction);
-            client.FunctionsManager.RegisterFromType(typeof(InterfaceAddressesRowsInput));
-            client.FunctionsManager.RegisterFromType(typeof(InterfaceDetailsRowsInput));
+            client.FunctionsManager.RegisterFunction(InterfaceAddressesRowsInput.InterfaceAddressesFunction);
+            client.FunctionsManager.RegisterFunction(InterfaceDetailsRowsInput.InterfaceDetailsFunction);
             await client.StartAsync(ct);
             await client.WaitForServerExitAsync(ct);
         });
