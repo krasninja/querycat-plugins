@@ -3,6 +3,7 @@ using Octokit;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Github.Inputs;
 
@@ -12,10 +13,15 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// <remarks>
 /// https://docs.github.com/en/rest/pulls/comments.
 /// </remarks>
-[Description("Return Github comments for the specific pull request.")]
-[FunctionSignature("github_pull_comments")]
 internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewComment>
 {
+    [Description("Return Github comments for the specific pull request.")]
+    [FunctionSignature("github_pull_comments(): object<IRowsInput>")]
+    public static VariantValue PullRequestCommentsFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(args));
+    }
+
     private int _pullNumber;
     private string _owner = string.Empty;
     private string _repository = string.Empty;
