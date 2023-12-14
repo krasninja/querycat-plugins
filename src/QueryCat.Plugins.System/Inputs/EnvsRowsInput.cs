@@ -1,13 +1,19 @@
 using System.ComponentModel;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.System.Inputs;
 
-[Description("A key/value table of environment variables.")]
-[FunctionSignature("sys_envs")]
 internal sealed class EnvsRowsInput : FetchInput<EnvsRowsInput.EnvDto>
 {
+    [Description("A key/value table of environment variables.")]
+    [FunctionSignature("sys_envs(): object<IRowsInput>")]
+    public static VariantValue EnvsRowsFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new EnvsRowsInput());
+    }
+
     internal class EnvDto
     {
         public string Key { get; set; } = string.Empty;

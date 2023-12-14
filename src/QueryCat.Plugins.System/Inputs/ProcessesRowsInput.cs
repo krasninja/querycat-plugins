@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.System.Inputs;
 
@@ -9,6 +10,13 @@ namespace QueryCat.Plugins.System.Inputs;
 [FunctionSignature("sys_processes")]
 internal sealed class ProcessesRowsInput : FetchInput<ProcessesRowsInput.ProcessDto>
 {
+    [Description("All running processes on the host system.")]
+    [FunctionSignature("sys_processes(): object<IRowsInput>")]
+    public static VariantValue ProcessesFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new ProcessesRowsInput());
+    }
+
     internal class ProcessDto
     {
         public int Pid { get; set; }

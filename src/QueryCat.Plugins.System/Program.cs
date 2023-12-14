@@ -17,9 +17,9 @@ public class Program
         AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-            client.FunctionsManager.RegisterFromType(typeof(ArgsRowsInput));
-            client.FunctionsManager.RegisterFromType(typeof(EnvsRowsInput));
-            client.FunctionsManager.RegisterFromType(typeof(ProcessesRowsInput));
+            client.FunctionsManager.RegisterFunction(ArgsRowsInput.ArgsRowsFunction);
+            client.FunctionsManager.RegisterFunction(EnvsRowsInput.EnvsRowsFunction);
+            client.FunctionsManager.RegisterFunction(ProcessesRowsInput.ProcessesFunction);
             await client.StartAsync(ct);
             await client.WaitForServerExitAsync(ct);
         });

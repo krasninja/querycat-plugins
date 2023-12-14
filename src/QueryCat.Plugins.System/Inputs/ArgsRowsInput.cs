@@ -1,13 +1,19 @@
 using System.ComponentModel;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.System.Inputs;
 
-[Description("A key/value table of command line arguments.")]
-[FunctionSignature("sys_args")]
 internal sealed class ArgsRowsInput : FetchInput<ArgsRowsInput.ArgDto>
 {
+    [Description("A key/value table of command line arguments.")]
+    [FunctionSignature("sys_args(): object<IRowsInput>")]
+    public static VariantValue ArgsRowsFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new ArgsRowsInput());
+    }
+
     internal class ArgDto
     {
         public string Value { get; set; } = string.Empty;
