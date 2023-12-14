@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.Jira.Utils;
 using RestSharp;
 
@@ -13,10 +14,15 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// <remarks>
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get.
 /// </remarks>
-[Description("Search issues using JQL.")]
-[FunctionSignature("jira_issue_search")]
 internal sealed class IssuesSearchRowsInput : FetchInput<JsonNode>
 {
+    [Description("Search issues using JQL.")]
+    [FunctionSignature("jira_issue_search(): object<IRowsInput>")]
+    public static VariantValue JiraIssueSearchFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new IssuesSearchRowsInput());
+    }
+
     private string _jql = string.Empty;
 
     /// <inheritdoc />

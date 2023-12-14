@@ -21,9 +21,9 @@ public class Program
             client.FunctionsManager.RegisterFunction(SetBasicAuth.JiraSetBasicAuthFunction);
             client.FunctionsManager.RegisterFunction(SetToken.JiraSetTokenAuthFunction);
             client.FunctionsManager.RegisterFunction(SetUrl.JiraSetUrlFunction);
-            client.FunctionsManager.RegisterFromType(typeof(IssueCommentsRowsInput));
-            client.FunctionsManager.RegisterFromType(typeof(IssuesRowsInput));
-            client.FunctionsManager.RegisterFromType(typeof(IssuesSearchRowsInput));
+            client.FunctionsManager.RegisterFunction(IssueCommentsRowsInput.JiraIssueCommentsFunction);
+            client.FunctionsManager.RegisterFunction(IssuesRowsInput.JiraIssueFunction);
+            client.FunctionsManager.RegisterFunction(IssuesSearchRowsInput.JiraIssueSearchFunction);
             await client.StartAsync(ct);
             await client.WaitForServerExitAsync(ct);
         });

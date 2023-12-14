@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.Jira.Utils;
 using RestSharp;
 
@@ -14,10 +15,15 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get.
 /// https://github.com/turbot/steampipe-plugin-jira/blob/main/jira/table_jira_issue.go.
 /// </remarks>
-[Description("Issues are the building blocks of any Jira project.")]
-[FunctionSignature("jira_issue")]
 internal sealed class IssuesRowsInput : FetchInput<JsonNode>
 {
+    [Description("Issues are the building blocks of any Jira project.")]
+    [FunctionSignature("jira_issue(): object<IRowsInput>")]
+    public static VariantValue JiraIssueFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new IssuesRowsInput());
+    }
+
     private string _key = string.Empty;
 
     public static void InitializeBasicFields(ClassRowsFrameBuilder<JsonNode> builder)

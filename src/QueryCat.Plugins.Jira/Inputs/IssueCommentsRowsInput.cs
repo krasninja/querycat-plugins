@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
 using RestSharp;
 using QueryCat.Plugins.Jira.Utils;
 
@@ -13,10 +14,15 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// <remarks>
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get.
 /// </remarks>
-[Description("Get issue comments.")]
-[FunctionSignature("jira_issue_comments")]
 internal sealed class IssueCommentsRowsInput : FetchInput<JsonNode>
 {
+    [Description("Get issue comments.")]
+    [FunctionSignature("jira_issue_comments(): object<IRowsInput>")]
+    public static VariantValue JiraIssueCommentsFunction(FunctionCallInfo args)
+    {
+        return VariantValue.CreateFromObject(new IssueCommentsRowsInput());
+    }
+
     private string _issueId = string.Empty;
 
     /// <inheritdoc />
