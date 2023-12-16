@@ -64,8 +64,10 @@ internal class FluidTemplateRowsOutput : IRowsOutput
                 statement.WriteToAsync(stringWriter, encoder, context).GetAwaiter().GetResult();
             }
             var result = executionThread.Run(sb.ToString());
+            /*
             var iterator = ExecutionThreadUtils.ConvertToIterator(result);
             context.SetValue(varKey, new EnumerableRowsIterator(iterator));
+            */
             return ValueTask.FromResult(Completion.Normal);
         });
     }

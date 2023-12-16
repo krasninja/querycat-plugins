@@ -10,6 +10,8 @@
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-aws-$(PackageVersion)-$(Runtime)</AssemblyName>
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained>True</SelfContained>
+    <PublishTrimmed>True</PublishTrimmed>
+    <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishAot>False</PublishAot>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
@@ -19,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.EC2" Version="3.7.309" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.304.5" />
+    <PackageReference Include="AWSSDK.EC2" Version="3.7.309.2" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.304.7" />
   </ItemGroup>
 
 </Project>
