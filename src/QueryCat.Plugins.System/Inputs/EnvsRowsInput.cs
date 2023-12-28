@@ -5,7 +5,7 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.System.Inputs;
 
-internal sealed class EnvsRowsInput : FetchInput<EnvsRowsInput.EnvDto>
+internal sealed class EnvsRowsInput : FetchRowsInput<EnvsRowsInput.EnvDto>
 {
     [Description("A key/value table of environment variables.")]
     [FunctionSignature("sys_envs(): object<IRowsInput>")]

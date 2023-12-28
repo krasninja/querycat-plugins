@@ -5,7 +5,7 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.System.Inputs;
 
-internal sealed class ArgsRowsInput : FetchInput<ArgsRowsInput.ArgDto>
+internal sealed class ArgsRowsInput : FetchRowsInput<ArgsRowsInput.ArgDto>
 {
     [Description("A key/value table of command line arguments.")]
     [FunctionSignature("sys_args(): object<IRowsInput>")]

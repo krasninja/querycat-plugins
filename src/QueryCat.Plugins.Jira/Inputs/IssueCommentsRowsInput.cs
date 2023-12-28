@@ -14,7 +14,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// <remarks>
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get.
 /// </remarks>
-internal sealed class IssueCommentsRowsInput : FetchInput<JsonNode>
+internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
 {
     [Description("Get issue comments.")]
     [FunctionSignature("jira_issue_comments(): object<IRowsInput>")]

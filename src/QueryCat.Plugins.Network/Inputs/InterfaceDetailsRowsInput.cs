@@ -6,7 +6,7 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Network.Inputs;
 
-internal sealed class InterfaceDetailsRowsInput : FetchInput<InterfaceDetailsRowsInput.InterfaceAddressDto>
+internal sealed class InterfaceDetailsRowsInput : FetchRowsInput<InterfaceDetailsRowsInput.InterfaceAddressDto>
 {
     [Description("Network interfaces and relevant detailed information.")]
     [FunctionSignature("net_interface_details(): object<IRowsInput>")]

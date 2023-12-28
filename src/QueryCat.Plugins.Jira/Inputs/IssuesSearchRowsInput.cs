@@ -14,7 +14,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// <remarks>
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get.
 /// </remarks>
-internal sealed class IssuesSearchRowsInput : FetchInput<JsonNode>
+internal sealed class IssuesSearchRowsInput : FetchRowsInput<JsonNode>
 {
     [Description("Search issues using JQL.")]
     [FunctionSignature("jira_issue_search(): object<IRowsInput>")]

@@ -9,7 +9,7 @@ namespace QueryCat.Plugins.Aws.Inputs;
 
 [Description("Get EC2 instances.")]
 [FunctionSignature("aws_ec2_instances")]
-internal sealed class Ec2InstancesRowsInput : FetchInput<Instance>
+internal sealed class Ec2InstancesRowsInput : FetchRowsInput<Instance>
 {
     private AmazonEC2Client? _client;
 

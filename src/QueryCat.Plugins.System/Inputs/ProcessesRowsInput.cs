@@ -8,7 +8,7 @@ namespace QueryCat.Plugins.System.Inputs;
 
 [Description("All running processes on the host system.")]
 [FunctionSignature("sys_processes")]
-internal sealed class ProcessesRowsInput : FetchInput<ProcessesRowsInput.ProcessDto>
+internal sealed class ProcessesRowsInput : FetchRowsInput<ProcessesRowsInput.ProcessDto>
 {
     [Description("All running processes on the host system.")]
     [FunctionSignature("sys_processes(): object<IRowsInput>")]

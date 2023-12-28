@@ -6,7 +6,7 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.FileSystem.Inputs;
 
-internal sealed class FilesRowsInput : FetchInput<FilesRowsInput.FileDto>
+internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
 {
     [Description("Return information on files.")]
     [FunctionSignature("fs_files(): object<IRowsInput>")]

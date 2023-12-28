@@ -6,7 +6,7 @@ using QueryCat.Plugins.VStarCam.Domain;
 
 namespace QueryCat.Plugins.VStarCam.Inputs;
 
-internal sealed class CamerasRowsInput : FetchInput<Camera>
+internal sealed class CamerasRowsInput : FetchRowsInput<Camera>
 {
     [Description("VStar cameras in local network.")]
     [FunctionSignature("vstar_cameras(): object<IRowsInput>")]
