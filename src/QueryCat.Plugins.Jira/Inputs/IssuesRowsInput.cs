@@ -29,7 +29,7 @@ internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
     public static void InitializeBasicFields(ClassRowsFrameBuilder<JsonNode> builder)
     {
         builder
-            .AddDataPropertyAsJson()
+            .AddDataPropertyAsJson(p => p)
             .AddProperty("id", p => p.GetValueByPath("id").AsString, "The issue identifier.")
             .AddProperty("key", p => p.GetValueByPath("key").AsString, "The issue key.")
             .AddProperty("project_key", p => p.GetValueByPath("fields.project.key").AsString, "The issue project key.")

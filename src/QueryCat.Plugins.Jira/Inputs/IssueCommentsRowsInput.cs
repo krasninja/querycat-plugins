@@ -29,7 +29,7 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
     protected override void Initialize(ClassRowsFrameBuilder<JsonNode> builder)
     {
         builder
-            .AddDataPropertyAsJson()
+            .AddDataPropertyAsJson(p => p)
             .AddProperty("id", p => p.GetValueByPath("id").AsString, "The comment identifier.")
             .AddProperty("issue_id", p => _issueId, "The comment issue identifier.")
             .AddProperty("author_account_id", p => p.GetValueByPath("author.accountId").AsString, "Author account id.")
