@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.2.0</PackageVersion>
+    <PackageVersion>0.2.1</PackageVersion>
     <Title>File system Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>File system plugin.</Description>

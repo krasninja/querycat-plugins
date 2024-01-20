@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.4.0</PackageVersion>
+    <PackageVersion>0.4.1</PackageVersion>
     <Title>System Functions</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat processes</PackageTags>
