@@ -7,6 +7,7 @@ namespace QueryCat.Plugins.Network.Functions;
 
 internal static class IpToInt
 {
+    [SafeFunction]
     [Description("Convert IP address to integer.")]
     [FunctionSignature("net_ip_to_int(ip: string): integer")]
     public static VariantValue IpToIntFunction(FunctionCallInfo args)

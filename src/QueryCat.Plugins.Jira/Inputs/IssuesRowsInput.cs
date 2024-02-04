@@ -17,6 +17,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
 {
+    [SafeFunction]
     [Description("Issues are the building blocks of any Jira project.")]
     [FunctionSignature("jira_issue(): object<IRowsInput>")]
     public static VariantValue JiraIssueFunction(FunctionCallInfo args)

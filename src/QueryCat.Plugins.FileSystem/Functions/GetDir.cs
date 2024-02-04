@@ -6,6 +6,7 @@ namespace QueryCat.Plugins.FileSystem.Functions;
 
 internal static class GetDir
 {
+    [SafeFunction]
     [Description("Get path of a file or directory.")]
     [FunctionSignature("fs_get_dir(path: string): string")]
     public static VariantValue GetDirFunction(FunctionCallInfo args)

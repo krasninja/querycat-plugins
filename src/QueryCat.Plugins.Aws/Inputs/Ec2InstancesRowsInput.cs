@@ -7,6 +7,7 @@ using QueryCat.Backend.Core.Functions;
 
 namespace QueryCat.Plugins.Aws.Inputs;
 
+[SafeFunction]
 [Description("Get EC2 instances.")]
 [FunctionSignature("aws_ec2_instances")]
 internal sealed class Ec2InstancesRowsInput : FetchRowsInput<Instance>

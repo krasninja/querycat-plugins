@@ -7,6 +7,7 @@ namespace QueryCat.Plugins.Clipboard.Functions;
 
 internal static class Get
 {
+    [SafeFunction]
     [Description("Retrieves text data from the clipboard.")]
     [FunctionSignature("clipboard_get(): string")]
     public static VariantValue GetFunction(FunctionCallInfo args)

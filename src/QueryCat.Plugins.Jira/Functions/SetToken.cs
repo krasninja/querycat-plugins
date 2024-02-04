@@ -6,6 +6,7 @@ namespace QueryCat.Plugins.Jira.Functions;
 
 internal static class SetToken
 {
+    [SafeFunction]
     [Description("Set JIRA token authentication method.")]
     [FunctionSignature("jira_set_token(token: string): void")]
     public static VariantValue JiraSetTokenAuthFunction(FunctionCallInfo args)

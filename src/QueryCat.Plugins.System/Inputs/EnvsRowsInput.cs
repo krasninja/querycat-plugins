@@ -7,6 +7,7 @@ namespace QueryCat.Plugins.System.Inputs;
 
 internal sealed class EnvsRowsInput : FetchRowsInput<EnvsRowsInput.EnvDto>
 {
+    [SafeFunction]
     [Description("A key/value table of environment variables.")]
     [FunctionSignature("sys_envs(): object<IRowsInput>")]
     public static VariantValue EnvsRowsFunction(FunctionCallInfo args)

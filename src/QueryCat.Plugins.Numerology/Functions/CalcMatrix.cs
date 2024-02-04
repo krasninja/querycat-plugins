@@ -6,6 +6,7 @@ namespace QueryCat.Plugins.Numerology.Functions;
 
 internal static class CalcMatrix
 {
+    [SafeFunction]
     [Description("Calculate Pythagorean matrix by date of birthday.")]
     [FunctionSignature("numerology_calc_matrix(dob: timestamp): string")]
     public static VariantValue CalcMatrixFunction(FunctionCallInfo args)

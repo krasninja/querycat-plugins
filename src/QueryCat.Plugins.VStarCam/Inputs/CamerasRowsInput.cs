@@ -8,6 +8,7 @@ namespace QueryCat.Plugins.VStarCam.Inputs;
 
 internal sealed class CamerasRowsInput : FetchRowsInput<Camera>
 {
+    [SafeFunction]
     [Description("VStar cameras in local network.")]
     [FunctionSignature("vstar_cameras(): object<IRowsInput>")]
     public static VariantValue CamerasRowsInputFunction(FunctionCallInfo args)

@@ -16,8 +16,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
 {
-    private readonly string _term;
-
+    [SafeFunction]
     [Description("Search Github issues and pull requests.")]
     [FunctionSignature("github_search_issues(term?: string = 'is:open archived:false assignee:@me'): object<IRowsInput>")]
     public static VariantValue GitHubSearchIssuesFunction(FunctionCallInfo args)
@@ -26,6 +25,8 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
         var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
+
+    private readonly string _term;
 
     public SearchIssuesRowsInput(string token, string term) : base(token)
     {

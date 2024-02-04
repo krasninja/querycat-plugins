@@ -15,6 +15,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
 {
+    [SafeFunction]
     [Description("Return Github pull requests of specific repository.")]
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
     public static VariantValue GitHubPullsFunction(FunctionCallInfo args)

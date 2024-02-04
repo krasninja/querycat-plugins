@@ -8,6 +8,7 @@ namespace QueryCat.Plugins.FileSystem.Inputs;
 
 internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
 {
+    [SafeFunction]
     [Description("Return information on files.")]
     [FunctionSignature("fs_files(): object<IRowsInput>")]
     public static VariantValue FilesFunction(FunctionCallInfo args)

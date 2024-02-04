@@ -6,6 +6,7 @@ namespace QueryCat.Plugins.Jira.Functions;
 
 internal static class SetBasicAuth
 {
+    [SafeFunction]
     [Description("Set JIRA basic authentication method.")]
     [FunctionSignature("jira_set_basic_auth(username: string, password: string): void")]
     public static VariantValue JiraSetBasicAuthFunction(FunctionCallInfo args)

@@ -10,7 +10,6 @@ using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Backend.Execution;
 using QueryCat.Backend.Relational.Iterators;
-using QueryCat.Backend.Storage;
 
 namespace QueryCat.Plugins.FluidTemplates;
 

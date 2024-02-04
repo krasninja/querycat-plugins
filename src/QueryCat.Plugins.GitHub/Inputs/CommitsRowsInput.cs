@@ -15,6 +15,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
 {
+    [SafeFunction]
     [Description("Return Github commits of specific repository.")]
     [FunctionSignature("github_commits(): object<IRowsInput>")]
     public static VariantValue GitHubCommitsFunction(FunctionCallInfo args)

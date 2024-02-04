@@ -7,6 +7,7 @@ namespace QueryCat.Plugins.System.Inputs;
 
 internal sealed class ArgsRowsInput : FetchRowsInput<ArgsRowsInput.ArgDto>
 {
+    [SafeFunction]
     [Description("A key/value table of command line arguments.")]
     [FunctionSignature("sys_args(): object<IRowsInput>")]
     public static VariantValue ArgsRowsFunction(FunctionCallInfo args)

@@ -16,6 +16,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
 {
+    [SafeFunction]
     [Description("Get issue comments.")]
     [FunctionSignature("jira_issue_comments(): object<IRowsInput>")]
     public static VariantValue JiraIssueCommentsFunction(FunctionCallInfo args)

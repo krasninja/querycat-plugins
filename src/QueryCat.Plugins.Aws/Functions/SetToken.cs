@@ -6,6 +6,7 @@ namespace QueryCat.Plugins.Aws.Functions;
 
 internal static class SetToken
 {
+    [SafeFunction]
     [Description("Set AWS token authentication method.")]
     [FunctionSignature("aws_set_token(access_key: string, secret_key: string): void")]
     public static VariantValue AwsSetTokenAuthFunction(FunctionCallInfo args)

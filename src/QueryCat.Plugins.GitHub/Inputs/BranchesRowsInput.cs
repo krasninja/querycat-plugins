@@ -15,6 +15,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class BranchesRowsInput : BaseRowsInput<Branch>
 {
+    [SafeFunction]
     [Description("Return Github branches of specific repository.")]
     [FunctionSignature("github_branches(): object<IRowsInput>")]
     public static VariantValue GitHubBranchesFunction(FunctionCallInfo args)

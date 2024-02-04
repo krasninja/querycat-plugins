@@ -15,6 +15,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
 {
+    [SafeFunction]
     [Description("Return Github comments for the specific issue.")]
     [FunctionSignature("github_issue_comments(): object<IRowsInput>")]
     public static VariantValue IssueCommentsFunction(FunctionCallInfo args)

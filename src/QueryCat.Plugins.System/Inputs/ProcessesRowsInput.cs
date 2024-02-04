@@ -10,6 +10,7 @@ namespace QueryCat.Plugins.System.Inputs;
 [FunctionSignature("sys_processes")]
 internal sealed class ProcessesRowsInput : FetchRowsInput<ProcessesRowsInput.ProcessDto>
 {
+    [SafeFunction]
     [Description("All running processes on the host system.")]
     [FunctionSignature("sys_processes(): object<IRowsInput>")]
     public static VariantValue ProcessesFunction(FunctionCallInfo args)

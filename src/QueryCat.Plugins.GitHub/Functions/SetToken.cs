@@ -6,6 +6,7 @@ namespace QueryCat.Plugins.Github.Functions;
 
 internal static class SetToken
 {
+    [SafeFunction]
     [Description("GitHub authentication.")]
     [FunctionSignature("github_set_token(token: string): void")]
     public static VariantValue SetTokenFunction(FunctionCallInfo args)

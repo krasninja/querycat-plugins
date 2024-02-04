@@ -10,6 +10,7 @@ internal record CameraInfo(Camera Camera, CameraParameters CameraParameters);
 
 internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
 {
+    [SafeFunction]
     [Description("VStar camera information.")]
     [FunctionSignature("vstar_camera_info(login: string, password: string): object<IRowsInput>")]
     public static VariantValue CameraInfoRowsInputFunction(FunctionCallInfo args)

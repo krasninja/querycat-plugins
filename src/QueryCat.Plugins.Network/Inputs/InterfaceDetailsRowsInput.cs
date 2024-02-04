@@ -8,6 +8,7 @@ namespace QueryCat.Plugins.Network.Inputs;
 
 internal sealed class InterfaceDetailsRowsInput : FetchRowsInput<InterfaceDetailsRowsInput.InterfaceAddressDto>
 {
+    [SafeFunction]
     [Description("Network interfaces and relevant detailed information.")]
     [FunctionSignature("net_interface_details(): object<IRowsInput>")]
     public static VariantValue InterfaceDetailsFunction(FunctionCallInfo args)
