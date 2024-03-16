@@ -10,22 +10,15 @@ namespace QueryCat.Plugins.Github;
 /// <summary>
 /// Program entry point.
 /// </summary>
-internal class Program
+public class Program
 {
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
         QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
         AsyncUtils.RunSync(async ct =>
         {
-            using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-            client.FunctionsManager.RegisterFunction(SetToken.SetTokenFunction);
-            client.FunctionsManager.RegisterFunction(BranchesRowsInput.GitHubBranchesFunction);
-            client.FunctionsManager.RegisterFunction(CommitsRefRowsInput.GitHubCommitsRefFunction);
-            client.FunctionsManager.RegisterFunction(CommitsRowsInput.GitHubCommitsFunction);
-            client.FunctionsManager.RegisterFunction(IssueCommentsRowsInput.IssueCommentsFunction);
-            client.FunctionsManager.RegisterFunction(PullRequestCommentsRowsInput.PullRequestCommentsFunction);
-            client.FunctionsManager.RegisterFunction(PullRequestsRowsInput.GitHubPullsFunction);
-            client.FunctionsManager.RegisterFunction(SearchIssuesRowsInput.GitHubSearchIssuesFunction);
+            using var client = new ThriftPluginClient(args);
+            RegisterFunctions(client.FunctionsManager);
             await client.StartAsync(ct);
             await client.WaitForServerExitAsync(ct);
         });
@@ -35,4 +28,20 @@ internal class Program
     public static void DllMain(QueryCatPluginArguments args) => QueryCatMain(args.ConvertToPluginClientArguments());
 
     public static void Main(string[] args) => QueryCatMain(ThriftPluginClient.ConvertCommandLineArguments(args));
+
+    /// <summary>
+    /// Register plugin functions.
+    /// </summary>
+    /// <param name="functionsManager">Functions manager.</param>
+    public static void RegisterFunctions(IFunctionsManager functionsManager)
+    {
+        functionsManager.RegisterFunction(SetToken.SetTokenFunction);
+        functionsManager.RegisterFunction(BranchesRowsInput.GitHubBranchesFunction);
+        functionsManager.RegisterFunction(CommitsRefRowsInput.GitHubCommitsRefFunction);
+        functionsManager.RegisterFunction(CommitsRowsInput.GitHubCommitsFunction);
+        functionsManager.RegisterFunction(IssueCommentsRowsInput.IssueCommentsFunction);
+        functionsManager.RegisterFunction(PullRequestCommentsRowsInput.PullRequestCommentsFunction);
+        functionsManager.RegisterFunction(PullRequestsRowsInput.GitHubPullsFunction);
+        functionsManager.RegisterFunction(SearchIssuesRowsInput.GitHubSearchIssuesFunction);
+    }
 }

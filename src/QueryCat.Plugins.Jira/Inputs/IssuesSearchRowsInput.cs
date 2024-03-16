@@ -24,17 +24,13 @@ internal sealed class IssuesSearchRowsInput : FetchRowsInput<JsonNode>
         return VariantValue.CreateFromObject(new IssuesSearchRowsInput());
     }
 
-    private string _jql = string.Empty;
-
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<JsonNode> builder)
     {
         IssuesRowsInput.InitializeBasicFields(builder);
         builder
-            .AddProperty("jql", _ => _jql, "JQL.");
-        AddKeyColumn("jql",
-            isRequired: true,
-            set: value => _jql = value.AsString);
+            .AddProperty("jql", _ => GetKeyColumnValue("jql"), "JQL.")
+            .AddKeyColumn("jql", isRequired: true);
     }
 
     /// <inheritdoc />
@@ -45,7 +41,7 @@ internal sealed class IssuesSearchRowsInput : FetchRowsInput<JsonNode>
         return fetch.FetchLimitOffset((limit, offset, ct) =>
         {
             var request = new RestRequest("search")
-                .AddQueryParameter("jql", _jql)
+                .AddQueryParameter("jql", GetKeyColumnValue("jql"))
                 .AddQueryParameter("startAt", offset)
                 .AddQueryParameter("maxResults", limit);
             var json = config.Client.Get(request).ToJson();

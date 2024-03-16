@@ -46,7 +46,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("author", p => p.User.Login, "Issue author.")
             .AddProperty("comments", p => p.Comments, "Number of comments.")
             .AddProperty("number", p => p.Number, "Issue number.")
-            .AddProperty("url", p => p.HtmlUrl)
+            .AddProperty("url", p => p.HtmlUrl, "URL to HTML")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.");
     }

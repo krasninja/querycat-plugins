@@ -66,6 +66,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.Core", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.Addons", "..\backend\src\QueryCat.Backend.Addons\QueryCat.Backend.Addons.csproj", "{00A9266B-A8DC-4A41-ADCD-8BB3CA1613A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.VisualParadigm", "QueryCat.Plugins.VisualParadigm\QueryCat.Plugins.VisualParadigm.csproj", "{B0A33090-7187-4365-B87C-C78EF99C2D48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualParadigm", "VisualParadigm", "{CAFF6C3C-9EAC-4375-B14E-996BC59254DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +160,10 @@ Global
 		{00A9266B-A8DC-4A41-ADCD-8BB3CA1613A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00A9266B-A8DC-4A41-ADCD-8BB3CA1613A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00A9266B-A8DC-4A41-ADCD-8BB3CA1613A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A33090-7187-4365-B87C-C78EF99C2D48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A33090-7187-4365-B87C-C78EF99C2D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A33090-7187-4365-B87C-C78EF99C2D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A33090-7187-4365-B87C-C78EF99C2D48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{939CE72C-CD01-4AA0-B424-E9A669B419A6} = {57FD3CD5-B80B-40B7-97B1-3C5D0A4FDDFF}
@@ -179,5 +187,6 @@ Global
 		{3FCB8C43-1816-44E6-88CD-D2A91C00086C} = {57FD3CD5-B80B-40B7-97B1-3C5D0A4FDDFF}
 		{8168C689-C17C-45C5-B917-1656132B0074} = {57FD3CD5-B80B-40B7-97B1-3C5D0A4FDDFF}
 		{00A9266B-A8DC-4A41-ADCD-8BB3CA1613A6} = {57FD3CD5-B80B-40B7-97B1-3C5D0A4FDDFF}
+		{B0A33090-7187-4365-B87C-C78EF99C2D48} = {CAFF6C3C-9EAC-4375-B14E-996BC59254DE}
 	EndGlobalSection
 EndGlobal

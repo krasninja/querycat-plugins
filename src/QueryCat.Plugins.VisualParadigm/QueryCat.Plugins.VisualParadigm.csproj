@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QueryCat.Plugins.VisualParadigm</RootNamespace>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Title>Visual Paradigm Plugin</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>sample</PackageTags>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-visualparadigm-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <PublishTrimmed>true</PublishTrimmed>
+    <StripSymbols>true</StripSymbols>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
+  </ItemGroup>
+
+</Project>

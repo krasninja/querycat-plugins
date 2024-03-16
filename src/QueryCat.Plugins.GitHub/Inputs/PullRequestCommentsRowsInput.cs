@@ -23,10 +23,6 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
         return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(args));
     }
 
-    private int _pullNumber;
-    private string _owner = string.Empty;
-    private string _repository = string.Empty;
-
     public PullRequestCommentsRowsInput(FunctionCallInfo args)
         : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
@@ -39,8 +35,8 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
             .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Comment id.")
             .AddProperty("pull_id", p => p.PullRequestReviewId, "Pull request id.")
-            .AddProperty("pull_number", p => _pullNumber, "Pull request number.")
-            .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
+            .AddProperty("pull_number", p => GetKeyColumnValue("pull_number"), "Pull request number.")
+            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("body", p => p.Body, "Comment body.")
             .AddProperty("url", p => p.Url, "Comment URL.")
             .AddProperty("path", p => p.Path, "Relative path of the file the comment is about.")
@@ -52,23 +48,20 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
             .AddProperty("created_by_id", p => p.User.Id, "User id who created the comment.")
             .AddProperty("created_by_login", p => p.User.Login, "User login who created the comment.")
             .AddProperty("created_at", p => p.CreatedAt, "Date of comment creation.")
-            .AddProperty("updated_at", p => p.UpdatedAt, "Date of comment update.");
-
-        AddKeyColumn("repository_full_name",
-            isRequired: true,
-            set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
-        AddKeyColumn("pull_number",
-            isRequired: true,
-            set: v => _pullNumber = (int)v.AsInteger);
+            .AddProperty("updated_at", p => p.UpdatedAt, "Date of comment update.")
+            .AddKeyColumn("repository_full_name", isRequired: true)
+            .AddKeyColumn("pull_number", isRequired: true);
     }
 
     /// <inheritdoc />
     protected override IEnumerable<PullRequestReviewComment> GetData(Fetcher<PullRequestReviewComment> fetcher)
     {
+        var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
+        var pullNumber = (int)GetKeyColumnValue("pull_number").AsInteger;
         fetcher.PageStart = 1;
         return fetcher.FetchPaged(async (page, limit, ct) =>
         {
-            return await Client.PullRequest.ReviewComment.GetAll(_owner, _repository, _pullNumber,
+            return await Client.PullRequest.ReviewComment.GetAll(owner, repository, pullNumber,
                 new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
         });
     }

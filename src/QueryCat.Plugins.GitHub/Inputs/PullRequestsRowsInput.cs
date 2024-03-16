@@ -24,10 +24,6 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
         return VariantValue.CreateFromObject(new PullRequestsRowsInput(token));
     }
 
-    private string _owner = string.Empty;
-    private string _repository = string.Empty;
-    private int _number;
-
     public PullRequestsRowsInput(string token) : base(token)
     {
     }
@@ -38,7 +34,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
         builder
             .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Pull request id.")
-            .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
+            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("number", p => p.Number, "The pull request issue number.")
             .AddProperty("title", p => p.Title, "Pull request title.")
             .AddProperty("author_login", p => p.User.Login, "The login name of the user that submitted the PR.")
@@ -61,19 +57,16 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             .AddProperty("mergeable", p => p.Mergeable, "If true, the PR can be merged.")
             .AddProperty("mergeable_state", p => p.MergeableState?.Value, "The mergeability state of the PR.")
             .AddProperty("merged", p => p.Merged, "If true, the PR has been merged.")
-            .AddProperty("merged_at", p => p.MergedAt, "The timestamp when the PR was merged.");
-
-        AddKeyColumn("repository_full_name",
-            isRequired: true,
-            set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
-        AddKeyColumn("number",
-            isRequired: true,
-            set: v => _number = (int)v.AsInteger);
+            .AddProperty("merged_at", p => p.MergedAt, "The timestamp when the PR was merged.")
+            .AddKeyColumn("repository_full_name", isRequired: true)
+            .AddKeyColumn("number", isRequired: true);
     }
 
     /// <inheritdoc />
     protected override IEnumerable<PullRequest> GetData(Fetcher<PullRequest> fetch)
     {
-        return fetch.FetchOne(async ct => await Client.Repository.PullRequest.Get(_owner, _repository, _number));
+        var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
+        var number = (int)GetKeyColumnValue("number").AsInteger;
+        return fetch.FetchOne(async ct => await Client.Repository.PullRequest.Get(owner, repository, number));
     }
 }

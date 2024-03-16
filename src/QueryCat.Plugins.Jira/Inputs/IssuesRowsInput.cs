@@ -25,8 +25,6 @@ internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
         return VariantValue.CreateFromObject(new IssuesRowsInput());
     }
 
-    private string _key = string.Empty;
-
     public static void InitializeBasicFields(ClassRowsFrameBuilder<JsonNode> builder)
     {
         builder
@@ -49,11 +47,8 @@ internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
     {
         InitializeBasicFields(builder);
         builder
-            .AddProperty("description", p => p.GetValueByPath("renderedFields.description").AsString, "The issue description.");
-
-        AddKeyColumn("key",
-            isRequired: true,
-            set: value => _key = value.AsString);
+            .AddProperty("description", p => p.GetValueByPath("renderedFields.description").AsString, "The issue description.")
+            .AddKeyColumn("key", isRequired: true);
     }
 
     /// <inheritdoc />
@@ -61,7 +56,7 @@ internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
     {
         var config = General.GetConfiguration(QueryContext.InputConfigStorage);
         var request = new RestRequest("issue/{key}")
-            .AddUrlSegment("key", _key)
+            .AddUrlSegment("key", GetKeyColumnValue("key").AsString)
             .AddQueryParameter("expand", "renderedFields");
         return fetch.FetchOne(ct => Task.FromResult(config.Client.Get(request).ToJson()));
     }

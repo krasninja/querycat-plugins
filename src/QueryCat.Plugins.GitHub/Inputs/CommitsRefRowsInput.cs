@@ -24,10 +24,6 @@ internal sealed class CommitsRefRowsInput : CommitsRowsInput
         return VariantValue.CreateFromObject(new CommitsRefRowsInput(token));
     }
 
-    private string _sha = string.Empty;
-    private string _owner = string.Empty;
-    private string _repository = string.Empty;
-
     public CommitsRefRowsInput(string token) : base(token)
     {
     }
@@ -37,22 +33,19 @@ internal sealed class CommitsRefRowsInput : CommitsRowsInput
     {
         base.Initialize(builder);
         builder
-            .AddProperty("repository_full_name", _ => GetFullRepositoryName(_owner, _repository), "The full name of the repository.")
-            .AddProperty("sha", _ => _sha, "SHA of the commit.")
+            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("sha", _ => GetKeyColumnValue("sha"), "SHA of the commit.")
             .AddProperty("additions", p => p.Stats.Additions, "The number of additions in the commit.")
-            .AddProperty("deletions", p => p.Stats.Deletions, "The number of deletions in the commit.");
-
-        AddKeyColumn("repository_full_name",
-            isRequired: true,
-            set: v => (_owner, _repository) = SplitFullRepositoryName(v.AsString));
-        AddKeyColumn("sha",
-            isRequired: true,
-            set: v => _sha = v.AsString);
+            .AddProperty("deletions", p => p.Stats.Deletions, "The number of deletions in the commit.")
+            .AddKeyColumn("repository_full_name", isRequired: true)
+            .AddKeyColumn("sha", isRequired: true);
     }
 
     /// <inheritdoc />
     protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetch)
     {
-        return fetch.FetchOne(async ct => await Client.Repository.Commit.Get(_owner, _repository, _sha));
+        var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
+        var sha = GetKeyColumnValue("sha").AsString;
+        return fetch.FetchOne(async ct => await Client.Repository.Commit.Get(owner, repository, sha));
     }
 }

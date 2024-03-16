@@ -22,7 +22,6 @@ internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
 
     private readonly string _username;
     private readonly string _password;
-    private string _id = string.Empty;
 
     /// <inheritdoc />
     public CameraInfoRowsInput(string username, string password)
@@ -49,12 +48,8 @@ internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
             .AddProperty(p => p.CameraParameters.MainStreamWidth)
             .AddProperty(p => p.CameraParameters.MainStreamHeight)
             .AddProperty(p => p.CameraParameters.Bitrate)
-            .AddProperty(p => p.CameraParameters.Ir);
-
-        AddKeyColumn(
-            "id",
-            isRequired: true,
-            set: v => _id = v.AsString);
+            .AddProperty(p => p.CameraParameters.Ir)
+            .AddKeyColumn("id", isRequired: true);
     }
 
     /// <inheritdoc />
@@ -64,7 +59,8 @@ internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
         {
             var finder = new CamerasFinder();
             var cameras = await finder.FindAsync(ct);
-            var camera = cameras.FirstOrDefault(c => c.Id == _id);
+            var id = GetKeyColumnValue("id").AsString;
+            var camera = cameras.FirstOrDefault(c => c.Id == id);
             if (camera == null)
             {
                 return Array.Empty<CameraInfo>();

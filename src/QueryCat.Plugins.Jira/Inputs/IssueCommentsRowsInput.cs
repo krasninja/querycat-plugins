@@ -24,15 +24,13 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
         return VariantValue.CreateFromObject(new IssueCommentsRowsInput());
     }
 
-    private string _issueId = string.Empty;
-
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<JsonNode> builder)
     {
         builder
             .AddDataPropertyAsJson(p => p)
             .AddProperty("id", p => p.GetValueByPath("id").AsString, "The comment identifier.")
-            .AddProperty("issue_id", p => _issueId, "The comment issue identifier.")
+            .AddProperty("issue_id", p => GetKeyColumnValue("issue_id"), "The comment issue identifier.")
             .AddProperty("author_account_id", p => p.GetValueByPath("author.accountId").AsString, "Author account id.")
             .AddProperty("author_display_name", p => p.GetValueByPath("author.displayName").AsString, "Author name.")
             .AddProperty("author_email_address", p => p.GetValueByPath("author.emailAddress").AsString, "Author email.")
@@ -41,11 +39,8 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
             .AddProperty("update_email_address", p => p.GetValueByPath("updateAuthor.emailAddress").AsString, "Update author email.")
             .AddProperty("body", p => p.GetValueByPath("renderedBody").AsString, "Comment body.")
             .AddProperty("created", p => p.GetValueByPath("created").AsTimestamp, "Creation date and time.")
-            .AddProperty("updated", p => p.GetValueByPath("updated").AsTimestamp, "Update date and time.");
-
-        AddKeyColumn("issue_id",
-            isRequired: true,
-            set: value => _issueId = value.AsString);
+            .AddProperty("updated", p => p.GetValueByPath("updated").AsTimestamp, "Update date and time.")
+            .AddKeyColumn("issue_id", isRequired: true);
     }
 
     /// <inheritdoc />
@@ -56,7 +51,7 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
         return fetch.FetchLimitOffset((limit, offset, ct) =>
         {
             var request = new RestRequest("issue/{issueIdOrKey}/comment")
-                .AddUrlSegment("issueIdOrKey", _issueId)
+                .AddUrlSegment("issueIdOrKey", GetKeyColumnValue("issue_id").AsString)
                 .AddQueryParameter("startAt", offset)
                 .AddQueryParameter("maxResults", limit)
                 .AddQueryParameter("expand", "renderedBody");

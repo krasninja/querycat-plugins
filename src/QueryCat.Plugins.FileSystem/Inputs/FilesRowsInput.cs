@@ -52,12 +52,8 @@ internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
             .AddProperty(p => p.LastWriteTime, "Date and time at which the file has been last modified (in UTC).")
             .AddProperty(p => p.LastAccessTime, "Date and time at which the file has been last accessed (in UTC).")
             .AddProperty(p => p.Attributes, "File attributes.")
-            .AddProperty(p => p.UnixFileMode, "UNIX file permissions.");
-
-        AddKeyColumn("path",
-            VariantValue.Operation.Like,
-            isRequired: true,
-            set: v => AddInclude(v.AsString));
+            .AddProperty(p => p.UnixFileMode, "UNIX file permissions.")
+            .AddKeyColumn("path", VariantValue.Operation.Like, isRequired: true);
     }
 
     private void AddInclude(string path)
@@ -70,6 +66,7 @@ internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
     /// <inheritdoc />
     protected override IEnumerable<FileDto> GetData(Fetcher<FileDto> fetch)
     {
+        AddInclude(GetKeyColumnValue("path"));
         var files = _matcher.GetResultsInFullPath("/");
         foreach (var file in files)
         {
