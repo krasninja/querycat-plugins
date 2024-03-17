@@ -30,7 +30,7 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
         builder
             .AddDataPropertyAsJson(p => p)
             .AddProperty("id", p => p.GetValueByPath("id").AsString, "The comment identifier.")
-            .AddProperty("issue_id", p => GetKeyColumnValue("issue_id"), "The comment issue identifier.")
+            .AddProperty("issue_id", DataType.Integer, _ => GetKeyColumnValue("issue_id"), "The comment issue identifier.")
             .AddProperty("author_account_id", p => p.GetValueByPath("author.accountId").AsString, "Author account id.")
             .AddProperty("author_display_name", p => p.GetValueByPath("author.displayName").AsString, "Author name.")
             .AddProperty("author_email_address", p => p.GetValueByPath("author.emailAddress").AsString, "Author email.")

@@ -34,7 +34,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
         builder
             .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Pull request id.")
-            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("number", p => p.Number, "The pull request issue number.")
             .AddProperty("title", p => p.Title, "Pull request title.")
             .AddProperty("author_login", p => p.User.Login, "The login name of the user that submitted the PR.")

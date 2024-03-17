@@ -35,7 +35,7 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
             .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Comment id.")
             .AddProperty("issue_number", p => GetKeyColumnValue("issue_number"), "Issue number.")
-            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("body", p => p.Body, "Comment body.")
             .AddProperty("url", p => p.Url, "Comment URL.")
             .AddProperty("created_by_id", p => p.User.Id, "User id who created the comment.")

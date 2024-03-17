@@ -66,7 +66,7 @@ internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
     /// <inheritdoc />
     protected override IEnumerable<FileDto> GetData(Fetcher<FileDto> fetch)
     {
-        AddInclude(GetKeyColumnValue("path"));
+        AddInclude(GetKeyColumnValue("path").AsString);
         var files = _matcher.GetResultsInFullPath("/");
         foreach (var file in files)
         {

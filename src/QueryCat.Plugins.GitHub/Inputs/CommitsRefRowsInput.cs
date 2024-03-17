@@ -33,7 +33,7 @@ internal sealed class CommitsRefRowsInput : CommitsRowsInput
     {
         base.Initialize(builder);
         builder
-            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("sha", _ => GetKeyColumnValue("sha"), "SHA of the commit.")
             .AddProperty("additions", p => p.Stats.Additions, "The number of additions in the commit.")
             .AddProperty("deletions", p => p.Stats.Deletions, "The number of deletions in the commit.")

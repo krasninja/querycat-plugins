@@ -33,7 +33,7 @@ internal sealed class BranchesRowsInput : BaseRowsInput<Branch>
     {
         // For reference: https://github.com/turbot/steampipe-plugin-github/blob/main/github/table_github_branch.go.
         builder
-            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("name", p => p.Name, "Branch name.")
             .AddProperty("commit_sha", p => p.Commit.Sha, "Commit SHA the branch refers to.")
             .AddProperty("commit_url", p => p.Commit.Url, "Commit URL the branch refers to.")

@@ -34,7 +34,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
         // For reference: https://github.com/turbot/steampipe-plugin-github/blob/main/github/table_github_commit.go.
         builder
             .AddDataPropertyAsJson()
-            .AddProperty("repository_full_name", _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("sha", p => p.Sha, "SHA of the commit.")
             .AddProperty("author_name", p => p.Commit.Author.Name, "The login name of the author of the commit.")
             .AddProperty("author_date", p => p.Commit.Author.Date, "Timestamp when the author made this commit.")
