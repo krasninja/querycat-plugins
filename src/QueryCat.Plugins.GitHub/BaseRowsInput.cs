@@ -22,7 +22,7 @@ internal abstract class BaseRowsInput<TClass> : FetchRowsInput<TClass> where TCl
         var arr = fullRepositoryName.Split('/', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         if (arr.Length != 2)
         {
-            throw new QueryCatException($"Invalid {fullRepositoryName} format.");
+            throw new QueryCatException($"Invalid '{fullRepositoryName}' format.");
         }
         return (arr[0], arr[1]);
     }

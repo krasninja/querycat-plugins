@@ -18,12 +18,7 @@ public class Program
         AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
-            client.FunctionsManager.RegisterFunction(SetBasicAuth.JiraSetBasicAuthFunction);
-            client.FunctionsManager.RegisterFunction(SetToken.JiraSetTokenAuthFunction);
-            client.FunctionsManager.RegisterFunction(SetUrl.JiraSetUrlFunction);
-            client.FunctionsManager.RegisterFunction(IssueCommentsRowsInput.JiraIssueCommentsFunction);
-            client.FunctionsManager.RegisterFunction(IssuesRowsInput.JiraIssueFunction);
-            client.FunctionsManager.RegisterFunction(IssuesSearchRowsInput.JiraIssueSearchFunction);
+            RegisterFunctions(client.FunctionsManager);
             await client.StartAsync(ct);
             await client.WaitForServerExitAsync(ct);
         });
@@ -33,4 +28,18 @@ public class Program
     public static void DllMain(QueryCatPluginArguments args) => QueryCatMain(args.ConvertToPluginClientArguments());
 
     public static void Main(string[] args) => QueryCatMain(ThriftPluginClient.ConvertCommandLineArguments(args));
+
+    /// <summary>
+    /// Register plugin functions.
+    /// </summary>
+    /// <param name="functionsManager">Functions manager.</param>
+    public static void RegisterFunctions(IFunctionsManager functionsManager)
+    {
+        functionsManager.RegisterFunction(SetBasicAuth.JiraSetBasicAuthFunction);
+        functionsManager.RegisterFunction(SetToken.JiraSetTokenAuthFunction);
+        functionsManager.RegisterFunction(SetUrl.JiraSetUrlFunction);
+        functionsManager.RegisterFunction(IssueCommentsRowsInput.JiraIssueCommentsFunction);
+        functionsManager.RegisterFunction(IssuesRowsInput.JiraIssueFunction);
+        functionsManager.RegisterFunction(IssuesSearchRowsInput.JiraIssueSearchFunction);
+    }
 }

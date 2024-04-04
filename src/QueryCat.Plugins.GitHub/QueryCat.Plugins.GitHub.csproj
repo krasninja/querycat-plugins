@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>QueryCat.Plugins.Github</RootNamespace>
-    <PackageVersion>0.4.2</PackageVersion>
+    <PackageVersion>0.4.3</PackageVersion>
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-github-$(PackageVersion)-$(Runtime)</AssemblyName>
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained Condition=" '$(UseAssemblyName)' == 'true' ">True</SelfContained>
-    <PublishTrimmed>True</PublishTrimmed>
+    <PublishTrimmed>False</PublishTrimmed>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishAot>False</PublishAot>
     <OutputType>Exe</OutputType>
