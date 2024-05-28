@@ -1,6 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
-using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Utils;
 using QueryCat.Plugins.Client;
 
@@ -13,7 +11,7 @@ public class Program
 {
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
-        ThriftPluginClient.SetupApplicationLogging(logLevel: LogLevel.Debug);
+        ThriftPluginClient.SetupApplicationLogging(args.LogLevel);
         AsyncUtils.RunSync(async ct =>
         {
             using var client = new ThriftPluginClient(args);

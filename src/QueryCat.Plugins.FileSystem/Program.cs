@@ -14,7 +14,7 @@ public class Program
 {
     public static void QueryCatMain(ThriftPluginClientArguments args)
     {
-        QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging();
+        QueryCat.Plugins.Client.ThriftPluginClient.SetupApplicationLogging(args.LogLevel);
         AsyncUtils.RunSync(async ct =>
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
