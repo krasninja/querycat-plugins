@@ -47,8 +47,12 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("comments", p => p.Comments, "Number of comments.")
             .AddProperty("number", p => p.Number, "Issue number.")
             .AddProperty("url", p => p.HtmlUrl, "URL to HTML")
+            .AddProperty("closed_by_user_id", p => p.ClosedBy?.Id, "The user who closed the issue.")
+            .AddProperty("closed_at", p => p.ClosedAt, "The date when issue was closed.")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
-            .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.");
+            .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.")
+            .AddKeyColumn("created_at", VariantValue.Operation.GreaterOrEquals)
+            .AddKeyColumn("created_at", VariantValue.Operation.LessOrEquals);
     }
 
     /// <inheritdoc />
@@ -56,10 +60,23 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     {
         var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest();
         fetch.PageStart = 1;
+        DateRange? createdAtRange = null;
+        if (this.TryGetKeyColumnValue("created_at", VariantValue.Operation.GreaterOrEquals, out var createdAtStart)
+            && this.TryGetKeyColumnValue("created_at", VariantValue.Operation.LessOrEquals, out var createdAtEnd))
+        {
+            createdAtRange = new DateRange(
+                new DateTimeOffset(createdAtStart.AsTimestamp),
+                new DateTimeOffset(createdAtEnd.AsTimestamp));
+        }
+
         return fetch.FetchPaged(async (page, limit, ct) =>
             {
                 request.Page = page;
                 request.PerPage = limit;
+                if (createdAtRange != null)
+                {
+                    request.Created = createdAtRange;
+                }
                 var data = (await Client.Search.SearchIssues(request)).Items;
                 return data;
             });
