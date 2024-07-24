@@ -16,7 +16,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
 {
     [SafeFunction]
-    [Description("Return Github pull requests of specific repository.")]
+    [Description("Return GitHub pull requests of specific repository.")]
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
     public static VariantValue GitHubPullsFunction(FunctionCallInfo args)
     {
@@ -59,14 +59,33 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             .AddProperty("merged", p => p.Merged, "If true, the PR has been merged.")
             .AddProperty("merged_at", p => p.MergedAt, "The timestamp when the PR was merged.")
             .AddKeyColumn("repository_full_name", isRequired: true)
-            .AddKeyColumn("number", isRequired: true);
+            .AddKeyColumn("number", isRequired: false)
+            .AddKeyColumn("state");
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<PullRequest> GetData(Fetcher<PullRequest> fetch)
+    protected override IEnumerable<PullRequest> GetData(Fetcher<PullRequest> fetcher)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var number = (int)GetKeyColumnValue("number").AsInteger;
-        return fetch.FetchOne(async ct => await Client.Repository.PullRequest.Get(owner, repository, number));
+
+        var number = GetKeyColumnValue("number");
+        if (!number.IsNull)
+        {
+            return fetcher.FetchOne(async ct => await Client.Repository.PullRequest.Get(owner, repository, number));
+        }
+        else
+        {
+            fetcher.PageStart = 1;
+            var options = new PullRequestRequest
+            {
+                State = ItemStateFilter.All,
+            };
+            if (TryGetKeyColumnValue("state", VariantValue.Operation.Equals, out var state))
+            {
+                options.State = Enum.Parse<ItemStateFilter>(state);
+            }
+            return fetcher.FetchAll(
+                async ct => await Client.PullRequest.GetAllForRepository(owner, repository, options));
+        }
     }
 }

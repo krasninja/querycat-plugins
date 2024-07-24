@@ -16,7 +16,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestReviewComment>
 {
     [SafeFunction]
-    [Description("Return Github comments for the specific pull request.")]
+    [Description("Return GitHub comments for the specific pull request.")]
     [FunctionSignature("github_pull_comments(): object<IRowsInput>")]
     public static VariantValue PullRequestCommentsFunction(FunctionCallInfo args)
     {

@@ -17,8 +17,8 @@ namespace QueryCat.Plugins.Github.Inputs;
 internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
 {
     [SafeFunction]
-    [Description("Search Github issues and pull requests.")]
-    [FunctionSignature("github_search_issues(term?: string = 'is:open archived:false assignee:@me'): object<IRowsInput>")]
+    [Description("Search GitHub issues and pull requests.")]
+    [FunctionSignature("github_search_issues(term?: string := 'is:open archived:false assignee:@me'): object<IRowsInput>")]
     public static VariantValue GitHubSearchIssuesFunction(FunctionCallInfo args)
     {
         var term = args.GetAt(0).AsString;
@@ -46,13 +46,15 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("author", p => p.User.Login, "Issue author.")
             .AddProperty("comments", p => p.Comments, "Number of comments.")
             .AddProperty("number", p => p.Number, "Issue number.")
-            .AddProperty("url", p => p.HtmlUrl, "URL to HTML")
+            .AddProperty("url", p => p.HtmlUrl, "URL to HTML.")
             .AddProperty("closed_by_user_id", p => p.ClosedBy?.Id, "The user who closed the issue.")
             .AddProperty("closed_at", p => p.ClosedAt, "The date when issue was closed.")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.")
             .AddKeyColumn("created_at", VariantValue.Operation.GreaterOrEquals)
-            .AddKeyColumn("created_at", VariantValue.Operation.LessOrEquals);
+            .AddKeyColumn("created_at", VariantValue.Operation.LessOrEquals)
+            .AddKeyColumn("closed_at", VariantValue.Operation.GreaterOrEquals)
+            .AddKeyColumn("closed_at", VariantValue.Operation.LessOrEquals);
     }
 
     /// <inheritdoc />
@@ -60,6 +62,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     {
         var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest();
         fetch.PageStart = 1;
+
         DateRange? createdAtRange = null;
         if (this.TryGetKeyColumnValue("created_at", VariantValue.Operation.GreaterOrEquals, out var createdAtStart)
             && this.TryGetKeyColumnValue("created_at", VariantValue.Operation.LessOrEquals, out var createdAtEnd))
@@ -69,14 +72,21 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
                 new DateTimeOffset(createdAtEnd.AsTimestamp));
         }
 
+        DateRange? closedAtRange = null;
+        if (this.TryGetKeyColumnValue("closed_at", VariantValue.Operation.GreaterOrEquals, out var closedAtStart)
+            && this.TryGetKeyColumnValue("closed_at", VariantValue.Operation.LessOrEquals, out var closedAtEnd))
+        {
+            closedAtRange = new DateRange(
+                new DateTimeOffset(closedAtStart.AsTimestamp),
+                new DateTimeOffset(closedAtEnd.AsTimestamp));
+        }
+
         return fetch.FetchPaged(async (page, limit, ct) =>
             {
                 request.Page = page;
                 request.PerPage = limit;
-                if (createdAtRange != null)
-                {
-                    request.Created = createdAtRange;
-                }
+                request.Created ??= createdAtRange;
+                request.Closed ??= closedAtRange;
                 var data = (await Client.Search.SearchIssues(request)).Items;
                 return data;
             });

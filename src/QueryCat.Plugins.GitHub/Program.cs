@@ -40,7 +40,10 @@ public class Program
         functionsManager.RegisterFunction(CommitsRefRowsInput.GitHubCommitsRefFunction);
         functionsManager.RegisterFunction(CommitsRowsInput.GitHubCommitsFunction);
         functionsManager.RegisterFunction(IssueCommentsRowsInput.IssueCommentsFunction);
+        functionsManager.RegisterFunction(IssueTimelineRowsInput.IssueTimelineFunction);
         functionsManager.RegisterFunction(PullRequestCommentsRowsInput.PullRequestCommentsFunction);
+        functionsManager.RegisterFunction(PullRequestRequestedReviewsRowsInput.PullRequestedReviewsFunction);
+        functionsManager.RegisterFunction(PullRequestReviewsRowsInput.PullReviewsFunction);
         functionsManager.RegisterFunction(PullRequestsRowsInput.GitHubPullsFunction);
         functionsManager.RegisterFunction(SearchIssuesRowsInput.GitHubSearchIssuesFunction);
     }
