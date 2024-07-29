@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QueryCat.Plugins.PostgresSniffer</RootNamespace>
+    <PackageVersion>0.1.1</PackageVersion>
+    <Title>Postgres Sniffer Plugin</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>postgres</PackageTags>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-pgsnif-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <PublishTrimmed>false</PublishTrimmed>
+    <StripSymbols>true</StripSymbols>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SharpPcap" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/PacketDotNet.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
+  </ItemGroup>
+
+</Project>

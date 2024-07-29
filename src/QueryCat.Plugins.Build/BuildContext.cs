@@ -8,7 +8,7 @@ namespace QueryCat.Plugins.Build;
 /// <summary>
 /// The main build settings (version, etc).
 /// </summary>
-public class BuildContext : FrostingContext
+public sealed class BuildContext : FrostingContext
 {
     public ConvertableDirectoryPath OutputDirectory => this.Directory("../../output");
 
@@ -22,6 +22,7 @@ public class BuildContext : FrostingContext
         "QueryCat.Plugins.Jira",
         "QueryCat.Plugins.Network",
         "QueryCat.Plugins.Numerology",
+        "QueryCat.Plugins.PostgresSniffer",
         "QueryCat.Plugins.System",
         "QueryCat.Plugins.VStarCam",
     };
