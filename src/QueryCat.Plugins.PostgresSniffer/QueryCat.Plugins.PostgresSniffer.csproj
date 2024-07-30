@@ -7,7 +7,7 @@
     <Title>Postgres Sniffer Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>postgres</PackageTags>
-    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-pgsnif-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-pgsniff-$(PackageVersion)-$(Runtime)</AssemblyName>
     <OptimizationPreference>Size</OptimizationPreference>
     <PublishTrimmed>false</PublishTrimmed>
     <StripSymbols>true</StripSymbols>
