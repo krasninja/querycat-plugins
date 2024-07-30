@@ -8,6 +8,7 @@ using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
+using QueryCat.Backend.Core.Utils;
 
 namespace QueryCat.Plugins.PostgresSniffer.Inputs;
 
@@ -27,7 +28,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput
 
     private ILiveDevice? _device;
     private TcpPacket? _tcpPacket;
-    private byte[] _tcpPayload = [];
+    private readonly DynamicBuffer<byte> _buffer = new();
 
     private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(nameof(PostgresQueriesRowsInput));
 
@@ -153,7 +154,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput
     public ErrorCode ReadValue(int columnIndex, out VariantValue value)
     {
         value = VariantValue.Null;
-        if (_tcpPacket == null || _tcpPayload.Length < 1)
+        if (_tcpPacket == null || _buffer.Size < 1)
         {
             return ErrorCode.Error;
         }
@@ -180,29 +181,32 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput
             value = new VariantValue(_tcpPacket.SourcePort);
         }
         // type
-        else if (columnIndex == 4 && _tcpPayload.Length > 0)
+        else if (columnIndex == 4 && _buffer.Size > 0)
         {
-            value = new VariantValue(Convert.ToChar(_tcpPayload[0]).ToString());
+            value = new VariantValue(Convert.ToChar(_buffer.GetAt(0)));
         }
         // length
-        else if (columnIndex == 5 && _tcpPayload.Length > 5)
+        else if (columnIndex == 5 && _buffer.Size > 5)
         {
-            value = new VariantValue(BinaryPrimitives.ReadInt32BigEndian(_tcpPayload[1..5]));
+            value = new VariantValue(BinaryPrimitives.ReadInt32BigEndian(_buffer.GetSpan(1, 5)));
         }
         // query
-        else if (columnIndex == 6 && _tcpPayload.Length > 5)
+        else if (columnIndex == 6 && _buffer.Size > 5)
         {
             // P - prepare.
-            if (_tcpPayload[0] == 80)
+            if (_buffer.GetAt(0) == 80)
             {
-                var prepareName = ReadNullTerminatedString(_tcpPayload[5..]);
+                var prepareName = ReadNullTerminatedString(_buffer.GetSpan(5));
                 var nextIndex = 5 + prepareName.Length + 1;
-                value = new VariantValue(ReadNullTerminatedString(_tcpPayload[nextIndex..]));
+                if (_buffer.Size > nextIndex)
+                {
+                    value = new VariantValue(ReadNullTerminatedString(_buffer.GetSpan(nextIndex)));
+                }
             }
             // Q - query.
-            else if (_tcpPayload[0] == 81)
+            else if (_buffer.GetAt(0) == 81)
             {
-                value = new VariantValue(ReadNullTerminatedString(_tcpPayload[5..]));
+                value = new VariantValue(ReadNullTerminatedString(_buffer.GetSpan(5)));
             }
         }
 
@@ -226,16 +230,44 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput
         {
             return false;
         }
-        if (_device.GetNextPacket(out var packet) != GetPacketStatus.PacketRead)
+        _buffer.AdvanceToEnd();
+
+        var isFirstPacket = true;
+        var actualPacketLength = 0;
+        do
         {
-            _tcpPacket = null;
-            _tcpPayload = [];
-            return false;
+            // Read data.
+            var status = _device.GetNextPacket(out var packet);
+            if (isFirstPacket && status != GetPacketStatus.PacketRead)
+            {
+                // No new data and we are not reading any packet - return no data.
+                return false;
+            }
+            if (status != GetPacketStatus.PacketRead)
+            {
+                break;
+            }
+
+            // Parse TCP packet.
+            var rawPacket = packet.GetPacket();
+            var parsedPacket = PacketDotNet.Packet.ParsePacket(rawPacket.LinkLayerType, rawPacket.Data);
+            _tcpPacket = parsedPacket.Extract<PacketDotNet.TcpPacket>();
+
+            // Read and format payload.
+            var payloadSpan = _tcpPacket.PayloadDataSegment.Bytes
+                .AsSpan(_tcpPacket.PayloadDataSegment.Offset, _tcpPacket.PayloadDataSegment.Length);
+            if (isFirstPacket)
+            {
+                if (payloadSpan.Length < 6)
+                {
+                    break;
+                }
+                actualPacketLength = BinaryPrimitives.ReadInt32BigEndian(payloadSpan[1..5]);
+                isFirstPacket = false;
+            }
+            _buffer.Write(payloadSpan);
         }
-        var rawPacket = packet.GetPacket();
-        var parsedPacket = PacketDotNet.Packet.ParsePacket(rawPacket.LinkLayerType, rawPacket.Data);
-        _tcpPacket = parsedPacket.Extract<PacketDotNet.TcpPacket>();
-        _tcpPayload = _tcpPacket.PayloadDataSegment.ActualBytes();
+        while (actualPacketLength >= _buffer.Size);
 
         return true;
     }
