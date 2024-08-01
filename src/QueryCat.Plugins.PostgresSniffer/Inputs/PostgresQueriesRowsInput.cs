@@ -22,14 +22,52 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
 {
     private const int MaxMessageSize = 1_048_576;
 
+    /// <summary>
+    /// Current message data.
+    /// </summary>
+    private sealed class CurrentMessage
+    {
+        public TcpSplitter.SessionBuffer? CurrentBuffer { get; private set; }
+
+        public char Type { get; private set; }
+
+        /// <summary>
+        /// Total length with message type byte.
+        /// </summary>
+        public int Length { get; private set; }
+
+        public bool IsInitialized => CurrentBuffer != null;
+
+        public bool IsValid => (char.IsLetter(Type) || char.IsDigit(Type)) && Length < MaxMessageSize;
+
+        public void Clear()
+        {
+            Length = 0;
+            Type = default;
+            CurrentBuffer = null;
+        }
+
+        public bool Set(byte[] head, TcpSplitter.SessionBuffer buffer)
+        {
+            if (head.Length != 5)
+            {
+                return false;
+            }
+            CurrentBuffer = buffer;
+            Length = BinaryPrimitives.ReadInt32BigEndian(head[1..5]) + 1;
+            Type = Convert.ToChar(head[0]);
+            return true;
+        }
+    }
+
     private readonly string _iface;
     private readonly string _host;
     private readonly ushort _port;
 
     private ILiveDevice? _device;
     private readonly TcpSplitter _tcpSplitter = new();
-    private TcpSplitter.SessionBuffer? _currentBuffer;
     private readonly byte[] _postgresPacketHead = new byte[5];
+    private readonly CurrentMessage _currentMessage = new();
 
     private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(nameof(PostgresQueriesRowsInput));
 
@@ -164,11 +202,8 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     public ErrorCode ReadValue(int columnIndex, out VariantValue value)
     {
         value = VariantValue.Null;
-        if (_currentBuffer == null || _currentBuffer.Size < 5)
-        {
-            return ErrorCode.Error;
-        }
-        if (!_currentBuffer.TryCopyExact(_postgresPacketHead, advance: false))
+        var sessionBuffer = _currentMessage.CurrentBuffer;
+        if (sessionBuffer == null || sessionBuffer.Size < _postgresPacketHead.Length)
         {
             return ErrorCode.Error;
         }
@@ -176,37 +211,37 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         // destination_ip
         if (columnIndex == 0)
         {
-            value = new VariantValue(_currentBuffer.Session.DestinationAddress.ToString());
+            value = new VariantValue(sessionBuffer.Session.DestinationAddress.ToString());
         }
         // source_ip
         else if (columnIndex == 1)
         {
-            value = new VariantValue(_currentBuffer.Session.SourceAddress.ToString());
+            value = new VariantValue(sessionBuffer.Session.SourceAddress.ToString());
         }
         // destination_port
         else if (columnIndex == 2)
         {
-            value = new VariantValue(_currentBuffer.Session.DestinationPort);
+            value = new VariantValue(sessionBuffer.Session.DestinationPort);
         }
         // source_port
         else if (columnIndex == 3)
         {
-            value = new VariantValue(_currentBuffer.Session.SourcePort);
+            value = new VariantValue(sessionBuffer.Session.SourcePort);
         }
         // type
         else if (columnIndex == 4)
         {
-            value = new VariantValue(Convert.ToChar(_postgresPacketHead[0]));
+            value = new VariantValue(_currentMessage.Type);
         }
         // length
         else if (columnIndex == 5)
         {
-            value = new VariantValue(GetTotalLengthFromPacketHead() - 1);
+            value = new VariantValue(_currentMessage.Length - 1);
         }
         // query
         else if (columnIndex == 6)
         {
-            using var packetMemory = MemoryPool<byte>.Shared.Rent(GetTotalLengthFromPacketHead());
+            using var packetMemory = MemoryPool<byte>.Shared.Rent(_currentMessage.Length);
             value = new VariantValue(ReadQuery(packetMemory.Memory.Span));
         }
 
@@ -215,17 +250,16 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
 
     private string ReadQuery(Span<byte> buf)
     {
-        if (_currentBuffer == null)
+        if (_currentMessage.CurrentBuffer == null)
         {
             return string.Empty;
         }
 
-        var packetSize = GetTotalLengthFromPacketHead();
-        var packetSpan = buf[..packetSize];
-        if (!_currentBuffer.TryCopyExact(packetSpan, advance: false))
+        var packetSpan = buf[.._currentMessage.Length];
+        if (!_currentMessage.CurrentBuffer.TryCopyExact(packetSpan, advance: false))
         {
             _logger.LogWarning("Cannot copy packet! Packet size: {HeadSize}, buffer size: {BufferSize}.",
-                packetSpan.Length, _currentBuffer.Size);
+                packetSpan.Length, _currentMessage.CurrentBuffer.Size);
             return string.Empty;
         }
 
@@ -236,21 +270,20 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         }
 
         // Skip head.
-        packetSpan = packetSpan[5..];
+        packetSpan = packetSpan[_postgresPacketHead.Length..];
 
         // P - prepare.
-        if (_postgresPacketHead[0] == 80)
+        if (_currentMessage.Type == 'P')
         {
             var prepareName = ReadNullTerminatedString(packetSpan);
             var nextIndex = prepareName.Length + 1;
-
             if (packetSpan.Length > nextIndex)
             {
                 return ReadNullTerminatedString(packetSpan[nextIndex..]);
             }
         }
         // Q - query.
-        else if (_postgresPacketHead[0] == 81)
+        else if (_currentMessage.Type == 'Q')
         {
             return ReadNullTerminatedString(packetSpan);
         }
@@ -276,31 +309,30 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
             return false;
         }
 
-        if (_currentBuffer != null)
+        if (_currentMessage.IsInitialized && _currentMessage.CurrentBuffer != null)
         {
-            var postgresPacketSize = GetTotalLengthFromPacketHead();
-            _currentBuffer.Advance(postgresPacketSize);
+            _currentMessage.CurrentBuffer.Advance(_currentMessage.Length);
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Advance on {Size}, Size after {SizeAfter}.", postgresPacketSize, _currentBuffer.Size);
+                _logger.LogDebug("Advance on: {Size}, size after: {SizeAfter}.",
+                    _currentMessage.Length, _currentMessage.CurrentBuffer.Size);
             }
             Array.Fill<byte>(_postgresPacketHead, 0);
-            _currentBuffer = null;
+            _currentMessage.Clear();
         }
 
         foreach (var sessionBuffer in _tcpSplitter.GetSessionBuffers())
         {
             if (sessionBuffer.TryCopyExact(_postgresPacketHead, advance: false))
             {
-                var postgresPacketSize = GetTotalLengthFromPacketHead();
+                _currentMessage.Set(_postgresPacketHead, sessionBuffer);
 
                 // Validate.
-                var messageType = Convert.ToChar(_postgresPacketHead[0]);
-                if ((!char.IsLetter(messageType) && !char.IsDigit(messageType))
-                    || postgresPacketSize > MaxMessageSize)
+                if (!_currentMessage.IsValid)
                 {
-                    _logger.LogWarning("Invalid packet header!");
+                    _logger.LogDebug("Invalid packet header!");
                     sessionBuffer.AdvanceToEnd();
+                    _currentMessage.Clear();
                     continue;
                 }
 
@@ -308,24 +340,19 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
 
                 if (_logger.IsEnabled(LogLevel.Debug))
                 {
-                    _logger.LogDebug("Packet Size: {HeadSize}, Buffer size: {BufferSize}.", postgresPacketSize, bufferSize);
+                    _logger.LogDebug("Packet size: {HeadSize}, buffer size: {BufferSize}.",
+                        _currentMessage.Length, bufferSize);
                 }
-                if (postgresPacketSize <= bufferSize)
+                if (_currentMessage.Length <= bufferSize)
                 {
-                    _currentBuffer = sessionBuffer;
                     return true;
                 }
+                _currentMessage.Clear();
             }
         }
 
         return false;
     }
-
-    /// <summary>
-    /// Get total packet size including byte command (+1).
-    /// </summary>
-    private int GetTotalLengthFromPacketHead()
-        => BinaryPrimitives.ReadInt32BigEndian(_postgresPacketHead[1..5]) + 1;
 
     /// <inheritdoc />
     public void Explain(IndentedStringBuilder stringBuilder)
