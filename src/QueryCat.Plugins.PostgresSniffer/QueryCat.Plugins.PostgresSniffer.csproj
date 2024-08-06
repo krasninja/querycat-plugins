@@ -28,6 +28,11 @@
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/SharpPcap.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

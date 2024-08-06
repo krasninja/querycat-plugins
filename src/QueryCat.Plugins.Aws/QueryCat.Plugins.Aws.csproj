@@ -29,4 +29,22 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/AWSSDK.Core.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/AWSSDK.EC2.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/AWSSDK.S3.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+  </ItemGroup>
+
 </Project>

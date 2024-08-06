@@ -12,6 +12,7 @@
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
     <OutputType>Library</OutputType>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,14 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Extensions.FileSystemGlobbing.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
   </ItemGroup>
 
 </Project>
