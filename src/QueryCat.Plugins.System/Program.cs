@@ -20,7 +20,7 @@ public class Program
             client.FunctionsManager.RegisterFunction(ArgsRowsInput.ArgsRowsFunction);
             client.FunctionsManager.RegisterFunction(EnvsRowsInput.EnvsRowsFunction);
             client.FunctionsManager.RegisterFunction(ProcessesRowsInput.ProcessesFunction);
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }

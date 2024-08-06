@@ -19,7 +19,7 @@ public class Program
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(Get.GetFunction);
             client.FunctionsManager.RegisterFunction(Set.SetFunction);
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }

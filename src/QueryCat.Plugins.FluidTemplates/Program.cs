@@ -17,7 +17,7 @@ public class Program
         {
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(FluidTemplateRowsOutput.FluidTemplate);
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }

@@ -23,7 +23,7 @@ public class Program
             client.FunctionsManager.RegisterFunction(IpToInt.IpToIntFunction);
             client.FunctionsManager.RegisterFunction(InterfaceAddressesRowsInput.InterfaceAddressesFunction);
             client.FunctionsManager.RegisterFunction(InterfaceDetailsRowsInput.InterfaceDetailsFunction);
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }

@@ -21,7 +21,7 @@ public class Program
             client.FunctionsManager.RegisterFunction(SetIr.VStarSetIrFunction);
             client.FunctionsManager.RegisterFunction(CameraInfoRowsInput.CameraInfoRowsInputFunction);
             client.FunctionsManager.RegisterFunction(CamerasRowsInput.CamerasRowsInputFunction);
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }

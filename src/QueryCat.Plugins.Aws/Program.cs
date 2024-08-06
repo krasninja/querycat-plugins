@@ -18,7 +18,7 @@ public class Program
             using var client = new QueryCat.Plugins.Client.ThriftPluginClient(args);
             client.FunctionsManager.RegisterFunction(SetToken.AwsSetTokenAuthFunction);
             client.FunctionsManager.RegisterFromType(typeof(Ec2InstancesRowsInput));
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }

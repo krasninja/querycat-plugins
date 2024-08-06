@@ -15,7 +15,7 @@ public class Program
         AsyncUtils.RunSync(async ct =>
         {
             using var client = new ThriftPluginClient(args);
-            await client.StartAsync(ct);
+            await client.StartAsync(cancellationToken: ct);
             await client.WaitForServerExitAsync(ct);
         });
     }
