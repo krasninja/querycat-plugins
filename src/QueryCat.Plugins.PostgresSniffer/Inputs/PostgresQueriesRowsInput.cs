@@ -128,7 +128,8 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         }
         else
         {
-            _device = CaptureDeviceList.Instance.FirstOrDefault(d => d.Name != "lo");
+            // First device ignore loopback: "lo" or "\Device\NPF_Loopback".
+            _device = CaptureDeviceList.Instance.FirstOrDefault(d => d.Name != "lo" && !d.Name.EndsWith("Loopback"));
         }
 
         if (_device == null)
