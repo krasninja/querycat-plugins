@@ -1,6 +1,8 @@
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Plugins.VStarCam.Functions;
+using QueryCat.Plugins.VStarCam.Inputs;
 
-namespace QueryCat.Plugins.PostgresSniffer;
+namespace QueryCat.Plugins.VStarCam;
 
 /// <summary>
 /// The special registration class that is called by plugin loader.
@@ -13,6 +15,8 @@ internal static class Registration
     /// <param name="functionsManager">Functions manager.</param>
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
-        functionsManager.RegisterFunction(Inputs.PostgresQueriesRowsInput.PostgresSnifferStart);
+        functionsManager.RegisterFunction(SetIr.VStarSetIrFunction);
+        functionsManager.RegisterFunction(CameraInfoRowsInput.CameraInfoRowsInputFunction);
+        functionsManager.RegisterFunction(CamerasRowsInput.CamerasRowsInputFunction);
     }
 }

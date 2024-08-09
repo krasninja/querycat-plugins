@@ -13,16 +13,12 @@
     <PublishTrimmed>True</PublishTrimmed>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishAot>False</PublishAot>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.EC2" Version="3.7.401.3" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.400.3" />
+    <PackageReference Include="QueryCat" Version="0.6.9" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

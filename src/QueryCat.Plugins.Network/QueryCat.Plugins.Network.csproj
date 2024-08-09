@@ -13,14 +13,10 @@
     <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
-    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="QueryCat" Version="0.6.9" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

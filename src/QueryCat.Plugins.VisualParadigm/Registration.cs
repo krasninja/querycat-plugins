@@ -1,6 +1,6 @@
 using QueryCat.Backend.Core.Functions;
 
-namespace QueryCat.Plugins.PostgresSniffer;
+namespace QueryCat.Plugins.VisualParadigm;
 
 /// <summary>
 /// The special registration class that is called by plugin loader.
@@ -13,6 +13,5 @@ internal static class Registration
     /// <param name="functionsManager">Functions manager.</param>
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
-        functionsManager.RegisterFunction(Inputs.PostgresQueriesRowsInput.PostgresSnifferStart);
     }
 }

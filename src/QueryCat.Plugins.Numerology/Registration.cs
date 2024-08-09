@@ -1,6 +1,7 @@
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Plugins.Numerology.Functions;
 
-namespace QueryCat.Plugins.PostgresSniffer;
+namespace QueryCat.Plugins.Numerology;
 
 /// <summary>
 /// The special registration class that is called by plugin loader.
@@ -13,6 +14,6 @@ internal static class Registration
     /// <param name="functionsManager">Functions manager.</param>
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
-        functionsManager.RegisterFunction(Inputs.PostgresQueriesRowsInput.PostgresSnifferStart);
+        functionsManager.RegisterFunction(CalcMatrix.CalcMatrixFunction);
     }
 }
