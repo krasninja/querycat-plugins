@@ -11,7 +11,6 @@
     <OptimizationPreference>Size</OptimizationPreference>
     <PublishTrimmed>false</PublishTrimmed>
     <StripSymbols>true</StripSymbols>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="SharpPcap" Version="6.3.0" />
+    <PackageReference Include="QueryCat" Version="0.6.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,10 +33,6 @@
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj" />
   </ItemGroup>
 
 </Project>
