@@ -12,29 +12,51 @@ internal static class CalcMatrix
     public static VariantValue CalcMatrixFunction(FunctionCallInfo args)
     {
         var dob = args.GetAt(0).AsTimestamp;
-        var dateArr = NumberStringToArray(dob.ToString("yyyyMMdd"));
+        var dateArr = NumberStringToArray(dob.ToString("dMyyyy"));
 
-        // Additional number 1.
         var addNumber1 = dateArr.Sum();
+        var addNumber2 = SumUntilOneDigit(addNumber1, elevenRule: true);
+        var addNumber3 = addNumber1 - (2 * dateArr[0]);
+        var addNumber4 = SumUntilOneDigit(addNumber3);
 
-        // Additional number 2.
-        int[] addNumber2Arr;
-        string addNumber2Str = ArrayToString(IntToArray(addNumber1));
-        /*while ((addNumber2Arr = NumberStringToArray(addNumber2Str).Length > 0))
-        {
+        var allNumbers = dateArr
+            .Concat(NumberToArray(addNumber1))
+            .Concat(NumberToArray(addNumber2))
+            .Concat(NumberToArray(addNumber3))
+            .Concat(NumberToArray(addNumber4))
+            .Where(x => x > 0)
+            .Order()
+            .ToArray();
 
-        }*/
-        return new VariantValue("test");
+        var result = $"{addNumber2}," + string.Join(
+            ' ',
+            allNumbers.GroupBy(x => x).Select(x => string.Join(null, x))
+        );
+
+        return new VariantValue(result);
     }
 
-    private static int[] NumberStringToArray(string str)
+    private static int SumUntilOneDigit(int num, bool elevenRule = false)
+    {
+        var currentNum = num;
+        while (NumberToArray(currentNum).Length > 1)
+        {
+            if (elevenRule && currentNum == 11)
+            {
+                break;
+            }
+            currentNum = NumberToArray(currentNum).Sum();
+        }
+        return currentNum;
+    }
+
+    private static int[] NumberStringToArray(string str, bool removeZeros = true)
         => str.ToCharArray()
-        .Select(c => int.Parse(c.ToString()))
-        .ToArray();
+            .Where(char.IsDigit)
+            .Select(c => int.Parse(c.ToString()))
+            .Where(c => removeZeros || c > 0)
+            .ToArray();
 
-    private static int[] IntToArray(int a)
-        => NumberStringToArray(a.ToString());
-
-    private static string ArrayToString(int[] arr)
-        => string.Join(string.Empty, arr);
+    private static int[] NumberToArray(int num, bool removeZeros = true)
+        => NumberStringToArray(num.ToString(), removeZeros);
 }
