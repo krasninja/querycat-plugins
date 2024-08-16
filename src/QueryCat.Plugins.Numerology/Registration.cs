@@ -6,7 +6,7 @@ namespace QueryCat.Plugins.Numerology;
 /// <summary>
 /// The special registration class that is called by plugin loader.
 /// </summary>
-internal static class Registration
+public static class Registration
 {
     /// <summary>
     /// Register plugin functions.
