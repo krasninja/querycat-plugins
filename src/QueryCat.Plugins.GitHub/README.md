@@ -1,5 +1,11 @@
 # QueryCat Plugin for GitHub
 
+- [Functions](Functions.md)
+- [Schema](Schema.md)
+- [Changelog](CHANGELOG.md)
+
+GitHub API plugin.
+
 ## Example Queries
 
 **Get commit details by hash**
