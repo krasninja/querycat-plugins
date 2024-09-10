@@ -1,22 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.GitHub", "QueryCat.Plugins.GitHub\QueryCat.Plugins.GitHub.csproj", "{3E8236D3-DE28-42AA-ACA3-DBFDD1330958}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.GitHub", "src\QueryCat.Plugins.GitHub\QueryCat.Plugins.GitHub.csproj", "{3E8236D3-DE28-42AA-ACA3-DBFDD1330958}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.System", "QueryCat.Plugins.System\QueryCat.Plugins.System.csproj", "{8FF24112-BD0F-474F-86C5-25444C2587F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.System", "src\QueryCat.Plugins.System\QueryCat.Plugins.System.csproj", "{8FF24112-BD0F-474F-86C5-25444C2587F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.FluidTemplates", "QueryCat.Plugins.FluidTemplates\QueryCat.Plugins.FluidTemplates.csproj", "{521EFF6D-12C7-46B5-B2DD-2E79987FA96F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.FluidTemplates", "src\QueryCat.Plugins.FluidTemplates\QueryCat.Plugins.FluidTemplates.csproj", "{521EFF6D-12C7-46B5-B2DD-2E79987FA96F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Aws", "QueryCat.Plugins.Aws\QueryCat.Plugins.Aws.csproj", "{2C6BF5EC-0D4F-40C4-A2AE-E9980B10D686}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Aws", "src\QueryCat.Plugins.Aws\QueryCat.Plugins.Aws.csproj", "{2C6BF5EC-0D4F-40C4-A2AE-E9980B10D686}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Jira", "QueryCat.Plugins.Jira\QueryCat.Plugins.Jira.csproj", "{266010EB-9852-4B90-A772-2AA3103DAF5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Jira", "src\QueryCat.Plugins.Jira\QueryCat.Plugins.Jira.csproj", "{266010EB-9852-4B90-A772-2AA3103DAF5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.VStarCam", "QueryCat.Plugins.VStarCam\QueryCat.Plugins.VStarCam.csproj", "{21CC49F5-156C-466F-AD9E-40DD4EBF04CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.VStarCam", "src\QueryCat.Plugins.VStarCam\QueryCat.Plugins.VStarCam.csproj", "{21CC49F5-156C-466F-AD9E-40DD4EBF04CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Clipboard", "QueryCat.Plugins.Clipboard\QueryCat.Plugins.Clipboard.csproj", "{39A5B2F3-47DA-494E-B353-1563CE137366}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Clipboard", "src\QueryCat.Plugins.Clipboard\QueryCat.Plugins.Clipboard.csproj", "{39A5B2F3-47DA-494E-B353-1563CE137366}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Network", "QueryCat.Plugins.Network\QueryCat.Plugins.Network.csproj", "{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Network", "src\QueryCat.Plugins.Network\QueryCat.Plugins.Network.csproj", "{24F8ADCD-4EC4-4A7A-B7B9-37D83DB4359A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.FileSystem", "QueryCat.Plugins.FileSystem\QueryCat.Plugins.FileSystem.csproj", "{C5C833F4-A558-41F9-9509-D2D0A183484F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.FileSystem", "src\QueryCat.Plugins.FileSystem\QueryCat.Plugins.FileSystem.csproj", "{C5C833F4-A558-41F9-9509-D2D0A183484F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JIRA", "JIRA", "{D417A513-C687-4D9B-A971-00B3B252C1FA}"
 EndProject
@@ -38,21 +38,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aws", "Aws", "{303DFDC9-646
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Numerology", "Numerology", "{96656113-5025-4A81-A876-65D30C1C2E9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Numerology", "QueryCat.Plugins.Numerology\QueryCat.Plugins.Numerology.csproj", "{4DEFA5B2-A553-4E13-BC4E-4D86AD828976}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Numerology", "src\QueryCat.Plugins.Numerology\QueryCat.Plugins.Numerology.csproj", "{4DEFA5B2-A553-4E13-BC4E-4D86AD828976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Build", "QueryCat.Plugins.Build\QueryCat.Plugins.Build.csproj", "{1881599A-B346-4029-B7AA-437228C95129}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Build", "src\QueryCat.Plugins.Build\QueryCat.Plugins.Build.csproj", "{1881599A-B346-4029-B7AA-437228C95129}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Build", "_Build", "{801319CE-ACEC-47C4-8397-3C64EADB579C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.VisualParadigm", "QueryCat.Plugins.VisualParadigm\QueryCat.Plugins.VisualParadigm.csproj", "{B0A33090-7187-4365-B87C-C78EF99C2D48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.VisualParadigm", "src\QueryCat.Plugins.VisualParadigm\QueryCat.Plugins.VisualParadigm.csproj", "{B0A33090-7187-4365-B87C-C78EF99C2D48}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualParadigm", "VisualParadigm", "{CAFF6C3C-9EAC-4375-B14E-996BC59254DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgresSniffer", "PostgresSniffer", "{9A98777A-179D-4BE4-98BF-CA3F71B8C191}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.PostgresSniffer", "QueryCat.Plugins.PostgresSniffer\QueryCat.Plugins.PostgresSniffer.csproj", "{A9A9AF40-04CA-418B-BC6C-5AF67A2EFD6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.PostgresSniffer", "src\QueryCat.Plugins.PostgresSniffer\QueryCat.Plugins.PostgresSniffer.csproj", "{A9A9AF40-04CA-418B-BC6C-5AF67A2EFD6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Build", "..\backend\src\QueryCat.Build\QueryCat.Build.csproj", "{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Build", "backend\src\QueryCat.Build\QueryCat.Build.csproj", "{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend", "backend\src\QueryCat.Backend\QueryCat.Backend.csproj", "{85BB1630-1F81-4415-9841-952A416D48CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.ThriftPlugins", "backend\src\QueryCat.Backend.ThriftPlugins\QueryCat.Backend.ThriftPlugins.csproj", "{D92DAB02-232C-4C3D-9538-FD492FC1D3AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.Core", "backend\src\QueryCat.Backend.Core\QueryCat.Backend.Core.csproj", "{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.AssemblyPlugins", "backend\src\QueryCat.Backend.AssemblyPlugins\QueryCat.Backend.AssemblyPlugins.csproj", "{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +124,22 @@ Global
 		{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85BB1630-1F81-4415-9841-952A416D48CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85BB1630-1F81-4415-9841-952A416D48CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85BB1630-1F81-4415-9841-952A416D48CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85BB1630-1F81-4415-9841-952A416D48CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D92DAB02-232C-4C3D-9538-FD492FC1D3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D92DAB02-232C-4C3D-9538-FD492FC1D3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D92DAB02-232C-4C3D-9538-FD492FC1D3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D92DAB02-232C-4C3D-9538-FD492FC1D3AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{266010EB-9852-4B90-A772-2AA3103DAF5D} = {D417A513-C687-4D9B-A971-00B3B252C1FA}
@@ -132,5 +156,9 @@ Global
 		{B0A33090-7187-4365-B87C-C78EF99C2D48} = {CAFF6C3C-9EAC-4375-B14E-996BC59254DE}
 		{A9A9AF40-04CA-418B-BC6C-5AF67A2EFD6E} = {9A98777A-179D-4BE4-98BF-CA3F71B8C191}
 		{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{85BB1630-1F81-4415-9841-952A416D48CB} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{D92DAB02-232C-4C3D-9538-FD492FC1D3AD} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 	EndGlobalSection
 EndGlobal
