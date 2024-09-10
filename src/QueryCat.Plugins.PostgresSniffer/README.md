@@ -1,5 +1,9 @@
 # QueryCat Plugin for Postgres Sniffer
 
+- [Functions](Functions.md)
+- [Schema](Schema.md)
+- [Changelog](CHANGELOG.md)
+
 ## Prerequisites
 
 - Windows

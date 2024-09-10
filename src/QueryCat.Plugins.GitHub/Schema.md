@@ -1,5 +1,16 @@
 # Schema
 
+- [github_branches](#github_branches)
+- [github_commits](#github_commits)
+- [github_commits_ref](#github_commits_ref)
+- [github_issue_comments](#github_issue_comments)
+- [github_issue_timeline](#github_issue_timeline)
+- [github_pull_comments](#github_pull_comments)
+- [github_pull_reviews](#github_pull_reviews)
+- [github_pull_reviews_requests](#github_pull_reviews_requests)
+- [github_pulls](#github_pulls)
+- [github_search_issues](#github_search_issues)
+
 ## **github_branches**
 
 ```
