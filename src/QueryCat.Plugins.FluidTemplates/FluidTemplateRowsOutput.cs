@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Text;
 using Fluid;
-using Fluid.Ast;
 using Fluid.Values;
 using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
@@ -10,6 +9,7 @@ using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Backend.Execution;
 using QueryCat.Backend.Relational.Iterators;
+using Completion = Fluid.Ast.Completion;
 
 namespace QueryCat.Plugins.FluidTemplates;
 
