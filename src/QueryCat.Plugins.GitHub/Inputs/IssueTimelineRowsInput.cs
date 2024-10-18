@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -18,13 +19,13 @@ internal sealed class IssueTimelineRowsInput : BaseRowsInput<TimelineEventInfo>
     [SafeFunction]
     [Description("Return GitHub timeline for the specific issue.")]
     [FunctionSignature("github_issue_timeline(): object<IRowsInput>")]
-    public static VariantValue IssueTimelineFunction(FunctionCallInfo args)
+    public static VariantValue IssueTimelineFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new IssueTimelineRowsInput(args));
+        return VariantValue.CreateFromObject(new IssueTimelineRowsInput(thread));
     }
 
-    public IssueTimelineRowsInput(FunctionCallInfo args)
-        : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public IssueTimelineRowsInput(IExecutionThread thread)
+        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
     }
 

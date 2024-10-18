@@ -17,14 +17,13 @@ internal class FluidTemplateRowsOutput : IRowsOutput
 {
     [Description("Writes data to a Fluid template.")]
     [FunctionSignature("fluid_template(template: string, out: string, var_name: string = 'rows'): object<IRowsOutput>")]
-    public static VariantValue FluidTemplate(FunctionCallInfo args)
+    public static VariantValue FluidTemplate(IExecutionThread thread)
     {
-        var templateFile = args.GetAt(0).AsString;
-        var outputFile = args.GetAt(1).AsString;
-        var variableName = args.GetAt(2).AsString;
+        var templateFile = thread.Stack[0].AsString;
+        var outputFile = thread.Stack[1].AsString;
+        var variableName = thread.Stack[2].AsString;
 
-        return VariantValue.CreateFromObject(new FluidTemplateRowsOutput(templateFile, outputFile, variableName,
-            args.ExecutionThread));
+        return VariantValue.CreateFromObject(new FluidTemplateRowsOutput(templateFile, outputFile, variableName, thread));
     }
 
     private const string QueryCatContextKey = "$$qcat_context";
@@ -149,8 +148,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
 
     private static FluidValue CreateFluidValue(VariantValue variantValue)
     {
-        var type = variantValue.GetInternalType();
-        return type switch
+        return variantValue.Type switch
         {
             DataType.Null => NilValue.Instance,
             DataType.Boolean => BooleanValue.Create(variantValue.AsBoolean),

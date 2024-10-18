@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Microsoft.Data.Sqlite;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -12,9 +13,9 @@ internal sealed class DiagramElementsRowsInput : FetchRowsInput<DiagramElement>
     [SafeFunction]
     [Description("Get diagram elements.")]
     [FunctionSignature("vp_diagram_elements(db: string): object<IRowsInput>")]
-    public static VariantValue DiagramElementsInput(FunctionCallInfo args)
+    public static VariantValue DiagramElementsInput(IExecutionThread thread)
     {
-        var db = args.GetAt(0).AsString;
+        var db = thread.Stack.Pop();
         return VariantValue.CreateFromObject(new DiagramElementsRowsInput(db));
     }
 

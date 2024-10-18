@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Net.NetworkInformation;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -11,7 +12,7 @@ internal sealed class InterfaceDetailsRowsInput : FetchRowsInput<InterfaceDetail
     [SafeFunction]
     [Description("Network interfaces and relevant detailed information.")]
     [FunctionSignature("net_interface_details(): object<IRowsInput>")]
-    public static VariantValue InterfaceDetailsFunction(FunctionCallInfo args)
+    public static VariantValue InterfaceDetailsFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new InterfaceDetailsRowsInput());
     }

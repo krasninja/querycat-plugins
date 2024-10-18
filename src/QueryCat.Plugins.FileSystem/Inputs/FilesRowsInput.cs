@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Microsoft.Extensions.FileSystemGlobbing;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -11,7 +12,7 @@ internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
     [SafeFunction]
     [Description("Return information on files.")]
     [FunctionSignature("fs_files(): object<IRowsInput>")]
-    public static VariantValue FilesFunction(FunctionCallInfo args)
+    public static VariantValue FilesFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new FilesRowsInput());
     }

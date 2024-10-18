@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.VStarCam.Domain;
@@ -13,12 +14,12 @@ internal static class SetIr
 
     [Description("Set camera IR on/off.")]
     [FunctionSignature("vstar_set_ir(login: string, password: string, camera_id: string, ir: boolean): void")]
-    public static VariantValue VStarSetIrFunction(FunctionCallInfo args)
+    public static VariantValue VStarSetIrFunction(IExecutionThread thread)
     {
-        var login = args.GetAt(0).AsString;
-        var password = args.GetAt(1).AsString;
-        var id = args.GetAt(2).AsString;
-        var irState = args.GetAt(3).AsBoolean;
+        var login = thread.Stack[0].AsString;
+        var password = thread.Stack[1].AsString;
+        var id = thread.Stack[2].AsString;
+        var irState = thread.Stack[3].AsBoolean;
 
         using var camerasFinder = new CamerasFinder();
         var cameras = camerasFinder.FindAsync(CancellationToken.None).GetAwaiter().GetResult();

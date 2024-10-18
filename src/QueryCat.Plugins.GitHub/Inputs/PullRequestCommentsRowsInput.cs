@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -18,13 +19,13 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
     [SafeFunction]
     [Description("Return GitHub comments for the specific pull request.")]
     [FunctionSignature("github_pull_comments(): object<IRowsInput>")]
-    public static VariantValue PullRequestCommentsFunction(FunctionCallInfo args)
+    public static VariantValue PullRequestCommentsFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(args));
+        return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(thread));
     }
 
-    public PullRequestCommentsRowsInput(FunctionCallInfo args)
-        : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestCommentsRowsInput(IExecutionThread thread)
+        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
     }
 

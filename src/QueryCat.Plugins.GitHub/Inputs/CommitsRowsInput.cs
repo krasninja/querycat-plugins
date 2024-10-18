@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -18,9 +19,9 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     [SafeFunction]
     [Description("Return GitHub commits of specific repository.")]
     [FunctionSignature("github_commits(): object<IRowsInput>")]
-    public static VariantValue GitHubCommitsFunction(FunctionCallInfo args)
+    public static VariantValue GitHubCommitsFunction(IExecutionThread thread)
     {
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new CommitsRowsInput(token));
     }
 

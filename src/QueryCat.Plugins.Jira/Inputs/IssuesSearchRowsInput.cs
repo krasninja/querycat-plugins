@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -19,7 +20,7 @@ internal sealed class IssuesSearchRowsInput : FetchRowsInput<JsonNode>
     [SafeFunction]
     [Description("Search issues using JQL.")]
     [FunctionSignature("jira_issue_search(): object<IRowsInput>")]
-    public static VariantValue JiraIssueSearchFunction(FunctionCallInfo args)
+    public static VariantValue JiraIssueSearchFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new IssuesSearchRowsInput());
     }

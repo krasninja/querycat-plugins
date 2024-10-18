@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -11,7 +12,7 @@ internal sealed class CamerasRowsInput : FetchRowsInput<Camera>
     [SafeFunction]
     [Description("VStar cameras in local network.")]
     [FunctionSignature("vstar_cameras(): object<IRowsInput>")]
-    public static VariantValue CamerasRowsInputFunction(FunctionCallInfo args)
+    public static VariantValue CamerasRowsInputFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new CamerasRowsInput());
     }

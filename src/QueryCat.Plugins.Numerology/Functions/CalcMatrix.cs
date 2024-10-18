@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 
@@ -9,9 +10,9 @@ internal static class CalcMatrix
     [SafeFunction]
     [Description("Calculate Pythagorean matrix by date of birthday.")]
     [FunctionSignature("numerology_calc_matrix(dob: timestamp): string")]
-    public static VariantValue CalcMatrixFunction(FunctionCallInfo args)
+    public static VariantValue CalcMatrixFunction(IExecutionThread thread)
     {
-        var dob = args.GetAt(0).AsTimestamp;
+        var dob = thread.Stack.Pop().AsTimestamp;
         var dateArr = NumberStringToArray(dob.ToString("dMyyyy"));
 
         var addNumber1 = dateArr.Sum();

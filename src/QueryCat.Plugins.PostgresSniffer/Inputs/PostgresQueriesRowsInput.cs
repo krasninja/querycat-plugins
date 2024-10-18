@@ -6,6 +6,7 @@ using SharpPcap;
 using SharpPcap.LibPcap;
 using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.PostgresSniffer.Utils;
@@ -73,11 +74,11 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
 
     [Description("Listen TCP traffic for the specified host and port.")]
     [FunctionSignature("pgsniff_start(iface?: string := null, host?: string := null, port: integer := 5432): object<IRowsInput>")]
-    public static VariantValue PostgresSnifferStart(FunctionCallInfo args)
+    public static VariantValue PostgresSnifferStart(IExecutionThread thread)
     {
-        var iface = args.GetAt(0);
-        var host = args.GetAt(1);
-        var port = args.GetAt(2);
+        var iface = thread.Stack[0];
+        var host = thread.Stack[1];
+        var port = thread.Stack[2];
         return VariantValue.CreateFromObject(
             new PostgresQueriesRowsInput(iface.AsString, host.AsString, (ushort)port.AsInteger));
     }

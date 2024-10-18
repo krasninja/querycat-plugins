@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -13,10 +14,10 @@ internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
     [SafeFunction]
     [Description("VStar camera information.")]
     [FunctionSignature("vstar_camera_info(login: string, password: string): object<IRowsInput>")]
-    public static VariantValue CameraInfoRowsInputFunction(FunctionCallInfo args)
+    public static VariantValue CameraInfoRowsInputFunction(IExecutionThread thread)
     {
-        var login = args.GetAt(0).AsString;
-        var password = args.GetAt(1).AsString;
+        var login = thread.Stack[0].AsString;
+        var password = thread.Stack[1].AsString;
         return VariantValue.CreateFromObject(new CameraInfoRowsInput(login, password));
     }
 

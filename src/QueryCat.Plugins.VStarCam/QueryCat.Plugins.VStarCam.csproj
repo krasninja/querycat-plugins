@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.4.3</PackageVersion>
+    <PackageVersion>0.4.4</PackageVersion>
     <Title>VStarCam Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>vstarcam querycat</PackageTags>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="112.1.0" />
-    <PackageReference Include="QueryCat" Version="0.7.0" />
+    <PackageReference Include="QueryCat" Version="0.8.0-alpha.33" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

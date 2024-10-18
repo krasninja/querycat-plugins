@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -20,7 +21,7 @@ internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
     [SafeFunction]
     [Description("Issues are the building blocks of any Jira project.")]
     [FunctionSignature("jira_issue(): object<IRowsInput>")]
-    public static VariantValue JiraIssueFunction(FunctionCallInfo args)
+    public static VariantValue JiraIssueFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new IssuesRowsInput());
     }

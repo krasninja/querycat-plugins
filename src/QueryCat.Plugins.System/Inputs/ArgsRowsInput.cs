@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -10,7 +11,7 @@ internal sealed class ArgsRowsInput : FetchRowsInput<ArgsRowsInput.ArgDto>
     [SafeFunction]
     [Description("A key/value table of command line arguments.")]
     [FunctionSignature("sys_args(): object<IRowsInput>")]
-    public static VariantValue ArgsRowsFunction(FunctionCallInfo args)
+    public static VariantValue ArgsRowsFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new ArgsRowsInput());
     }

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -18,13 +19,13 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
     [SafeFunction]
     [Description("Return GitHub commits for the specific pull request.")]
     [FunctionSignature("github_pull_commits(): object<IRowsInput>")]
-    public static VariantValue PullRequestCommitsFunction(FunctionCallInfo args)
+    public static VariantValue PullRequestCommitsFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new PullRequestCommitsRowsInput(args));
+        return VariantValue.CreateFromObject(new PullRequestCommitsRowsInput(thread));
     }
 
-    public PullRequestCommitsRowsInput(FunctionCallInfo args)
-        : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestCommitsRowsInput(IExecutionThread thread)
+        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
     }
 

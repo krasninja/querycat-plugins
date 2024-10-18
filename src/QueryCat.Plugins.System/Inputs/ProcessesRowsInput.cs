@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -13,7 +14,7 @@ internal sealed class ProcessesRowsInput : FetchRowsInput<ProcessesRowsInput.Pro
     [SafeFunction]
     [Description("All running processes on the host system.")]
     [FunctionSignature("sys_processes(): object<IRowsInput>")]
-    public static VariantValue ProcessesFunction(FunctionCallInfo args)
+    public static VariantValue ProcessesFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new ProcessesRowsInput());
     }

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -18,13 +19,13 @@ internal sealed class PullRequestReviewsRowsInput : BaseRowsInput<PullRequestRev
     [SafeFunction]
     [Description("Return GitHub reviews for the specific pull request.")]
     [FunctionSignature("github_pull_reviews(): object<IRowsInput>")]
-    public static VariantValue PullReviewsFunction(FunctionCallInfo args)
+    public static VariantValue PullReviewsFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new PullRequestReviewsRowsInput(args));
+        return VariantValue.CreateFromObject(new PullRequestReviewsRowsInput(thread));
     }
 
-    public PullRequestReviewsRowsInput(FunctionCallInfo args)
-        : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestReviewsRowsInput(IExecutionThread thread)
+        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
     }
 

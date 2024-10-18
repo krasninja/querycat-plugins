@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 
@@ -9,10 +10,10 @@ internal static class SetToken
     [SafeFunction]
     [Description("GitHub authentication.")]
     [FunctionSignature("github_set_token(token: string): void")]
-    public static VariantValue SetTokenFunction(FunctionCallInfo args)
+    public static VariantValue SetTokenFunction(IExecutionThread thread)
     {
-        var token = args.GetAt(0).AsString;
-        args.ExecutionThread.ConfigStorage.Set(General.GitHubToken, new VariantValue(token));
+        var token = thread.Stack.Pop().AsString;
+        thread.ConfigStorage.Set(General.GitHubToken, new VariantValue(token));
         return VariantValue.Null;
     }
 }

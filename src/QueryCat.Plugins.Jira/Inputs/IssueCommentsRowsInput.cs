@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -19,7 +20,7 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
     [SafeFunction]
     [Description("Get issue comments.")]
     [FunctionSignature("jira_issue_comments(): object<IRowsInput>")]
-    public static VariantValue JiraIssueCommentsFunction(FunctionCallInfo args)
+    public static VariantValue JiraIssueCommentsFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new IssueCommentsRowsInput());
     }

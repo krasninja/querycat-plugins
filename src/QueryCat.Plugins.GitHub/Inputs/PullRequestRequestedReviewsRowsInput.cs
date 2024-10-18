@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -32,13 +33,13 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
     [SafeFunction]
     [Description("Return GitHub review requests for the specific pull request.")]
     [FunctionSignature("github_pull_reviews_requests(): object<IRowsInput>")]
-    public static VariantValue PullRequestedReviewsFunction(FunctionCallInfo args)
+    public static VariantValue PullRequestedReviewsFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new PullRequestRequestedReviewsRowsInput(args));
+        return VariantValue.CreateFromObject(new PullRequestRequestedReviewsRowsInput(thread));
     }
 
-    public PullRequestRequestedReviewsRowsInput(FunctionCallInfo args)
-        : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestRequestedReviewsRowsInput(IExecutionThread thread)
+        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
     }
 

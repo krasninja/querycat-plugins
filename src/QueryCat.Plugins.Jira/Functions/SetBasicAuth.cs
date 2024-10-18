@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 
@@ -9,10 +10,10 @@ internal static class SetBasicAuth
     [SafeFunction]
     [Description("Set JIRA basic authentication method.")]
     [FunctionSignature("jira_set_basic_auth(username: string, password: string): void")]
-    public static VariantValue JiraSetBasicAuthFunction(FunctionCallInfo args)
+    public static VariantValue JiraSetBasicAuthFunction(IExecutionThread thread)
     {
-        args.ExecutionThread.ConfigStorage.Set(General.JiraUsername, args.GetAt(0));
-        args.ExecutionThread.ConfigStorage.Set(General.JiraPassword, args.GetAt(1));
+        thread.ConfigStorage.Set(General.JiraUsername, thread.Stack[0]);
+        thread.ConfigStorage.Set(General.JiraPassword, thread.Stack[1]);
         return VariantValue.Null;
     }
 }

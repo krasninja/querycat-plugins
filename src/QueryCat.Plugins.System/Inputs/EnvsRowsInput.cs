@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -10,7 +11,7 @@ internal sealed class EnvsRowsInput : FetchRowsInput<EnvsRowsInput.EnvDto>
     [SafeFunction]
     [Description("A key/value table of environment variables.")]
     [FunctionSignature("sys_envs(): object<IRowsInput>")]
-    public static VariantValue EnvsRowsFunction(FunctionCallInfo args)
+    public static VariantValue EnvsRowsFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new EnvsRowsInput());
     }

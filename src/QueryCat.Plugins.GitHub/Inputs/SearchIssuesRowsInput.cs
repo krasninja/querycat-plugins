@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -19,10 +20,10 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     [SafeFunction]
     [Description("Search GitHub issues and pull requests.")]
     [FunctionSignature("github_search_issues(term?: string := 'is:open archived:false assignee:@me'): object<IRowsInput>")]
-    public static VariantValue GitHubSearchIssuesFunction(FunctionCallInfo args)
+    public static VariantValue GitHubSearchIssuesFunction(IExecutionThread thread)
     {
-        var term = args.GetAt(0).AsString;
-        var token = args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var term = thread.Stack.Pop().AsString;
+        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
 

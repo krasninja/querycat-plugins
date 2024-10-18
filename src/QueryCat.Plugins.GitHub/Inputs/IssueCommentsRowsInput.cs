@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Octokit;
 using QueryCat.Backend.Core.Data;
+using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
@@ -18,13 +19,13 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     [SafeFunction]
     [Description("Return GitHub comments for the specific issue.")]
     [FunctionSignature("github_issue_comments(): object<IRowsInput>")]
-    public static VariantValue IssueCommentsFunction(FunctionCallInfo args)
+    public static VariantValue IssueCommentsFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new IssueCommentsRowsInput(args));
+        return VariantValue.CreateFromObject(new IssueCommentsRowsInput(thread));
     }
 
-    public IssueCommentsRowsInput(FunctionCallInfo args)
-        : base(args.ExecutionThread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public IssueCommentsRowsInput(IExecutionThread thread)
+        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
     {
     }
 
