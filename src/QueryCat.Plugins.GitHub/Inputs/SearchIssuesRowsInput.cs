@@ -26,7 +26,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
 
-    private readonly string _term;
+    private string _term;
 
     public SearchIssuesRowsInput(string token, string term) : base(token)
     {
@@ -51,16 +51,22 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("closed_at", p => p.ClosedAt, "The date when issue was closed.")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.")
+            .AddProperty("term", DataType.String, _ => GetKeyColumnValue("term"))
             .AddKeyColumn("created_at", VariantValue.Operation.GreaterOrEquals)
             .AddKeyColumn("created_at", VariantValue.Operation.LessOrEquals)
             .AddKeyColumn("closed_at", VariantValue.Operation.GreaterOrEquals)
-            .AddKeyColumn("closed_at", VariantValue.Operation.LessOrEquals);
+            .AddKeyColumn("closed_at", VariantValue.Operation.LessOrEquals)
+            .AddKeyColumn("term", VariantValue.Operation.Equals);
     }
 
     /// <inheritdoc />
     protected override IEnumerable<Issue> GetData(Fetcher<Issue> fetch)
     {
         var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest();
+        if (this.TryGetKeyColumnValue("term", VariantValue.Operation.Equals, out var term))
+        {
+            request = new SearchIssuesRequest(term);
+        }
         fetch.PageStart = 1;
 
         DateRange? createdAtRange = null;

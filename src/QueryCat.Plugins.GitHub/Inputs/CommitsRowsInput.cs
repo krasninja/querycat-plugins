@@ -37,11 +37,12 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
             .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("sha", p => p.Sha, "SHA of the commit.")
             .AddProperty("author_name", p => p.Commit.Author.Name, "The login name of the author of the commit.")
+            .AddProperty("author_login", p => p.Commit.Author.Email, "The email name of the author of the commit.")
             .AddProperty("author_date", p => p.Commit.Author.Date, "Timestamp when the author made this commit.")
             .AddProperty("committer_login", p => p.Committer.Login, "The login name of committer of the commit.")
             .AddProperty("verified", p => p.Commit.Verification.Verified, "True if the commit was verified with a signature.")
             .AddProperty("message", p => p.Commit.Message, "Commit message.")
-            .AddKeyColumn("repository_full_name", isRequired: true)
+                .AddKeyColumn("repository_full_name", isRequired: true)
             .AddKeyColumn("sha", operation: VariantValue.Operation.GreaterOrEquals, VariantValue.Operation.Greater)
             .AddKeyColumn("author_date",
                 operation: VariantValue.Operation.Greater,
@@ -49,7 +50,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
             .AddKeyColumn("author_date",
                 operation: VariantValue.Operation.Less,
                 orOperation: VariantValue.Operation.LessOrEquals)
-            .AddKeyColumn("author_login", operation: VariantValue.Operation.Equals);
+            .AddKeyColumn("author_name", operation: VariantValue.Operation.Equals);
     }
 
     /// <inheritdoc />
@@ -57,7 +58,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var request = new CommitRequest();
-        if (TryGetKeyColumnValue("author_login", VariantValue.Operation.Equals, out var value))
+        if (TryGetKeyColumnValue("committer_login", VariantValue.Operation.Equals, out var value))
         {
             request.Author = value.AsString;
         }
