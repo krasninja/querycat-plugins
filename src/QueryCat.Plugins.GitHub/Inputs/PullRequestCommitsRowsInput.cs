@@ -49,7 +49,7 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
     protected override IEnumerable<PullRequestCommit> GetData(Fetcher<PullRequestCommit> fetcher)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var pullNumber = (int)GetKeyColumnValue("pull_number").AsInteger;
+        var pullNumber = GetKeyColumnValue("pull_number").ToInt32();
         return fetcher.FetchAll(async (ct) => await Client.PullRequest.Commits(owner, repository, pullNumber));
     }
 }

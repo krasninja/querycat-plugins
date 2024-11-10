@@ -72,7 +72,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
         var number = GetKeyColumnValue("number");
         if (!number.IsNull)
         {
-            return fetcher.FetchOne(async ct => await Client.Repository.PullRequest.Get(owner, repository, number));
+            return fetcher.FetchOne(async ct => await Client.Repository.PullRequest.Get(owner, repository, number.ToInt32()));
         }
         else
         {

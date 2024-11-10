@@ -52,7 +52,7 @@ internal sealed class IssueTimelineRowsInput : BaseRowsInput<TimelineEventInfo>
     protected override IEnumerable<TimelineEventInfo> GetData(Fetcher<TimelineEventInfo> fetcher)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var number = (int)GetKeyColumnValue("number").AsInteger;
+        var number = GetKeyColumnValue("number").ToInt32();
         return fetcher.FetchAll(
             async ct => await Client.Issue.Timeline.GetAllForIssue(owner, repository, number));
     }

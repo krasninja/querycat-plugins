@@ -27,7 +27,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
     }
 
-    private string _term;
+    private readonly string _term;
 
     public SearchIssuesRowsInput(string token, string term) : base(token)
     {
@@ -75,8 +75,8 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             && this.TryGetKeyColumnValue("created_at", VariantValue.Operation.LessOrEquals, out var createdAtEnd))
         {
             createdAtRange = new DateRange(
-                new DateTimeOffset(createdAtStart.AsTimestamp),
-                new DateTimeOffset(createdAtEnd.AsTimestamp));
+                new DateTimeOffset(createdAtStart.ToDateTime()),
+                new DateTimeOffset(createdAtEnd.ToDateTime()));
         }
 
         DateRange? closedAtRange = null;
@@ -84,8 +84,8 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             && this.TryGetKeyColumnValue("closed_at", VariantValue.Operation.LessOrEquals, out var closedAtEnd))
         {
             closedAtRange = new DateRange(
-                new DateTimeOffset(closedAtStart.AsTimestamp),
-                new DateTimeOffset(closedAtEnd.AsTimestamp));
+                new DateTimeOffset(closedAtStart.ToDateTime()),
+                new DateTimeOffset(closedAtEnd.ToDateTime()));
         }
 
         return fetch.FetchPaged(async (page, limit, ct) =>

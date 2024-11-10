@@ -8,6 +8,8 @@ namespace QueryCat.Plugins.Jira;
 /// </summary>
 internal static class General
 {
+    private const string DefaultJiraUrl = "https://jira.jira.org/";
+
     public const string JiraUsername = "jira-username";
     public const string JiraPassword = "jira-password";
     public const string JiraUrl = "jira-url";
@@ -18,11 +20,11 @@ internal static class General
     {
         if (configStorage.Has(JiraConfig))
         {
-            return configStorage.Get(JiraConfig).As<JiraConfiguration>();
+            return configStorage.Get(JiraConfig).AsRequired<JiraConfiguration>();
         }
 
         var config = new JiraConfiguration();
-        config.BasePath = configStorage.GetOrDefault(JiraUrl, new VariantValue("https://jira.atlassian.com")).AsString;
+        config.BasePath = configStorage.GetOrDefault(JiraUrl, new VariantValue(DefaultJiraUrl)).AsString;
         if (configStorage.Has(JiraUsername) && configStorage.Has(JiraPassword))
         {
             config.Username = configStorage.Get(JiraUsername).AsString;

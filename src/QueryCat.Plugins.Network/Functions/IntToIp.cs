@@ -13,8 +13,8 @@ internal static class IntToIp
     [FunctionSignature("net_int_to_ip(ip: integer): string")]
     public static VariantValue IntToIpFunction(IExecutionThread thread)
     {
-        var ip = thread.Stack.Pop().AsInteger;
-        var bytes = BitConverter.GetBytes((int)ip);
+        var ip = thread.Stack.Pop();
+        var bytes = BitConverter.GetBytes(ip.ToInt32());
         return new VariantValue(new IPAddress(bytes).ToString());
     }
 }

@@ -55,7 +55,7 @@ internal sealed class PullRequestReviewsRowsInput : BaseRowsInput<PullRequestRev
     protected override IEnumerable<PullRequestReview> GetData(Fetcher<PullRequestReview> fetcher)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var number = (int)GetKeyColumnValue("pull_number").AsInteger;
+        var number = GetKeyColumnValue("pull_number").ToInt32();
         return fetcher.FetchAll(async ct => await Client.Repository.PullRequest.Review.GetAll(owner, repository, number));
     }
 }

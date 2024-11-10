@@ -51,7 +51,7 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     protected override IEnumerable<IssueComment> GetData(Fetcher<IssueComment> fetcher)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var issueNumber = (int)GetKeyColumnValue("issue_number").AsInteger;
+        var issueNumber = GetKeyColumnValue("issue_number").ToInt32();
         fetcher.PageStart = 1;
         return fetcher.FetchPaged(async (page, limit, ct) =>
         {

@@ -18,7 +18,7 @@ internal static class General
     {
         if (configStorage.Has(AwsCredentials))
         {
-            return configStorage.Get(AwsCredentials).As<BasicAWSCredentials>();
+            return configStorage.Get(AwsCredentials).AsRequired<BasicAWSCredentials>();
         }
 
         var accessKey = configStorage.GetOrDefault(AwsAccessKey);

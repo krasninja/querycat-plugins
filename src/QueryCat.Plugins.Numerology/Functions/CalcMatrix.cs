@@ -13,7 +13,11 @@ internal static class CalcMatrix
     public static VariantValue CalcMatrixFunction(IExecutionThread thread)
     {
         var dob = thread.Stack.Pop().AsTimestamp;
-        var dateArr = NumberStringToArray(dob.ToString("dMyyyy"));
+        if (!dob.HasValue)
+        {
+            return VariantValue.Null;
+        }
+        var dateArr = NumberStringToArray(dob.Value.ToString("dMyyyy"));
 
         var addNumber1 = dateArr.Sum();
         var addNumber2 = SumUntilOneDigit(addNumber1, elevenRule: true);

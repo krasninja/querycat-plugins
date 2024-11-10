@@ -80,7 +80,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         var host = thread.Stack[1];
         var port = thread.Stack[2];
         return VariantValue.CreateFromObject(
-            new PostgresQueriesRowsInput(iface.AsString, host.AsString, (ushort)port.AsInteger));
+            new PostgresQueriesRowsInput(iface.AsString, host.AsString, port.ToUInt16()));
     }
 
     /// <inheritdoc />

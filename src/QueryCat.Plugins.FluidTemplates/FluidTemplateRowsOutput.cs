@@ -1,7 +1,9 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.Text;
 using Fluid;
 using Fluid.Values;
+using QueryCat.Backend;
 using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
@@ -23,7 +25,8 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         var outputFile = thread.Stack[1].AsString;
         var variableName = thread.Stack[2].AsString;
 
-        return VariantValue.CreateFromObject(new FluidTemplateRowsOutput(templateFile, outputFile, variableName, thread));
+        var optionsThread = (IExecutionThread<ExecutionOptions>)thread;
+        return VariantValue.CreateFromObject(new FluidTemplateRowsOutput(templateFile, outputFile, variableName, optionsThread));
     }
 
     private const string QueryCatContextKey = "$$qcat_context";
@@ -33,7 +36,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     private readonly string _templateFile;
     private readonly string _outFile;
     private readonly string _varName;
-    private readonly IExecutionThread _executionThread;
+    private readonly IExecutionThread<ExecutionOptions> _executionThread;
     private readonly TemplateOptions _templateOptions;
     private readonly List<VariantValue[]> _rows = new();
 
@@ -46,11 +49,11 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         set => _queryContext = value;
     }
 
-    private static readonly FluidParser Parser = new();
+    private static readonly FluidParser _parser = new();
 
     static FluidTemplateRowsOutput()
     {
-        Parser.RegisterEmptyBlock("run", (statements, writer, encoder, context) =>
+        _parser.RegisterEmptyBlock("run", (statements, writer, encoder, context) =>
         {
             var queryContext = (QueryContext)context.AmbientValues[QueryCatContextKey];
             var executionThread = (ExecutionThread)context.AmbientValues[QueryCatExecutionThreadKey];
@@ -69,7 +72,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         });
     }
 
-    public FluidTemplateRowsOutput(string templateFile, string outFile, string varName, IExecutionThread executionThread)
+    public FluidTemplateRowsOutput(string templateFile, string outFile, string varName, IExecutionThread<ExecutionOptions> executionThread)
     {
         _templateFile = templateFile;
         _outFile = outFile;
@@ -77,7 +80,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         _executionThread = executionThread;
 
         _templateOptions = new TemplateOptions();
-        _templateOptions.MemberAccessStrategy.Register<VariantValue, object>((obj, name) =>
+        _templateOptions.MemberAccessStrategy.Register<VariantValue, object?>((obj, name) =>
         {
             return name switch
             {
@@ -88,7 +91,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
                 nameof(VariantValue.AsInterval) => obj.AsInterval,
                 nameof(VariantValue.AsBoolean) => obj.AsBoolean,
                 nameof(VariantValue.AsNumeric) => obj.AsNumeric,
-                _ => obj.ToString(),
+                _ => obj.ToString(CultureInfo.InvariantCulture),
             };
         });
         _templateOptions.MemberAccessStrategy.Register<Row>();
@@ -113,13 +116,12 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     public void Close()
     {
         var templateText = File.ReadAllText(_templateFile);
-        if (Parser.TryParse(templateText, out var template, out var error))
+        if (_parser.TryParse(templateText, out var template, out var error))
         {
-            var subExecutionThread = new ExecutionThread((ExecutionThread)_executionThread); // TODO: not good cast.
-            subExecutionThread.Options.DefaultRowsOutput = NullRowsOutput.Instance;
+            _executionThread.Options.DefaultRowsOutput = NullRowsOutput.Instance;
             var context = new TemplateContext(template, _templateOptions);
             context.AmbientValues[QueryCatContextKey] = _queryContext;
-            context.AmbientValues[QueryCatExecutionThreadKey] = subExecutionThread;
+            context.AmbientValues[QueryCatExecutionThreadKey] = _executionThread;
             context.AmbientValues[QueryCatRowsKey] = _varName;
             context.SetValue(_varName, _rows);
 
@@ -152,11 +154,11 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         {
             DataType.Null => NilValue.Instance,
             DataType.Boolean => BooleanValue.Create(variantValue.AsBoolean),
-            DataType.Float => NumberValue.Create((decimal)variantValue.AsFloat),
-            DataType.Integer => NumberValue.Create(variantValue.AsInteger),
-            DataType.Numeric => NumberValue.Create(variantValue.AsNumeric),
+            DataType.Float => NumberValue.Create(variantValue.ToDecimal()),
+            DataType.Integer => NumberValue.Create(variantValue.ToInt64()),
+            DataType.Numeric => NumberValue.Create(variantValue.ToDecimal()),
             DataType.String => StringValue.Create(variantValue.AsString),
-            DataType.Timestamp => new DateTimeValue(variantValue.AsTimestamp),
+            DataType.Timestamp => new DateTimeValue(variantValue.ToDateTime()),
             DataType.Interval => new ObjectValue(variantValue.AsInterval),
             _ => new ObjectValue(variantValue.AsObject),
         };

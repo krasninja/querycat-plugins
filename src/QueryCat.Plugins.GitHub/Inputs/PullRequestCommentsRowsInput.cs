@@ -58,7 +58,7 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
     protected override IEnumerable<PullRequestReviewComment> GetData(Fetcher<PullRequestReviewComment> fetcher)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var pullNumber = (int)GetKeyColumnValue("pull_number").AsInteger;
+        var pullNumber = GetKeyColumnValue("pull_number").ToInt32();
         fetcher.PageStart = 1;
         return fetcher.FetchPaged(async (page, limit, ct) =>
         {
