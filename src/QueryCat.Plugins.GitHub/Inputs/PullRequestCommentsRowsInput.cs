@@ -35,11 +35,11 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
         builder
             .AddDataPropertyAsJson()
             .AddProperty("id", p => p.Id, "Comment id.")
-            .AddProperty("pull_id", p => p.PullRequestReviewId, "Pull request id.")
+            .AddProperty("pull_review_id", p => p.PullRequestReviewId, "Pull request review id.")
             .AddProperty("pull_number", DataType.Integer, _ => GetKeyColumnValue("pull_number"), "Pull request number.")
             .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("body", p => p.Body, "Comment body.")
-            .AddProperty("url", p => p.Url, "Comment URL.")
+            .AddProperty("url", p => p.HtmlUrl, "Comment URL.")
             .AddProperty("path", p => p.Path, "Relative path of the file the comment is about.")
             .AddProperty("commit_id", p => p.CommitId, "Commit id.")
             .AddProperty("original_commit_id", p => p.OriginalCommitId, "Original commit it.")
