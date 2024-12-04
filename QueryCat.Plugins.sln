@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualParadigm", "VisualPar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgresSniffer", "PostgresSniffer", "{9A98777A-179D-4BE4-98BF-CA3F71B8C191}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{2F452030-BCA1-4979-8603-35DC30077F8B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.PostgresSniffer", "src\QueryCat.Plugins.PostgresSniffer\QueryCat.Plugins.PostgresSniffer.csproj", "{A9A9AF40-04CA-418B-BC6C-5AF67A2EFD6E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Build", "backend\src\QueryCat.Build\QueryCat.Build.csproj", "{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603}"
@@ -57,6 +59,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.Core", "backend\src\QueryCat.Backend.Core\QueryCat.Backend.Core.csproj", "{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.AssemblyPlugins", "backend\src\QueryCat.Backend.AssemblyPlugins\QueryCat.Backend.AssemblyPlugins.csproj", "{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Tester", "..\querycat\src\QueryCat.Tester\QueryCat.Tester.csproj", "{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Database", "src\QueryCat.Plugins.Database\QueryCat.Plugins.Database.csproj", "{12737855-C29B-4426-B733-C8007CB7DACF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend", "backend\src\QueryCat.Backend\QueryCat.Backend.csproj", "{3737FBCF-3CD9-41DF-961B-92CC461D94FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +136,18 @@ Global
 		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12737855-C29B-4426-B733-C8007CB7DACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12737855-C29B-4426-B733-C8007CB7DACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12737855-C29B-4426-B733-C8007CB7DACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12737855-C29B-4426-B733-C8007CB7DACF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{266010EB-9852-4B90-A772-2AA3103DAF5D} = {D417A513-C687-4D9B-A971-00B3B252C1FA}
@@ -146,5 +166,7 @@ Global
 		{8C3BF374-646F-4DC7-ADD3-6EFB7FEC3603} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 		{4A1B1229-20A6-465C-B5AC-6A8E24D6B64B} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{12737855-C29B-4426-B733-C8007CB7DACF} = {2F452030-BCA1-4979-8603-35DC30077F8B}
+		{3737FBCF-3CD9-41DF-961B-92CC461D94FF} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 	EndGlobalSection
 EndGlobal
