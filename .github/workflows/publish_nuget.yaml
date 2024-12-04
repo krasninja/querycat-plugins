@@ -15,7 +15,7 @@ jobs:
           submodules: 'true'
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8'
+          dotnet-version: '9'
       - name: Run build Cake script
         run: ${PWD}/build.sh -t pack-plugins
       - name: Upload Artifacts

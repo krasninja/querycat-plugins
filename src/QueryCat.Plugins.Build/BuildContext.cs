@@ -16,6 +16,7 @@ public sealed class BuildContext : FrostingContext
     {
         "QueryCat.Plugins.Aws",
         "QueryCat.Plugins.Clipboard",
+        "QueryCat.Plugins.Database",
         "QueryCat.Plugins.FileSystem",
         "QueryCat.Plugins.FluidTemplates",
         "QueryCat.Plugins.GitHub",
