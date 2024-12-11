@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using QueryCat.Backend.Core;
@@ -8,16 +6,14 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Database.Common;
 
-internal abstract class TableRowsInput : IRowsInput, IDisposable
+internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisposable
 {
-    public string ConnectionString { get; protected set; }
-
-    public string TableName { get; protected set; }
-
-    public string Namespace { get; protected set; }
+    private readonly TableRowsProvider _provider;
 
     /// <inheritdoc />
     public Column[] Columns { get; protected set; } = [];
+
+    public string TableName { get; }
 
     /// <inheritdoc />
     public QueryContext QueryContext { get; set; } = NullQueryContext.Instance;
@@ -27,16 +23,25 @@ internal abstract class TableRowsInput : IRowsInput, IDisposable
     /// <inheritdoc />
     public string[] UniqueKey =>
     [
-        ConnectionString,
         TableName,
-        Namespace,
     ];
 
-    public TableRowsInput(string connectionString, string tableName, string? @namespace = null)
+    public TableRowsInput(TableRowsProvider provider, string tableName)
     {
-        ConnectionString = connectionString;
+        _provider = provider;
         TableName = tableName;
-        Namespace = @namespace ?? string.Empty;
+    }
+
+    /// <inheritdoc />
+    public ErrorCode DeleteCurrent()
+    {
+        if (_reader == null)
+        {
+            return ErrorCode.Closed;
+        }
+        var id = _reader.GetInt64(0);
+        _provider.DeleteDatabaseRow(id);
+        return ErrorCode.OK;
     }
 
     /// <inheritdoc />
@@ -48,23 +53,7 @@ internal abstract class TableRowsInput : IRowsInput, IDisposable
             _reader = null;
         }
 
-        var command = CreateSelectAllCommand();
-
-        var namespaceParameter = command.CreateParameter();
-        namespaceParameter.ParameterName = "namespace";
-        namespaceParameter.DbType = DbType.String;
-        namespaceParameter.Direction = ParameterDirection.Input;
-        namespaceParameter.Value = Namespace;
-        command.Parameters.Add(namespaceParameter);
-
-        var tableParameter = command.CreateParameter();
-        tableParameter.ParameterName = "table";
-        tableParameter.DbType = DbType.String;
-        tableParameter.Direction = ParameterDirection.Input;
-        tableParameter.Value = TableName;
-        command.Parameters.Add(tableParameter);
-
-        _reader = command.ExecuteReader();
+        _reader = _provider.CreateDatabaseSelectReader(QueryContext.QueryInfo.Columns.ToArray());
 
         var dbColumns = _reader.GetColumnSchema();
         var columns = new List<Column>();
@@ -78,8 +67,6 @@ internal abstract class TableRowsInput : IRowsInput, IDisposable
         }
         Columns = columns.ToArray();
     }
-
-    protected abstract DbCommand CreateSelectAllCommand();
 
     /// <inheritdoc />
     public virtual void Close()
@@ -120,6 +107,14 @@ internal abstract class TableRowsInput : IRowsInput, IDisposable
             return false;
         }
         return _reader.Read();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<KeyColumn> GetKeyColumns() => Columns.Select((c, i) => new KeyColumn(i)).ToArray();
+
+    /// <inheritdoc />
+    public void SetKeyColumnValue(int columnIndex, VariantValue value, VariantValue.Operation operation)
+    {
     }
 
     /// <inheritdoc />
@@ -183,6 +178,7 @@ internal abstract class TableRowsInput : IRowsInput, IDisposable
         if (disposing)
         {
             _reader?.Dispose();
+            (_provider as IDisposable)?.Dispose();
         }
     }
 

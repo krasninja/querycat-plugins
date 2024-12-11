@@ -1,6 +1,5 @@
 using QueryCat.Backend.Core.Functions;
-using QueryCat.Plugins.Database.Inputs;
-using QueryCat.Plugins.Database.Outputs;
+using QueryCat.Plugins.Database.Providers;
 
 namespace QueryCat.Plugins.Database;
 
