@@ -65,14 +65,16 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<PullRequest> GetData(Fetcher<PullRequest> fetcher)
+    protected override IAsyncEnumerable<PullRequest> GetDataAsync(Fetcher<PullRequest> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
 
         var number = GetKeyColumnValue("number");
         if (!number.IsNull)
         {
-            return fetcher.FetchOne(async ct => await Client.Repository.PullRequest.Get(owner, repository, number.ToInt32()));
+            return fetcher.FetchOneAsync(
+                async ct => await Client.Repository.PullRequest.Get(owner, repository, number.ToInt32()), cancellationToken);
         }
         else
         {
@@ -85,8 +87,8 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             {
                 options.State = Enum.Parse<ItemStateFilter>(state);
             }
-            return fetcher.FetchAll(
-                async ct => await Client.PullRequest.GetAllForRepository(owner, repository, options));
+            return fetcher.FetchAllAsync(
+                async ct => await Client.PullRequest.GetAllForRepository(owner, repository, options), cancellationToken);
         }
     }
 }

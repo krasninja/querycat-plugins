@@ -19,6 +19,7 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
     public QueryContext QueryContext { get; set; } = NullQueryContext.Instance;
 
     private DbDataReader? _reader;
+    private readonly Dictionary<Column, TableSelectCondition> _keys = new();
 
     /// <inheritdoc />
     public string[] UniqueKey =>
@@ -33,53 +34,70 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
     }
 
     /// <inheritdoc />
-    public ErrorCode DeleteCurrent()
+    public async ValueTask<ErrorCode> DeleteAsync(CancellationToken cancellationToken = default)
     {
         if (_reader == null)
         {
             return ErrorCode.Closed;
         }
         var id = _reader.GetInt64(0);
-        _provider.DeleteDatabaseRow(id);
+        await _provider.DeleteDatabaseRowAsync(id, cancellationToken);
         return ErrorCode.OK;
     }
 
     /// <inheritdoc />
-    public virtual void Open()
+    public virtual async Task OpenAsync(CancellationToken cancellationToken = default)
     {
         if (_reader != null)
         {
-            _reader.Close();
+            await _reader.CloseAsync();
             _reader = null;
         }
 
-        _reader = _provider.CreateDatabaseSelectReader(QueryContext.QueryInfo.Columns.ToArray());
+        await InitializeColumnsAsync(cancellationToken);
+    }
 
-        var dbColumns = _reader.GetColumnSchema();
-        var columns = new List<Column>();
-        foreach (var dbColumn in dbColumns)
+    private async Task InitializeColumnsAsync(CancellationToken cancellationToken = default)
+    {
+        var tableColumns = await _provider.GetDatabaseTableColumnsAsync(cancellationToken);
+
+        // If we have desired columns from user - add them to the list.
+        var requestedColumns = QueryContext.QueryInfo.Columns.ToArray();
+        if (requestedColumns.Length > 0)
         {
-            if (dbColumn.DataType == null)
+            var targetColumns = new List<Column>(capacity: requestedColumns.Length);
+            foreach (var requestedColumn in requestedColumns)
             {
-                continue;
+                var tableColumn = Array.Find(tableColumns, c => c.Name == requestedColumn.Name);
+                if (tableColumn == null)
+                {
+                    continue;
+                }
+                targetColumns.Add(tableColumn);
             }
-            columns.Add(new Column(dbColumn.ColumnName, ConvertFromSystem(dbColumn.DataType)));
+            Columns = targetColumns.ToArray();
         }
-        Columns = columns.ToArray();
+        else
+        {
+            Columns = tableColumns;
+        }
     }
 
     /// <inheritdoc />
-    public virtual void Close()
+    public virtual async Task CloseAsync(CancellationToken cancellationToken = default)
     {
-        _reader?.Close();
+        if (_reader != null)
+        {
+            await _reader.CloseAsync();
+        }
         _reader = null;
     }
 
     /// <inheritdoc />
-    public virtual void Reset()
+    public virtual async Task ResetAsync(CancellationToken cancellationToken = default)
     {
-        Close();
-        Open();
+        await CloseAsync(cancellationToken);
+        await OpenAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -100,13 +118,16 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
     }
 
     /// <inheritdoc />
-    public virtual bool ReadNext()
+    public virtual async ValueTask<bool> ReadNextAsync(CancellationToken cancellationToken = default)
     {
         if (_reader == null)
         {
-            return false;
+            _reader = await _provider.CreateDatabaseSelectReaderAsync(
+                Columns,
+                _keys.Select(k => k.Value with { Column = k.Key }).ToArray(),
+                cancellationToken);
         }
-        return _reader.Read();
+        return await _reader.ReadAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -115,21 +136,13 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
     /// <inheritdoc />
     public void SetKeyColumnValue(int columnIndex, VariantValue value, VariantValue.Operation operation)
     {
+        var column = Columns[columnIndex];
+        _keys[column] = new TableSelectCondition(column, value, operation);
     }
 
     /// <inheritdoc />
     public void Explain(IndentedStringBuilder stringBuilder)
     {
-    }
-
-    private static DataType ConvertFromSystem(Type type)
-    {
-        var result = Converter.ConvertFromSystem(type);
-        if (result == DataType.Void)
-        {
-            return DataType.String;
-        }
-        return result;
     }
 
     internal static DbType GetDatabaseDataType(DataType type)

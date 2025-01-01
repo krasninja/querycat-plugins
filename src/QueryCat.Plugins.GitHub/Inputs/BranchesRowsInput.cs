@@ -43,15 +43,15 @@ internal sealed class BranchesRowsInput : BaseRowsInput<Branch>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<Branch> GetData(Fetcher<Branch> fetch)
+    protected override IAsyncEnumerable<Branch> GetDataAsync(Fetcher<Branch> fetch, CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
 
         fetch.PageStart = 1;
-        return fetch.FetchPaged(async (page, limit, ct) =>
+        return fetch.FetchPagedAsync(async (page, limit, ct) =>
             {
                 return await Client.Repository.Branch.GetAll(owner, repository,
                         new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
-            });
+            }, cancellationToken);
     }
 }

@@ -16,7 +16,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get.
 /// https://github.com/turbot/steampipe-plugin-jira/blob/main/jira/table_jira_issue.go.
 /// </remarks>
-internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
+internal sealed class IssuesRowsInput : AsyncEnumerableRowsInput<JsonNode>
 {
     [SafeFunction]
     [Description("Issues are the building blocks of any Jira project.")]
@@ -53,12 +53,14 @@ internal sealed class IssuesRowsInput : FetchRowsInput<JsonNode>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<JsonNode> GetData(Fetcher<JsonNode> fetch)
+    protected override IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var config = General.GetConfiguration(QueryContext.InputConfigStorage);
         var request = new RestRequest("issue/{key}")
             .AddUrlSegment("key", GetKeyColumnValue("key").AsString)
             .AddQueryParameter("expand", "renderedFields");
-        return fetch.FetchOne(ct => Task.FromResult(config.Client.Get(request).ToJson()));
+        return fetcher.FetchOneAsync(
+            async ct => (await config.Client.GetAsync(request, ct)).ToJson(), cancellationToken);
     }
 }

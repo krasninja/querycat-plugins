@@ -52,7 +52,7 @@ public class Camera
     private static readonly Regex ParametersGetResponseRegex =
         new(@"^var (.+)=(.+);", RegexOptions.Compiled | RegexOptions.Singleline);
 
-    public async Task<CameraParameters> GetParameters(CancellationToken cancellationToken)
+    public async Task<CameraParameters> GetParametersAsync(CancellationToken cancellationToken)
     {
         var request = CreateParametersGetRequest();
         var client = GetClient();

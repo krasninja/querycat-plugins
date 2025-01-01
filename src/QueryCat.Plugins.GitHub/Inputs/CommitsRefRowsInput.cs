@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Octokit;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
@@ -43,10 +44,11 @@ internal sealed class CommitsRefRowsInput : CommitsRowsInput
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetch)
+    protected override async IAsyncEnumerable<GitHubCommit> GetDataAsync(Fetcher<GitHubCommit> fetcher,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var sha = GetKeyColumnValue("sha").AsString;
-        return fetch.FetchOne(async ct => await Client.Repository.Commit.Get(owner, repository, sha));
+        yield return await Client.Repository.Commit.Get(owner, repository, sha);
     }
 }

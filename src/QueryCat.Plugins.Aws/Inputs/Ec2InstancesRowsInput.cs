@@ -1,25 +1,26 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Amazon.EC2;
 using Amazon.EC2.Model;
 using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Types;
+using QueryCat.Backend.Core.Utils;
 
 namespace QueryCat.Plugins.Aws.Inputs;
 
 [SafeFunction]
 [Description("Get EC2 instances.")]
 [FunctionSignature("aws_ec2_instances")]
-internal sealed class Ec2InstancesRowsInput : FetchRowsInput<Instance>
+internal sealed class Ec2InstancesRowsInput : AsyncEnumerableRowsInput<Instance>
 {
     private AmazonEC2Client? _client;
 
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<Instance> builder)
     {
-        var credentials = General.GetConfiguration(QueryContext.InputConfigStorage);
-        _client = new AmazonEC2Client(credentials);
-
         builder.NamingConvention = NamingConventionStyle.SnakeCase;
         builder
             .AddProperty(p => p.InstanceId)
@@ -33,17 +34,26 @@ internal sealed class Ec2InstancesRowsInput : FetchRowsInput<Instance>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<Instance> GetData(Fetcher<Instance> fetcher)
+    public override Task OpenAsync(CancellationToken cancellationToken = default)
     {
-        return fetcher.FetchAll(async ct =>
+        var credentials = General.GetConfiguration(QueryContext.InputConfigStorage);
+        _client = new AmazonEC2Client(credentials);
+        return base.OpenAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    protected override IAsyncEnumerable<Instance> GetDataAsync(Fetcher<Instance> fetcher, CancellationToken cancellationToken = default)
+    {
+        if (_client == null)
         {
-            if (_client == null)
-            {
-                throw new QueryCatException("Client is not initialized.");
-            }
-            var result = (await _client.DescribeInstancesAsync(ct)).Reservations.SelectMany(r => r.Instances);
-            return result;
-        });
+            throw new QueryCatException("Client is not initialized.");
+        }
+        return fetcher.FetchAllAsync(async _ =>
+        {
+            return (await _client.DescribeInstancesAsync(cancellationToken))
+                .Reservations
+                .SelectMany(r => r.Instances);
+        }, cancellationToken);
     }
 
     /// <inheritdoc />

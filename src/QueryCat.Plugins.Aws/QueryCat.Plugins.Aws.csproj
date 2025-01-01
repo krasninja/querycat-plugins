@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.1.1</PackageVersion>
+    <PackageVersion>0.2.1</PackageVersion>
     <Title>AWS Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Amazon Web Services plugin.</Description>
@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.EC2" Version="3.7.422.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.410.1" />
-    <PackageReference Include="QueryCat" Version="0.8.1" />
+    <PackageReference Include="QueryCat" Version="0.9.0-alpha.64" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

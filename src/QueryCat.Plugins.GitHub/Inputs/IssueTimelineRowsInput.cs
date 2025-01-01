@@ -49,11 +49,12 @@ internal sealed class IssueTimelineRowsInput : BaseRowsInput<TimelineEventInfo>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<TimelineEventInfo> GetData(Fetcher<TimelineEventInfo> fetcher)
+    protected override IAsyncEnumerable<TimelineEventInfo> GetDataAsync(Fetcher<TimelineEventInfo> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var number = GetKeyColumnValue("number").ToInt32();
-        return fetcher.FetchAll(
-            async ct => await Client.Issue.Timeline.GetAllForIssue(owner, repository, number));
+        return fetcher.FetchAllAsync(
+            async ct => await Client.Issue.Timeline.GetAllForIssue(owner, repository, number), cancellationToken);
     }
 }

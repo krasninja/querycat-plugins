@@ -9,7 +9,7 @@ namespace QueryCat.Plugins.VStarCam.Inputs;
 
 internal record CameraInfo(Camera Camera, CameraParameters CameraParameters);
 
-internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
+internal sealed class CameraInfoRowsInput : AsyncEnumerableRowsInput<CameraInfo>
 {
     [SafeFunction]
     [Description("VStar camera information.")]
@@ -54,9 +54,10 @@ internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<CameraInfo> GetData(Fetcher<CameraInfo> fetch)
+    protected override IAsyncEnumerable<CameraInfo> GetDataAsync(Fetcher<CameraInfo> fetch,
+        CancellationToken cancellationToken = default)
     {
-        return fetch.FetchAll(async ct =>
+        return fetch.FetchAllAsync(async ct =>
         {
             var finder = new CamerasFinder();
             var cameras = await finder.FindAsync(ct);
@@ -71,11 +72,11 @@ internal sealed class CameraInfoRowsInput : FetchRowsInput<CameraInfo>
             credentials[camera.Ip] = new CameraCredentials(_username, _password);
             new CamerasCredentialsUpdater(silent: true).SetCredentialsByIp(camera, credentials);
 
-            var @params = camera.GetParameters(ct).GetAwaiter().GetResult();
-            return new[]
-            {
+            var @params = await camera.GetParametersAsync(ct);
+            return
+            [
                 new CameraInfo(camera, @params)
-            };
-        });
+            ];
+        }, cancellationToken);
     }
 }

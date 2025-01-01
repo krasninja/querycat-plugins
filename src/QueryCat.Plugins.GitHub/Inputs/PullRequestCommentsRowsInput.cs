@@ -55,15 +55,16 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<PullRequestReviewComment> GetData(Fetcher<PullRequestReviewComment> fetcher)
+    protected override IAsyncEnumerable<PullRequestReviewComment> GetDataAsync(Fetcher<PullRequestReviewComment> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var pullNumber = GetKeyColumnValue("pull_number").ToInt32();
         fetcher.PageStart = 1;
-        return fetcher.FetchPaged(async (page, limit, ct) =>
+        return fetcher.FetchPagedAsync(async (page, limit, ct) =>
         {
             return await Client.PullRequest.ReviewComment.GetAll(owner, repository, pullNumber,
                 new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
-        });
+        }, cancellationToken);
     }
 }

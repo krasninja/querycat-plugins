@@ -24,35 +24,53 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     }
 
     /// <inheritdoc />
-    public override DbDataReader CreateDatabaseSelectReader(Column[] columns)
+    public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(
+        Column[] selectColumns,
+        IReadOnlyList<TableSelectCondition> conditions,
+        CancellationToken cancellationToken = default)
     {
-        var query = $"SELECT * FROM {Quote(_table)}";
-        return _dataSource.CreateCommand(query).ExecuteReader();
+        var selectCommand = _dataSource.CreateCommand();
+
+        var sb = new StringBuilder("SELECT ");
+        AppendSelectColumnsBlock(sb, selectColumns);
+        sb.Append($" FROM {Quote(_table)}");
+        if (conditions.Count > 0)
+        {
+            sb.Append(" WHERE ");
+            AppendWhereConditionsBlock(sb, selectCommand, conditions);
+        }
+#pragma warning disable CA2100
+        selectCommand.CommandText = sb.ToString();
+#pragma warning restore CA2100
+        return await selectCommand.ExecuteReaderAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override void DeleteDatabaseRow(long id)
+    public override async ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
-        var query = $"DELETE FROM {QuotedTableName} WHERE {Quote(IdentityColumnName)} = @p0;";
-        var command = _dataSource.CreateCommand(query);
-        command.Parameters.AddWithValue("@p0", id);
-        command.ExecuteReader();
+        var deleteCommand = _dataSource.CreateCommand();
+        var sb = new StringBuilder($"DELETE FROM {QuotedTableName} WHERE ");
+        AppendWhereConditionsBlock(sb, deleteCommand, new TableSelectCondition(IdentityColumn, new VariantValue(id)));
+#pragma warning disable CA2100
+        deleteCommand.CommandText = sb.ToString();
+#pragma warning restore CA2100
+        await deleteCommand.ExecuteReaderAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override void CreateDatabaseTable()
+    public override async Task CreateDatabaseTableAsync(CancellationToken cancellationToken = default)
     {
         var sb = new StringBuilder()
             .Append($"CREATE TABLE IF NOT EXISTS {QuotedTableName} (")
             .Append($"{IdentityColumnName} bigint GENERATED ALWAYS AS IDENTITY NOT NULL, ")
-            .Append($"CONSTRAINT {Quote("qc" + IdentityColumnName + "_" + _table[^1])} PRIMARY KEY ({Quote(IdentityColumnName)}));");
+            .Append($"CONSTRAINT {Quote("qc_" + IdentityColumnName + "_" + _table[^1])} PRIMARY KEY ({Quote(IdentityColumnName)}));");
 
         var query = sb.ToString();
-        _dataSource.CreateCommand(query).ExecuteNonQuery();
+        await _dataSource.CreateCommand(query).ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override void CreateDatabaseUniqueKeysIndex(Column[] keyColumns)
+    public override async Task CreateDatabaseUniqueKeysIndexAsync(Column[] keyColumns, CancellationToken cancellationToken = default)
     {
         var indexName = "qc_" + string.Join("_", keyColumns.Select(c => c.Name));
         var sb = new StringBuilder()
@@ -62,11 +80,11 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             )
             .Append(");");
 
-        _dataSource.CreateCommand(sb.ToString()).ExecuteNonQuery();
+        await _dataSource.CreateCommand(sb.ToString()).ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override void CreateDatabaseColumn(Column column)
+    public override async Task CreateDatabaseColumnAsync(Column column, CancellationToken cancellationToken = default)
     {
         var sb = new StringBuilder();
         sb.Append($"ALTER TABLE {QuotedTableName} ADD COLUMN IF NOT EXISTS {Quote(column.Name)} {GetDatabaseDataType(column.DataType)} NULL;");
@@ -74,81 +92,86 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         {
             sb.Append($"COMMENT ON COLUMN {QuotedTableName}.{Quote(column.Name)} IS '{column.Description.Replace("'", "''")}';");
         }
-        _dataSource.CreateCommand(sb.ToString()).ExecuteNonQuery();
+        await _dataSource.CreateCommand(sb.ToString()).ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override long InsertDatabaseRow(TableRowsModification data)
+    public override async ValueTask<long[]> InsertDatabaseRowsAsync(
+        TableRowsModification[] data,
+        CancellationToken cancellationToken = default)
     {
-        var sb = new StringBuilder()
-            .Append($"INSERT INTO {QuotedTableName} (")
-            .Append(
-                string.Join(',', data.Columns.Select(c => $"{Quote(c.Name)}"))
-            )
-            .Append(") SELECT ")
-            .Append(
-                string.Join(',', data.Columns.Select((c, i) => $"@p{i}"))
-            );
-        if (data.Keys.Any())
-        {
-            sb.Append($" WHERE NOT EXISTS (SELECT 1 FROM {QuotedTableName} WHERE ")
-                .Append(
-                    string.Join(" AND ", data.KeyColumns.Select((k, i) => $"{Quote(k.Name)} = @k{i}")))
-                .Append(") ");
-        }
-        sb.Append($"RETURNING {Quote(IdentityColumnName)};");
+        var insertCommand = _dataSource.CreateCommand();
 
-        var insertCommand = _dataSource.CreateCommand(sb.ToString());
+        var sb = new StringBuilder();
+        foreach (var item in data)
+        {
+            sb.Append($"INSERT INTO {QuotedTableName} (");
+            AppendSelectColumnsBlock(sb, item.Columns);
+            sb.Append(") SELECT ");
+            AppendSelectValuesBlock(sb, insertCommand, item.Values);
+            if (item.Keys.Any())
+            {
+                sb.Append($" WHERE NOT EXISTS (SELECT 1 FROM {QuotedTableName} WHERE ");
+                AppendWhereConditionsBlock(sb, insertCommand, item);
+                sb.Append(") ");
+            }
+            sb.Append($"RETURNING {Quote(IdentityColumnName)};");
+        }
 
-        for (var i = 0; i < data.Values.Length; i++)
-        {
-            insertCommand.Parameters.AddWithValue("p" + i, NormalizeValue(data.Values[i]));
-        }
-        for (var i = 0; i < data.Keys.Length; i++)
-        {
-            insertCommand.Parameters.AddWithValue("k" + i, NormalizeValue(data.Keys[i]));
-        }
-        return insertCommand.ExecuteNonQuery();
+        var query = sb.ToString();
+#pragma warning disable CA2100
+        insertCommand.CommandText = query;
+#pragma warning restore CA2100
+        return await ExecuteScalarsAsync(insertCommand, cancellationToken);
     }
 
     /// <inheritdoc />
-    public override void UpdateDatabaseRow(TableRowsModification data)
+    public override async ValueTask UpdateDatabaseRowAsync(
+        TableRowsModification[] data,
+        CancellationToken cancellationToken = default)
     {
-        var sb = new StringBuilder()
-            .Append($"UPDATE {QuotedTableName} SET ")
-            .Append(
-                string.Join(',', data.Columns.Select((c, i) =>
-                    $"{Quote(c.Name)} = @p{i}")))
-            .Append(" WHERE ")
-            .Append(
-                string.Join(" AND ", data.KeyColumns.Select((k, i) =>
-                    $"{Quote(k.Name)} = @k{i}")));
+        var updateCommand = _dataSource.CreateCommand();
 
-        var updateCommand = _dataSource.CreateCommand(sb.ToString());
-        for (var i = 0; i < data.Values.Length; i++)
+        var sb = new StringBuilder();
+        foreach (var item in data)
         {
-            updateCommand.Parameters.AddWithValue("p" + i, NormalizeValue(data.Values[i]));
+            sb.Append($"UPDATE {QuotedTableName} SET ");
+            AppendUpdateValuesBlock(sb, updateCommand, item);
+            sb.Append(" WHERE ");
+            AppendWhereConditionsBlock(sb, updateCommand, item);
+            sb.Append(';');
         }
-        for (var i = 0; i < data.Keys.Length; i++)
-        {
-            updateCommand.Parameters.AddWithValue("k" + i, NormalizeValue(data.Keys[i]));
-        }
-        updateCommand.ExecuteNonQuery();
+
+#pragma warning disable CA2100
+        updateCommand.CommandText = sb.ToString();
+#pragma warning restore CA2100
+        await updateCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override Column[] GetDatabaseTableColumns()
+    public override async Task<Column[]> GetDatabaseTableColumnsAsync(CancellationToken cancellationToken = default)
     {
-        using var connection = _dataSource.CreateConnection();
-        connection.Open();
-        using var dt = connection.GetSchema("Columns", _table.Prepend(null).ToArray()); // database, namespace, table.
+        await using var connection = _dataSource.CreateConnection();
+        await connection.OpenAsync(cancellationToken);
+        var restrictions = new string?[3];
+        if (_table.Length == 1)
+        {
+            restrictions[2] = _table[0];
+        }
+        if (_table.Length == 2)
+        {
+            restrictions[1] = _table[0];
+            restrictions[2] = _table[1];
+        }
+        using var dt = await connection.GetSchemaAsync("Columns", restrictions, cancellationToken); // database, namespace, table.
+        await connection.CloseAsync();
         return dt
             .AsEnumerable()
             .Select(r => new Column((string)r["column_name"], GetQueryCatDataType((string)r["data_type"])))
             .ToArray();
     }
 
-    internal static string Quote(params ReadOnlySpan<string> identifiers)
+    protected override string Quote(params ReadOnlySpan<string> identifiers)
     {
         if (identifiers.IsEmpty)
         {
@@ -181,7 +204,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             DataType.String => "text",
             DataType.Timestamp => "timestamp",
             DataType.Float => "double",
-            DataType.Boolean => "bit",
+            DataType.Boolean => "boolean",
             _ => "text",
         };
 
@@ -205,6 +228,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             "real" => DataType.Float,
             "numeric" => DataType.Numeric,
             "boolean" => DataType.Boolean,
+            "bit" => DataType.Boolean,
             _ => DataType.String,
         };
 

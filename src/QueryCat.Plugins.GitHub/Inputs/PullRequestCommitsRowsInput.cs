@@ -48,10 +48,12 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<PullRequestCommit> GetData(Fetcher<PullRequestCommit> fetcher)
+    protected override IAsyncEnumerable<PullRequestCommit> GetDataAsync(Fetcher<PullRequestCommit> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var pullNumber = GetKeyColumnValue("pull_number").ToInt32();
-        return fetcher.FetchAll(async (ct) => await Client.PullRequest.Commits(owner, repository, pullNumber));
+        return fetcher.FetchAllAsync(
+            async ct => await Client.PullRequest.Commits(owner, repository, pullNumber), cancellationToken);
     }
 }

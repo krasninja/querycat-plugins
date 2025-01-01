@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.Data.Sqlite;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
@@ -8,7 +9,7 @@ using QueryCat.Plugins.VisualParadigm.Models;
 
 namespace QueryCat.Plugins.VisualParadigm.Inputs;
 
-internal sealed class DiagramElementsRowsInput : FetchRowsInput<DiagramElement>
+internal sealed class DiagramElementsRowsInput : AsyncEnumerableRowsInput<DiagramElement>
 {
     [SafeFunction]
     [Description("Get diagram elements.")]
@@ -38,14 +39,15 @@ internal sealed class DiagramElementsRowsInput : FetchRowsInput<DiagramElement>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<DiagramElement> GetData(Fetcher<DiagramElement> fetcher)
+    protected override async IAsyncEnumerable<DiagramElement> GetDataAsync(Fetcher<DiagramElement> fetcher,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        using var connection = new SqliteConnection($"Data Source={_db}");
+        await using var connection = new SqliteConnection($"Data Source={_db}");
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM MODEL_ELEMENT";
 
-        using var reader = command.ExecuteReader();
-        while (reader.Read())
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        while (await reader.ReadAsync(cancellationToken))
         {
             yield return new DiagramElement
             {

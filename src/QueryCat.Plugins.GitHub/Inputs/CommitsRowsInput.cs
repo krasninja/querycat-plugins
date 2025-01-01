@@ -55,7 +55,7 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<GitHubCommit> GetData(Fetcher<GitHubCommit> fetcher)
+    protected override IAsyncEnumerable<GitHubCommit> GetDataAsync(Fetcher<GitHubCommit> fetcher, CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var request = new CommitRequest();
@@ -76,13 +76,13 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
             request.Sha = value.AsString;
         }
         fetcher.PageStart = 1;
-        return fetcher.FetchPaged(async (page, limit, ct) =>
+        return fetcher.FetchPagedAsync(async (page, limit, ct) =>
         {
             return await Client.Repository.Commit.GetAll(
                 owner,
                 repository,
                 request,
                 new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
-        });
+        }, cancellationToken);
     }
 }

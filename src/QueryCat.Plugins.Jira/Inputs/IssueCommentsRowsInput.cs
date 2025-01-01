@@ -15,7 +15,7 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// <remarks>
 /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get.
 /// </remarks>
-internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
+internal sealed class IssueCommentsRowsInput : AsyncEnumerableRowsInput<JsonNode>
 {
     [SafeFunction]
     [Description("Get issue comments.")]
@@ -45,19 +45,20 @@ internal sealed class IssueCommentsRowsInput : FetchRowsInput<JsonNode>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<JsonNode> GetData(Fetcher<JsonNode> fetch)
+    protected override IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var config = General.GetConfiguration(QueryContext.InputConfigStorage);
-        fetch.Limit = 100;
-        return fetch.FetchLimitOffset((limit, offset, ct) =>
+        fetcher.Limit = 100;
+        return fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
         {
             var request = new RestRequest("issue/{issueIdOrKey}/comment")
                 .AddUrlSegment("issueIdOrKey", GetKeyColumnValue("issue_id").AsString)
                 .AddQueryParameter("startAt", offset)
                 .AddQueryParameter("maxResults", limit)
                 .AddQueryParameter("expand", "renderedBody");
-            var json = config.Client.Get(request).ToJson();
-            return Task.FromResult(json["comments"]!.AsArray().Select(n => n!));
-        });
+            var json = (await config.Client.GetAsync(request, cancellationToken: ct)).ToJson();
+            return json["comments"]!.AsArray().Select(n => n!);
+        }, cancellationToken);
     }
 }

@@ -9,6 +9,7 @@ using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
+using QueryCat.Backend.Core.Utils;
 using QueryCat.Plugins.PostgresSniffer.Utils;
 
 namespace QueryCat.Plugins.PostgresSniffer.Inputs;
@@ -89,13 +90,13 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     /// <inheritdoc />
     public Column[] Columns { get; } =
     [
-        new Column("destination_ip", DataType.String, "Destination IP address."),
-        new Column("source_ip", DataType.String, "Source IP address."),
-        new Column("destination_port", DataType.Integer, "Destination port."),
-        new Column("source_port", DataType.Integer, "Source port."),
-        new Column("type", DataType.String, "Message type."),
-        new Column("length", DataType.Integer, "Message length."),
-        new Column("query", DataType.String, "SQL text.")
+        new("destination_ip", DataType.String, "Destination IP address."),
+        new("source_ip", DataType.String, "Source IP address."),
+        new("destination_port", DataType.Integer, "Destination port."),
+        new("source_port", DataType.Integer, "Source port."),
+        new("type", DataType.String, "Message type."),
+        new("length", DataType.Integer, "Message length."),
+        new("query", DataType.String, "SQL text.")
     ];
 
     /// <inheritdoc />
@@ -111,7 +112,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     }
 
     /// <inheritdoc />
-    public void Open()
+    public Task OpenAsync(CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrEmpty(_iface))
         {
@@ -144,6 +145,8 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         _device.Filter = GetFilter();
         _logger.LogDebug("Filter '{Filter}'.", _device.Filter);
         _device.StartCapture();
+
+        return Task.CompletedTask;
     }
 
     private void DeviceOnOnPacketArrival(object sender, PacketCapture e)
@@ -182,7 +185,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     }
 
     /// <inheritdoc />
-    public void Close()
+    public Task CloseAsync(CancellationToken cancellationToken = default)
     {
         if (_device != null)
         {
@@ -191,13 +194,15 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
             _device = null;
         }
         _tcpSplitter.Dispose();
+
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public void Reset()
+    public async Task ResetAsync(CancellationToken cancellationToken = default)
     {
-        Close();
-        Open();
+        await CloseAsync(cancellationToken);
+        await OpenAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -304,11 +309,11 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     }
 
     /// <inheritdoc />
-    public bool ReadNext()
+    public ValueTask<bool> ReadNextAsync(CancellationToken cancellationToken = default)
     {
         if (_device == null)
         {
-            return false;
+            return ValueTask.FromResult(false);
         }
 
         if (_currentMessage.IsInitialized && _currentMessage.CurrentBuffer != null)
@@ -347,13 +352,13 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
                 }
                 if (_currentMessage.Length <= bufferSize)
                 {
-                    return true;
+                    return ValueTask.FromResult(true);
                 }
                 _currentMessage.Clear();
             }
         }
 
-        return false;
+        return ValueTask.FromResult(false);;
     }
 
     /// <inheritdoc />
@@ -365,6 +370,6 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        Close();
+        AsyncUtils.RunSync(CloseAsync);
     }
 }

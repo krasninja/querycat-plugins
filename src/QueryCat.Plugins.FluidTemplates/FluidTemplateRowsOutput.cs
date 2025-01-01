@@ -11,6 +11,7 @@ using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Backend.Execution;
 using QueryCat.Backend.Relational.Iterators;
+using QueryCat.Backend.Storage;
 using Completion = Fluid.Ast.Completion;
 
 namespace QueryCat.Plugins.FluidTemplates;
@@ -53,7 +54,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
 
     static FluidTemplateRowsOutput()
     {
-        _parser.RegisterEmptyBlock("run", (statements, writer, encoder, context) =>
+        _parser.RegisterEmptyBlock("run", async (statements, writer, encoder, context) =>
         {
             var queryContext = (QueryContext)context.AmbientValues[QueryCatContextKey];
             var executionThread = (ExecutionThread)context.AmbientValues[QueryCatExecutionThreadKey];
@@ -65,10 +66,10 @@ internal class FluidTemplateRowsOutput : IRowsOutput
             {
                 statement.WriteToAsync(stringWriter, encoder, context).GetAwaiter().GetResult();
             }
-            var result = executionThread.Run(sb.ToString());
-            var iterator = ExecutionThreadUtils.ConvertToIterator(result);
+            var result = await executionThread.RunAsync(sb.ToString());
+            var iterator = RowsIteratorConverter.Convert(result);
             context.SetValue(varKey, new EnumerableRowsIterator(iterator));
-            return ValueTask.FromResult(Completion.Normal);
+            return Completion.Normal;
         });
     }
 
@@ -108,14 +109,15 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     }
 
     /// <inheritdoc />
-    public void Open()
+    public Task OpenAsync(CancellationToken cancellationToken = default)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public void Close()
+    public async Task CloseAsync(CancellationToken cancellationToken = default)
     {
-        var templateText = File.ReadAllText(_templateFile);
+        var templateText = await File.ReadAllTextAsync(_templateFile, cancellationToken);
         if (_parser.TryParse(templateText, out var template, out var error))
         {
             _executionThread.Options.DefaultRowsOutput = NullRowsOutput.Instance;
@@ -125,7 +127,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
             context.AmbientValues[QueryCatRowsKey] = _varName;
             context.SetValue(_varName, _rows);
 
-            File.WriteAllText(_outFile, template.Render(context));
+            await File.WriteAllTextAsync(_outFile, await template.RenderAsync(context), cancellationToken);
         }
         else
         {
@@ -134,18 +136,20 @@ internal class FluidTemplateRowsOutput : IRowsOutput
     }
 
     /// <inheritdoc />
-    public void Reset()
+    public Task ResetAsync(CancellationToken cancellationToken = default)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
     public RowsOutputOptions Options { get; } = new();
 
     /// <inheritdoc />
-    public void WriteValues(in VariantValue[] values)
+    public ValueTask<ErrorCode> WriteValuesAsync(VariantValue[] values, CancellationToken cancellationToken = default)
     {
         // Cache here and write all on close.
         _rows.Add(values);
+        return ValueTask.FromResult(ErrorCode.OK);
     }
 
     private static FluidValue CreateFluidValue(VariantValue variantValue)

@@ -52,10 +52,12 @@ internal sealed class PullRequestReviewsRowsInput : BaseRowsInput<PullRequestRev
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<PullRequestReview> GetData(Fetcher<PullRequestReview> fetcher)
+    protected override IAsyncEnumerable<PullRequestReview> GetDataAsync(Fetcher<PullRequestReview> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var number = GetKeyColumnValue("pull_number").ToInt32();
-        return fetcher.FetchAll(async ct => await Client.Repository.PullRequest.Review.GetAll(owner, repository, number));
+        return fetcher.FetchAllAsync(
+            async ct => await Client.Repository.PullRequest.Review.GetAll(owner, repository, number), cancellationToken);
     }
 }

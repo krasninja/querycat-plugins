@@ -48,15 +48,16 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<IssueComment> GetData(Fetcher<IssueComment> fetcher)
+    protected override IAsyncEnumerable<IssueComment> GetDataAsync(Fetcher<IssueComment> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var issueNumber = GetKeyColumnValue("issue_number").ToInt32();
         fetcher.PageStart = 1;
-        return fetcher.FetchPaged(async (page, limit, ct) =>
+        return fetcher.FetchPagedAsync(async (page, limit, ct) =>
         {
             return await Client.Issue.Comment.GetAllForIssue(owner, repository, issueNumber,
                 new ApiOptions { StartPage = page, PageCount = 1, PageSize = limit });
-        });
+        }, cancellationToken);
     }
 }

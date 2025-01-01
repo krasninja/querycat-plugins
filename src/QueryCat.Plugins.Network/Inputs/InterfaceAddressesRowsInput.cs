@@ -8,7 +8,7 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Network.Inputs;
 
-internal sealed class InterfaceAddressesRowsInput : FetchRowsInput<InterfaceAddressesRowsInput.InterfaceAddressDto>
+internal sealed class InterfaceAddressesRowsInput : EnumerableRowsInput<InterfaceAddressesRowsInput.InterfaceAddressDto>
 {
     [SafeFunction]
     [Description("Network interfaces and relevant metadata.")]
@@ -63,7 +63,7 @@ internal sealed class InterfaceAddressesRowsInput : FetchRowsInput<InterfaceAddr
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<InterfaceAddressDto> GetData(Fetcher<InterfaceAddressDto> fetch)
+    protected override IEnumerable<InterfaceAddressDto> GetData(Fetcher<InterfaceAddressDto> fetcher)
     {
         var result = new List<InterfaceAddressDto>();
         foreach (NetworkInterface iface in NetworkInterface.GetAllNetworkInterfaces())

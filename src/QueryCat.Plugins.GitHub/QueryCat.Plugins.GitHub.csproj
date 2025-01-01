@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>QueryCat.Plugins.Github</RootNamespace>
-    <PackageVersion>0.4.7</PackageVersion>
+    <PackageVersion>0.5.7</PackageVersion>
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>
@@ -17,8 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Octokit" Version="13.0.1" />
-    <TrimmerRootAssembly Include="Octokit" />
-    <PackageReference Include="QueryCat" Version="0.8.1" />
+    <PackageReference Include="QueryCat" Version="0.9.0-alpha.64" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

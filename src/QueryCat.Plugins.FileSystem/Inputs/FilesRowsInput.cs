@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.FileSystemGlobbing;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
@@ -7,7 +8,7 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.FileSystem.Inputs;
 
-internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
+internal sealed class FilesRowsInput : AsyncEnumerableRowsInput<FilesRowsInput.FileDto>
 {
     [SafeFunction]
     [Description("Return information on files.")]
@@ -65,7 +66,9 @@ internal sealed class FilesRowsInput : FetchRowsInput<FilesRowsInput.FileDto>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<FileDto> GetData(Fetcher<FileDto> fetch)
+    protected override async IAsyncEnumerable<FileDto> GetDataAsync(
+        Fetcher<FileDto> fetch,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         AddInclude(GetKeyColumnValue("path").AsString);
         var files = _matcher.GetResultsInFullPath("/");

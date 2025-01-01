@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="112.1.0" />
-    <PackageReference Include="QueryCat" Version="0.8.1" />
+    <PackageReference Include="QueryCat" Version="0.9.0-alpha.64" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

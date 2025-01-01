@@ -7,7 +7,7 @@ using QueryCat.Plugins.VStarCam.Domain;
 
 namespace QueryCat.Plugins.VStarCam.Inputs;
 
-internal sealed class CamerasRowsInput : FetchRowsInput<Camera>
+internal sealed class CamerasRowsInput : AsyncEnumerableRowsInput<Camera>
 {
     [SafeFunction]
     [Description("VStar cameras in local network.")]
@@ -34,12 +34,13 @@ internal sealed class CamerasRowsInput : FetchRowsInput<Camera>
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<Camera> GetData(Fetcher<Camera> fetch)
+    protected override IAsyncEnumerable<Camera> GetDataAsync(Fetcher<Camera> fetch,
+        CancellationToken cancellationToken = default)
     {
-        return fetch.FetchAll(async ct =>
+        return fetch.FetchAllAsync(async ct =>
         {
             using var finder = new CamerasFinder();
             return await finder.FindAsync(ct);
-        });
+        }, cancellationToken);
     }
 }

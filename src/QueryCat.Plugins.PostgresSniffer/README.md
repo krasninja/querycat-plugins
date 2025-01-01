@@ -18,3 +18,9 @@
 ```shell
 qcat query "select * from pgsniff_start()" --follow --page-size=-1
 ```
+
+**Run and filter out Hangfire queries**
+
+```shell
+qcat query "select * from pgsniff_start('192.168.1.10') where query not like '%hangfire%'" --follow --page-size=-1
+```

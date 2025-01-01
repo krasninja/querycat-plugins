@@ -4,7 +4,7 @@ using QueryCat.Backend.Core.Fetch;
 
 namespace QueryCat.Plugins.Github;
 
-internal abstract class BaseRowsInput<TClass> : FetchRowsInput<TClass> where TClass : class
+internal abstract class BaseRowsInput<TClass> : AsyncEnumerableRowsInput<TClass> where TClass : class
 {
     protected GitHubClient Client { get; }
 

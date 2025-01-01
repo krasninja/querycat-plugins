@@ -62,11 +62,12 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<ReviewRequest> GetData(Fetcher<ReviewRequest> fetcher)
+    protected override IAsyncEnumerable<ReviewRequest> GetDataAsync(Fetcher<ReviewRequest> fetcher,
+        CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
         var number = GetKeyColumnValue("pull_number").ToInt32();
-        return fetcher.FetchAll(async ct =>
+        return fetcher.FetchAllAsync(async ct =>
         {
             var result = await Client.Repository.PullRequest.ReviewRequest.Get(owner, repository, number);
             return Array.Empty<ReviewRequest>()
@@ -88,6 +89,6 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
                     UserLogin = u.Login,
                     HtmlUrl = u.HtmlUrl,
                 }));
-        });
+        }, cancellationToken);
     }
 }

@@ -17,14 +17,16 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
 {
+    private const string TermKey = "term";
+    private const string DefaultQuery = "is:open archived:false assignee:@me";
+
     [SafeFunction]
     [Description("Search GitHub issues and pull requests.")]
-    [FunctionSignature("github_search_issues(term?: string := 'is:open archived:false assignee:@me'): object<IRowsInput>")]
+    [FunctionSignature("github_search_issues(): object<IRowsInput>")]
     public static VariantValue GitHubSearchIssuesFunction(IExecutionThread thread)
     {
-        var term = thread.Stack.Pop().AsString;
         var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
-        return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, term));
+        return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, string.Empty));
     }
 
     private readonly string _term;
@@ -32,6 +34,15 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     public SearchIssuesRowsInput(string token, string term) : base(token)
     {
         _term = term;
+    }
+
+    private VariantValue GetTerm()
+    {
+        if (TryGetKeyColumnValue(TermKey, VariantValue.Operation.Equals, out var term))
+        {
+            return term;
+        }
+        return new VariantValue(_term);
     }
 
     /// <inheritdoc />
@@ -52,23 +63,24 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("closed_at", p => p.ClosedAt, "The date when issue was closed.")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.")
-            .AddProperty("term", DataType.String, _ => GetKeyColumnValue("term"))
+            .AddProperty(TermKey, DataType.String, _ => GetKeyColumnValue("term"))
             .AddKeyColumn("created_at", VariantValue.Operation.GreaterOrEquals)
             .AddKeyColumn("created_at", VariantValue.Operation.LessOrEquals)
             .AddKeyColumn("closed_at", VariantValue.Operation.GreaterOrEquals)
             .AddKeyColumn("closed_at", VariantValue.Operation.LessOrEquals)
-            .AddKeyColumn("term", VariantValue.Operation.Equals);
+            .AddKeyColumn(TermKey, VariantValue.Operation.Equals);
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<Issue> GetData(Fetcher<Issue> fetch)
+    protected override IAsyncEnumerable<Issue> GetDataAsync(Fetcher<Issue> fetcher,
+        CancellationToken cancellationToken = default)
     {
-        var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest();
-        if (this.TryGetKeyColumnValue("term", VariantValue.Operation.Equals, out var term))
+        var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest(DefaultQuery);
+        if (this.TryGetKeyColumnValue(TermKey, VariantValue.Operation.Equals, out var term))
         {
             request = new SearchIssuesRequest(term);
         }
-        fetch.PageStart = 1;
+        fetcher.PageStart = 1;
 
         DateRange? createdAtRange = null;
         if (this.TryGetKeyColumnValue("created_at", VariantValue.Operation.GreaterOrEquals, out var createdAtStart)
@@ -88,7 +100,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
                 new DateTimeOffset(closedAtEnd.ToDateTime()));
         }
 
-        return fetch.FetchPaged(async (page, limit, ct) =>
+        return fetcher.FetchPagedAsync(async (page, limit, ct) =>
             {
                 request.Page = page;
                 request.PerPage = limit;
@@ -96,6 +108,6 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
                 request.Closed ??= closedAtRange;
                 var data = (await Client.Search.SearchIssues(request)).Items;
                 return data;
-            });
+            }, cancellationToken);
     }
 }

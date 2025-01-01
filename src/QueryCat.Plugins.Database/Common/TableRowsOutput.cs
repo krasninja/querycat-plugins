@@ -31,7 +31,7 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
     }
 
     /// <inheritdoc />
-    public virtual void Open()
+    public virtual async Task OpenAsync(CancellationToken cancellationToken = default)
     {
         if (_isOpened)
         {
@@ -39,7 +39,7 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
         }
 
         // Create the initial table with primary key.
-        _provider.CreateDatabaseTable();
+        await _provider.CreateDatabaseTableAsync(cancellationToken);
         var columns = QueryContext.QueryInfo.Columns.ToArray();
 
         // Initialize _keysColumnsIndexes with keys columns.
@@ -57,37 +57,40 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
         }
 
         // Add missing columns to the table.
-        var existingColumns = _provider.GetDatabaseTableColumns().Select(c => c.Name).ToHashSet();
+        var existingColumns = (await _provider.GetDatabaseTableColumnsAsync(cancellationToken))
+            .Select(c => c.Name).ToHashSet();
         foreach (var column in QueryContext.QueryInfo.Columns)
         {
             if (!existingColumns.Contains(column.Name))
             {
-                _provider.CreateDatabaseColumn(column);
+                await _provider.CreateDatabaseColumnAsync(column, cancellationToken);
             }
         }
 
         // Create unique index on keys columns.
         if (KeyColumnsNames.Any())
         {
-            _provider.CreateDatabaseUniqueKeysIndex(_keyColumns);
+            await _provider.CreateDatabaseUniqueKeysIndexAsync(_keyColumns, cancellationToken);
         }
 
         _isOpened = true;
     }
 
     /// <inheritdoc />
-    public virtual void Close()
+    public virtual Task CloseAsync(CancellationToken cancellationToken = default)
     {
         _isOpened = false;
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public virtual void Reset()
+    public virtual Task ResetAsync(CancellationToken cancellationToken = default)
     {
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public ErrorCode WriteValues(VariantValue[] values)
+    public async ValueTask<ErrorCode> WriteValuesAsync(VariantValue[] values, CancellationToken cancellationToken = default)
     {
         if (!_isOpened)
         {
@@ -100,10 +103,10 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
             keyColumns: _keyColumns,
             values: values,
             keys: keys);
-        var id = _provider.InsertDatabaseRow(modification);
-        if (id < 1 && keys.Any())
+        var ids = await _provider.InsertDatabaseRowsAsync([modification], cancellationToken);
+        if (ids.Length < 1)
         {
-            _provider.UpdateDatabaseRow(modification);
+            await _provider.UpdateDatabaseRowAsync([modification], cancellationToken);
         }
 
         return ErrorCode.OK;
