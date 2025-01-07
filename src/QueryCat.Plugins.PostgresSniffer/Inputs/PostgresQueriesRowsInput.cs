@@ -45,7 +45,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         public void Clear()
         {
             Length = 0;
-            Type = default;
+            Type = '\0';
             CurrentBuffer = null;
         }
 
@@ -187,14 +187,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     /// <inheritdoc />
     public Task CloseAsync(CancellationToken cancellationToken = default)
     {
-        if (_device != null)
-        {
-            _device.StopCapture();
-            _device.Close();
-            _device = null;
-        }
-        _tcpSplitter.Dispose();
-
+        Dispose();
         return Task.CompletedTask;
     }
 
@@ -358,7 +351,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
             }
         }
 
-        return ValueTask.FromResult(false);;
+        return ValueTask.FromResult(false);
     }
 
     /// <inheritdoc />
@@ -371,5 +364,13 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
     public void Dispose()
     {
         AsyncUtils.RunSync(CloseAsync);
+        if (_device != null)
+        {
+            _device.StopCapture();
+            _device.Close();
+            _device.Dispose();
+            _device = null;
+        }
+        _tcpSplitter.Dispose();
     }
 }
