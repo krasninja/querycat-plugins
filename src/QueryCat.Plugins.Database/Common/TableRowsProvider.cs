@@ -194,7 +194,7 @@ internal abstract class TableRowsProvider
 
     protected async ValueTask<long[]> ExecuteScalarsAsync(DbCommand command, CancellationToken cancellationToken)
     {
-        var reader = await command.ExecuteReaderAsync(cancellationToken);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (!reader.HasRows || reader.FieldCount < 1)
         {
             return [];

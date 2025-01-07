@@ -29,7 +29,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         IReadOnlyList<TableSelectCondition> conditions,
         CancellationToken cancellationToken = default)
     {
-        var selectCommand = _dataSource.CreateCommand();
+        await using var selectCommand = _dataSource.CreateCommand();
 
         var sb = new StringBuilder("SELECT ");
         AppendSelectColumnsBlock(sb, selectColumns);
@@ -48,13 +48,13 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     /// <inheritdoc />
     public override async ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
-        var deleteCommand = _dataSource.CreateCommand();
+        await using var deleteCommand = _dataSource.CreateCommand();
         var sb = new StringBuilder($"DELETE FROM {QuotedTableName} WHERE ");
         AppendWhereConditionsBlock(sb, deleteCommand, new TableSelectCondition(IdentityColumn, new VariantValue(id)));
 #pragma warning disable CA2100
         deleteCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
-        await deleteCommand.ExecuteReaderAsync(cancellationToken);
+        await deleteCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -65,8 +65,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             .Append($"{IdentityColumnName} bigint GENERATED ALWAYS AS IDENTITY NOT NULL, ")
             .Append($"CONSTRAINT {Quote("qc_" + IdentityColumnName + "_" + _table[^1])} PRIMARY KEY ({Quote(IdentityColumnName)}));");
 
-        var query = sb.ToString();
-        await _dataSource.CreateCommand(query).ExecuteNonQueryAsync(cancellationToken);
+        await using var createDatabaseTableCommand = _dataSource.CreateCommand(sb.ToString());
+        await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -80,7 +80,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             )
             .Append(");");
 
-        await _dataSource.CreateCommand(sb.ToString()).ExecuteNonQueryAsync(cancellationToken);
+        await using var createIndexCommand = _dataSource.CreateCommand(sb.ToString());
+        await createIndexCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -92,7 +93,9 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         {
             sb.Append($"COMMENT ON COLUMN {QuotedTableName}.{Quote(column.Name)} IS '{column.Description.Replace("'", "''")}';");
         }
-        await _dataSource.CreateCommand(sb.ToString()).ExecuteNonQueryAsync(cancellationToken);
+
+        await using var createDatabaseColumnCommand = _dataSource.CreateCommand(sb.ToString());
+        await createDatabaseColumnCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -100,7 +103,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         TableRowsModification[] data,
         CancellationToken cancellationToken = default)
     {
-        var insertCommand = _dataSource.CreateCommand();
+        await using var insertCommand = _dataSource.CreateCommand();
 
         var sb = new StringBuilder();
         foreach (var item in data)
@@ -130,7 +133,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         TableRowsModification[] data,
         CancellationToken cancellationToken = default)
     {
-        var updateCommand = _dataSource.CreateCommand();
+        await using var updateCommand = _dataSource.CreateCommand();
 
         var sb = new StringBuilder();
         foreach (var item in data)
