@@ -1,7 +1,9 @@
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Npgsql;
+using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.Database.Common;
@@ -12,6 +14,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
 {
     private readonly string[] _table;
     private readonly NpgsqlDataSource _dataSource;
+    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(PostgresTableRowsProvider));
 
     public string QuotedTableName { get; }
 

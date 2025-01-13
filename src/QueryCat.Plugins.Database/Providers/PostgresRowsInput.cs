@@ -8,12 +8,6 @@ namespace QueryCat.Plugins.Database.Providers;
 
 internal sealed class PostgresRowsInput : TableRowsInput
 {
-    /// <inheritdoc />
-    public PostgresRowsInput(string connectionString, string tableName)
-        : base(new PostgresTableRowsProvider(connectionString, tableName), tableName)
-    {
-    }
-
     [SafeFunction]
     [Description("Returns data from Postgres database table.")]
     [FunctionSignature("pg_table(cs: string, table: string): object<IRowsInput>")]
@@ -22,5 +16,11 @@ internal sealed class PostgresRowsInput : TableRowsInput
         var connectionString = thread.Stack[0].AsString;
         var table = thread.Stack[1].AsString;
         return VariantValue.CreateFromObject(new PostgresRowsInput(connectionString, table));
+    }
+
+    /// <inheritdoc />
+    public PostgresRowsInput(string connectionString, string tableName)
+        : base(new PostgresTableRowsProvider(connectionString, tableName), tableName)
+    {
     }
 }

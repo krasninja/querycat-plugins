@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.Common;
+using Microsoft.Extensions.Logging;
 using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Types;
@@ -9,6 +10,7 @@ namespace QueryCat.Plugins.Database.Common;
 internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisposable
 {
     private readonly TableRowsProvider _provider;
+    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(TableRowsInput));
 
     /// <inheritdoc />
     public Column[] Columns { get; protected set; } = [];
@@ -19,7 +21,7 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
     public QueryContext QueryContext { get; set; } = NullQueryContext.Instance;
 
     private DbDataReader? _reader;
-    private readonly Dictionary<Column, TableSelectCondition> _keys = new();
+    private readonly Dictionary<(Column, VariantValue.Operation), TableSelectCondition> _keys = new();
 
     /// <inheritdoc />
     public string[] UniqueKey =>
@@ -77,7 +79,8 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
             }
             Columns = targetColumns.ToArray();
         }
-        else
+
+        if (Columns.Length == 0)
         {
             Columns = tableColumns;
         }
@@ -124,20 +127,37 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
         {
             _reader = await _provider.CreateDatabaseSelectReaderAsync(
                 Columns,
-                _keys.Select(k => k.Value with { Column = k.Key }).ToArray(),
+                _keys.Select(k => k.Value with { Column = k.Key.Item1 }).ToArray(),
                 cancellationToken);
         }
         return await _reader.ReadAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public IReadOnlyList<KeyColumn> GetKeyColumns() => Columns.Select((c, i) => new KeyColumn(i)).ToArray();
+    public IReadOnlyList<KeyColumn> GetKeyColumns() => Columns
+        .Select((c, i) => new KeyColumn(i, isRequired: false,
+        [
+            VariantValue.Operation.Equals,
+            VariantValue.Operation.NotEquals,
+            VariantValue.Operation.GreaterOrEquals,
+            VariantValue.Operation.Greater,
+            VariantValue.Operation.LessOrEquals,
+            VariantValue.Operation.Less,
+        ]))
+        .ToArray();
 
     /// <inheritdoc />
     public void SetKeyColumnValue(int columnIndex, VariantValue value, VariantValue.Operation operation)
     {
         var column = Columns[columnIndex];
-        _keys[column] = new TableSelectCondition(column, value, operation);
+        _keys[(column, operation)] = new TableSelectCondition(column, value, operation);
+    }
+
+    /// <inheritdoc />
+    public void UnsetKeyColumnValue(int columnIndex, VariantValue.Operation operation)
+    {
+        var column = Columns[columnIndex];
+        _keys.Remove((column, operation));
     }
 
     /// <inheritdoc />

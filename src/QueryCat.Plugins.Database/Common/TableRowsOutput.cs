@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Types;
@@ -7,6 +8,7 @@ namespace QueryCat.Plugins.Database.Common;
 internal abstract class TableRowsOutput : IRowsOutput, IDisposable
 {
     private readonly TableRowsProvider _provider;
+    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(TableRowsOutput));
 
     public string TableName { get; protected set; }
 
@@ -58,12 +60,14 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
 
         // Add missing columns to the table.
         var existingColumns = (await _provider.GetDatabaseTableColumnsAsync(cancellationToken))
-            .Select(c => c.Name).ToHashSet();
+            .Select(c => c.Name)
+            .ToHashSet();
         foreach (var column in QueryContext.QueryInfo.Columns)
         {
             if (!existingColumns.Contains(column.Name))
             {
                 await _provider.CreateDatabaseColumnAsync(column, cancellationToken);
+                _logger.LogDebug("Create column {Column}.", column.ToString());
             }
         }
 
