@@ -36,6 +36,7 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
             .AddDataPropertyAsJson()
             .AddProperty("pull_number", DataType.Integer, _ => GetKeyColumnValue("pull_number"), "Pull request number.")
             .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
+            .AddProperty("node_id", p => p.NodeId, "Node id.")
             .AddProperty("message", p => p.Commit.Message, "Commit message.")
             .AddProperty("is_verified", p => p.Commit.Verification.Verified, "Is verified.")
             .AddProperty("sha", p => p.Sha, "Commit SHA.")

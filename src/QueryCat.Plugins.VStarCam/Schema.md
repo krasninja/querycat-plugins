@@ -6,7 +6,7 @@
 ## **vstar_camera_info**
 
 ```
-vstar_camera_info(LOGIN: String, PASSWORD: String): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 VStar camera information.
@@ -31,7 +31,7 @@ VStar camera information.
 ## **vstar_cameras**
 
 ```
-vstar_cameras(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 VStar cameras in local network.

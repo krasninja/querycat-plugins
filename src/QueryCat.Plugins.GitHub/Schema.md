@@ -6,6 +6,7 @@
 - [github_issue_comments](#github_issue_comments)
 - [github_issue_timeline](#github_issue_timeline)
 - [github_pull_comments](#github_pull_comments)
+- [github_pull_commits](#github_pull_commits)
 - [github_pull_reviews](#github_pull_reviews)
 - [github_pull_reviews_requests](#github_pull_reviews_requests)
 - [github_pulls](#github_pulls)
@@ -14,7 +15,7 @@
 ## **github_branches**
 
 ```
-github_branches(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Return GitHub branches of specific repository.
@@ -27,10 +28,50 @@ Return GitHub branches of specific repository.
 | `commit_url` | `String` |  | Commit URL the branch refers to. |
 | `protected` | `Boolean` |  | True if branch is protected. |
 
+## **github_commits**
+
+```
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
+```
+
+Return GitHub commits of specific repository.
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `repository_full_name` | `String` | yes | The full name of the repository. |
+| `sha` | `String` |  | SHA of the commit. |
+| `author_name` | `String` |  | The login name of the author of the commit. |
+| `author_login` | `String` |  | The email name of the author of the commit. |
+| `author_date` | `Timestamp` |  | Timestamp when the author made this commit. |
+| `committer_login` | `String` |  | The login name of committer of the commit. |
+| `verified` | `Boolean` |  | True if the commit was verified with a signature. |
+| `message` | `String` |  | Commit message. |
+
+## **github_commits_ref**
+
+```
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
+```
+
+Return GitHub commit info of specific repository.
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `repository_full_name` | `String` | yes | The full name of the repository. |
+| `sha` | `Void` |  | SHA of the commit. |
+| `author_name` | `String` |  | The login name of the author of the commit. |
+| `author_login` | `String` |  | The email name of the author of the commit. |
+| `author_date` | `Timestamp` |  | Timestamp when the author made this commit. |
+| `committer_login` | `String` |  | The login name of committer of the commit. |
+| `verified` | `Boolean` |  | True if the commit was verified with a signature. |
+| `message` | `String` |  | Commit message. |
+| `additions` | `Integer` |  | The number of additions in the commit. |
+| `deletions` | `Integer` |  | The number of deletions in the commit. |
+
 ## **github_issue_comments**
 
 ```
-github_issue_comments(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Return GitHub comments for the specific issue.
@@ -50,7 +91,7 @@ Return GitHub comments for the specific issue.
 ## **github_pull_comments**
 
 ```
-github_pull_comments(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Return GitHub comments for the specific pull request.
@@ -58,7 +99,7 @@ Return GitHub comments for the specific pull request.
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `id` | `Integer` |  | Comment id. |
-| `pull_id` | `Integer` |  | Pull request id. |
+| `pull_review_id` | `Integer` |  | Pull request review id. |
 | `pull_number` | `Integer` | yes | Pull request number. |
 | `repository_full_name` | `String` | yes | The full name of the repository. |
 | `body` | `String` |  | Comment body. |
@@ -74,10 +115,31 @@ Return GitHub comments for the specific pull request.
 | `created_at` | `Timestamp` |  | Date of comment creation. |
 | `updated_at` | `Timestamp` |  | Date of comment update. |
 
+## **github_pull_commits**
+
+```
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
+```
+
+Return GitHub commits for the specific pull request.
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `pull_number` | `Integer` | yes | Pull request number. |
+| `repository_full_name` | `String` | yes | The full name of the repository. |
+| `node_id` | `String` |  | Node id. |
+| `message` | `String` |  | Commit message. |
+| `is_verified` | `Boolean` |  | Is verified. |
+| `sha` | `String` |  | Commit SHA. |
+| `url` | `String` |  | Commit URL. |
+| `committer_login` | `String` |  | Committer login. |
+| `author_login` | `String` |  | Author login. |
+| `author_email` | `String` |  | Author email. |
+
 ## **github_pull_reviews**
 
 ```
-github_pull_reviews(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Return GitHub reviews for the specific pull request.
@@ -99,7 +161,7 @@ Return GitHub reviews for the specific pull request.
 ## **github_pull_reviews_requests**
 
 ```
-github_pull_reviews_requests(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Return GitHub review requests for the specific pull request.
@@ -118,7 +180,7 @@ Return GitHub review requests for the specific pull request.
 ## **github_pulls**
 
 ```
-github_pulls(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Return GitHub pull requests of specific repository.
@@ -152,7 +214,7 @@ Return GitHub pull requests of specific repository.
 ## **github_search_issues**
 
 ```
-github_search_issues(TERM: String := 'is:open archived:false assignee:@me'): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazySignatureFunction
 ```
 
 Search GitHub issues and pull requests.
@@ -171,3 +233,4 @@ Search GitHub issues and pull requests.
 | `closed_at` | `Timestamp` |  | The date when issue was closed. |
 | `repository_full_name` | `String` |  |  |
 | `created_at` | `Timestamp` |  | Issue creation date. |
+| `term` | `String` |  |  |

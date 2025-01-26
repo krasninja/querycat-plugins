@@ -7,7 +7,7 @@
 ## **sys_args**
 
 ```
-sys_args(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 A key/value table of command line arguments.
@@ -19,7 +19,7 @@ A key/value table of command line arguments.
 ## **sys_envs**
 
 ```
-sys_envs(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 A key/value table of environment variables.
@@ -32,7 +32,7 @@ A key/value table of environment variables.
 ## **sys_processes**
 
 ```
-sys_processes(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 All running processes on the host system.

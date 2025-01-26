@@ -5,7 +5,7 @@
 ## **fs_files**
 
 ```
-fs_files(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 Return information on files.

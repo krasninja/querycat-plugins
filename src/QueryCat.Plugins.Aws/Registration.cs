@@ -16,6 +16,6 @@ public static class Registration
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
         functionsManager.RegisterFunction(SetToken.AwsSetTokenAuthFunction);
-        functionsManager.RegisterFromType(typeof(Ec2InstancesRowsInput));
+        functionsManager.RegisterFunctions(functionsManager.Factory.CreateFromType(typeof(Ec2InstancesRowsInput)));
     }
 }

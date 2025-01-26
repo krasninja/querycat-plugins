@@ -7,7 +7,7 @@
 ## **jira_issue**
 
 ```
-jira_issue(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 Issues are the building blocks of any Jira project.
@@ -29,7 +29,7 @@ Issues are the building blocks of any Jira project.
 ## **jira_issue_comments**
 
 ```
-jira_issue_comments(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 Get issue comments.
@@ -51,7 +51,7 @@ Get issue comments.
 ## **jira_issue_search**
 
 ```
-jira_issue_search(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 Search issues using JQL.

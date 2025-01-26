@@ -57,7 +57,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         _parser.RegisterEmptyBlock("run", async (statements, writer, encoder, context) =>
         {
             var queryContext = (QueryContext)context.AmbientValues[QueryCatContextKey];
-            var executionThread = (ExecutionThread)context.AmbientValues[QueryCatExecutionThreadKey];
+            var executionThread = (DefaultExecutionThread)context.AmbientValues[QueryCatExecutionThreadKey];
             var varKey = (string)context.AmbientValues[QueryCatRowsKey];
 
             var sb = new StringBuilder();

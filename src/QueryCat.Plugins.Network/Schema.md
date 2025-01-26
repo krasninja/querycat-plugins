@@ -6,7 +6,7 @@
 ## **net_interface_addresses**
 
 ```
-net_interface_addresses(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 Network interfaces and relevant metadata.
@@ -28,7 +28,7 @@ Network interfaces and relevant metadata.
 ## **net_interface_details**
 
 ```
-net_interface_details(): Object<IRowsInput>
+QueryCat.Backend.FunctionsManager.DefaultFunctionsFactory+LazyAttributesFunction
 ```
 
 Network interfaces and relevant detailed information.
