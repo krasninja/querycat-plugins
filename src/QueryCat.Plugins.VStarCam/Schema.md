@@ -6,7 +6,7 @@
 ## **vstar_camera_info**
 
 ```
-vstar_camera_info(LOGIN: String, PASSWORD: String): Object<IRowsInput>
+vstar_camera_info(login: String, password: String): Object<IRowsInput>
 ```
 
 VStar camera information.
