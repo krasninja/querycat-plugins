@@ -14,16 +14,11 @@
 
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="112.1.0" />
-    <!--<PackageReference Include="QueryCat" Version="0.9.0" />-->
+    <PackageReference Include="QueryCat" Version="0.10.0" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\querycat\src\QueryCat.Backend.Core\QueryCat.Backend.Core.csproj" />
-    <ProjectReference Include="..\..\..\querycat\src\QueryCat.Backend\QueryCat.Backend.csproj" />
   </ItemGroup>
 
 </Project>
