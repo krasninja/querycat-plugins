@@ -73,6 +73,7 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
 
     private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(nameof(PostgresQueriesRowsInput));
 
+    [SafeFunction]
     [Description("Listen TCP traffic for the specified host and port.")]
     [FunctionSignature("pgsniff_start(iface?: string := null, host?: string := null, port: integer := 5432): object<IRowsInput>")]
     public static VariantValue PostgresSnifferStart(IExecutionThread thread)
