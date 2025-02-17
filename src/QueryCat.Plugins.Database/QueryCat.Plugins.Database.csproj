@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <PackageVersion>0.1.0</PackageVersion>
     <Title>Database Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DuckDB.NET.Data.Full" Version="1.2.0" />
     <PackageReference Include="Npgsql" Version="9.0.2" />
     <PackageReference Include="QueryCat" Version="0.10.0" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">

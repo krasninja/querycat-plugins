@@ -1,8 +1,8 @@
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using DuckDB.NET.Data;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Types;
@@ -10,26 +10,26 @@ using QueryCat.Plugins.Database.Common;
 
 namespace QueryCat.Plugins.Database.Providers;
 
-internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
+internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
 {
     private readonly string[] _table;
-    private readonly NpgsqlDataSource _dataSource;
-    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(PostgresTableRowsProvider));
+    private readonly DuckDBConnection _dataSource;
+    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(DuckDBTableRowsProvider));
 
     public string QuotedTableName { get; }
 
-    public PostgresTableRowsProvider(string connectionString, string table)
+    private string SequenceName => $"\"seq_{IdentityColumnName}_{_table[^1]}\"";
+
+    public DuckDBTableRowsProvider(string connectionString, string table)
     {
         _table = table.Split('.', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        _dataSource = NpgsqlDataSource.Create(connectionString);
+        _dataSource = new DuckDBConnection(connectionString);
 
-        QuotedTableName = Quote(_table);
+        QuotedTableName = Quote(table);
     }
 
     /// <inheritdoc />
-    public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(
-        Column[] selectColumns,
-        IReadOnlyList<TableSelectCondition> conditions,
+    public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(Column[] selectColumns, IReadOnlyList<TableSelectCondition> conditions,
         CancellationToken cancellationToken = default)
     {
         await using var selectCommand = _dataSource.CreateCommand();
@@ -45,6 +45,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
 #pragma warning disable CA2100
         selectCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
+        await _dataSource.OpenAsync(cancellationToken);
         return await selectCommand.ExecuteReaderAsync(cancellationToken);
     }
 
@@ -65,10 +66,14 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     {
         var sb = new StringBuilder()
             .Append($"CREATE TABLE IF NOT EXISTS {QuotedTableName} (")
-            .Append($"{IdentityColumnName} bigint GENERATED ALWAYS AS IDENTITY NOT NULL, ")
-            .Append($"CONSTRAINT {Quote("qc_" + IdentityColumnName + "_" + _table[^1])} PRIMARY KEY ({Quote(IdentityColumnName)}));");
+            .Append($"{IdentityColumnName} bigint NOT NULL PRIMARY KEY);")
+            .Append($"CREATE SEQUENCE IF NOT EXISTS {SequenceName} START 1;");
 
-        await using var createDatabaseTableCommand = _dataSource.CreateCommand(sb.ToString());
+        await using var createDatabaseTableCommand = _dataSource.CreateCommand();
+#pragma warning disable CA2100
+        createDatabaseTableCommand.CommandText = sb.ToString();
+#pragma warning restore CA2100
+        await _dataSource.OpenAsync(cancellationToken);
         await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -83,7 +88,10 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             )
             .Append(");");
 
-        await using var createIndexCommand = _dataSource.CreateCommand(sb.ToString());
+        await using var createIndexCommand = _dataSource.CreateCommand();
+#pragma warning disable CA2100
+        createIndexCommand.CommandText = sb.ToString();
+#pragma warning restore CA2100
         await createIndexCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -97,14 +105,15 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             sb.Append($"COMMENT ON COLUMN {QuotedTableName}.{Quote(column.Name)} IS '{column.Description.Replace("'", "''")}';");
         }
 
-        await using var createDatabaseColumnCommand = _dataSource.CreateCommand(sb.ToString());
+        await using var createDatabaseColumnCommand = _dataSource.CreateCommand();
+#pragma warning disable CA2100
+        createDatabaseColumnCommand.CommandText = sb.ToString();
+#pragma warning restore CA2100
         await createDatabaseColumnCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public override async ValueTask<long[]> InsertDatabaseRowsAsync(
-        TableRowsModification[] data,
-        CancellationToken cancellationToken = default)
+    public override async ValueTask<long[]> InsertDatabaseRowsAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
         await using var insertCommand = _dataSource.CreateCommand();
 
@@ -112,8 +121,10 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         foreach (var item in data)
         {
             sb.Append($"INSERT INTO {QuotedTableName} (");
+            sb.Append(IdentityColumnName + ",");
             AppendSelectColumnsBlock(sb, item.Columns);
             sb.Append(") SELECT ");
+            sb.Append($"nextval('{SequenceName}'),");
             AppendSelectValuesBlock(sb, insertCommand, item.Values);
             if (item.Keys.Any())
             {
@@ -132,9 +143,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     }
 
     /// <inheritdoc />
-    public override async ValueTask UpdateDatabaseRowAsync(
-        TableRowsModification[] data,
-        CancellationToken cancellationToken = default)
+    public override async ValueTask UpdateDatabaseRowAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
         await using var updateCommand = _dataSource.CreateCommand();
 
@@ -157,29 +166,24 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     /// <inheritdoc />
     public override async Task<Column[]> GetDatabaseTableColumnsAsync(CancellationToken cancellationToken = default)
     {
-        await using var connection = _dataSource.CreateConnection();
-        await connection.OpenAsync(cancellationToken);
-        var restrictions = new string?[3];
+        using var dt = await _dataSource.GetSchemaAsync("Columns", cancellationToken);
+        var result = dt.AsEnumerable();
         if (_table.Length == 1)
         {
-            restrictions[2] = _table[0];
+            result = result.Where(r => (string)r["table_name"] == _table[0]);
         }
         if (_table.Length == 2)
         {
-            restrictions[1] = _table[0];
-            restrictions[2] = _table[1];
+            result = result.Where(r => (string)r["schema_name"] == _table[0] && (string)r["table_name"] == _table[1]);
         }
-        using var dt = await connection.GetSchemaAsync("Columns", restrictions, cancellationToken); // database, namespace, table.
-        await connection.CloseAsync();
-        return dt
-            .AsEnumerable()
-            .Select(r => new Column((string)r["column_name"], GetQueryCatDataType((string)r["data_type"])))
+        return result.Select(r => new Column((string)r["column_name"], GetQueryCatDataType((string)r["data_type"])))
             .ToArray();
     }
 
     /// <inheritdoc />
-    protected override string FormatParameterName(string name) => "@" + base.FormatParameterName(name);
+    protected override string FormatParameterName(string name) => "$" + base.FormatParameterName(name);
 
+    /// <inheritdoc />
     protected override string Quote(params ReadOnlySpan<string> identifiers)
     {
         if (identifiers.IsEmpty)
@@ -189,13 +193,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
 
         // Check if it is already quoted.
         var sb = new StringBuilder();
-        for (var i = 0; i < identifiers.Length; i++)
+        foreach (var id in identifiers)
         {
-            var id = identifiers[i];
-            if (i != 0)
-            {
-                sb.Append('.');
-            }
             if (id.StartsWith('\"'))
             {
                 sb.Append(id);
@@ -214,7 +213,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         => type switch
         {
             DataType.Integer => "bigint",
-            DataType.Numeric => "numeric",
+            DataType.Numeric => "decimal",
             DataType.String => "text",
             DataType.Timestamp => "timestamp",
             DataType.Float => "double",
@@ -229,21 +228,13 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             "int" => DataType.Integer,
             "smallint" => DataType.Integer,
             "bigint" => DataType.Integer,
-            "char" => DataType.String,
-            "character" => DataType.String,
-            "character varying" => DataType.String,
             "text" => DataType.String,
-            "guid" => DataType.String,
             "varchar" => DataType.String,
             "date" => DataType.Timestamp,
             "timestamp" => DataType.Timestamp,
-            "timestamp with time zone" => DataType.Timestamp,
             "double" => DataType.Float,
-            "double precision" => DataType.Float,
-            "real" => DataType.Float,
             "numeric" => DataType.Numeric,
             "boolean" => DataType.Boolean,
-            "bit" => DataType.Boolean,
             _ => DataType.String,
         };
 

@@ -16,6 +16,7 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
 
     private int[] _keysColumnsIndexes = [];
     private Column[] _keyColumns = [];
+    private readonly bool _skipUpdateIfExists;
 
     private bool _isOpened;
 
@@ -25,9 +26,10 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
     /// <inheritdoc />
     public RowsOutputOptions Options { get; } = new();
 
-    public TableRowsOutput(TableRowsProvider provider, string tableName, string? keys = null)
+    public TableRowsOutput(TableRowsProvider provider, bool skipUpdateIfExists, string tableName, string? keys = null)
     {
         _provider = provider;
+        _skipUpdateIfExists = skipUpdateIfExists;
         TableName = tableName;
         KeyColumnsNames = (keys ?? string.Empty).Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
     }
@@ -102,6 +104,18 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
         }
 
         var keys = GetKeysValues(values);
+        if (_logger.IsEnabled(LogLevel.Trace))
+        {
+            if (keys.Length > 0)
+            {
+                _logger.LogTrace("Start insert record with keys '{Keys}'.",
+                    string.Join(',', keys));
+            }
+            else
+            {
+                _logger.LogTrace("Start insert record.");
+            }
+        }
         var modification = new TableRowsModification(
             columns: QueryContext.QueryInfo.Columns.ToArray(),
             keyColumns: _keyColumns,
@@ -110,7 +124,24 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
         var ids = await _provider.InsertDatabaseRowsAsync([modification], cancellationToken);
         if (ids.Length < 1)
         {
-            await _provider.UpdateDatabaseRowAsync([modification], cancellationToken);
+            if (!_skipUpdateIfExists)
+            {
+                await _provider.UpdateDatabaseRowAsync([modification], cancellationToken);
+                _logger.LogTrace("Updated record with keys '{Keys}'.", string.Join(',', keys));
+            }
+            else
+            {
+                _logger.LogTrace("Skip record update.");
+            }
+        }
+        else
+        {
+            if (_logger.IsEnabled(LogLevel.Trace))
+            {
+                _logger.LogTrace("Inserted record with id {Id} and keys '{Keys}'.",
+                    string.Join(',', ids),
+                    string.Join(',', keys));
+            }
         }
 
         return ErrorCode.OK;

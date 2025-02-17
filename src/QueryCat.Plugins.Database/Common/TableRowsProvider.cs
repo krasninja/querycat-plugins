@@ -121,12 +121,12 @@ internal abstract class TableRowsProvider
     {
         var prefix = GetNextId();
         sb.Append(
-            string.Join(',', values.Select((_, i) => $"@v{prefix}_{i}"))
+            string.Join(',', values.Select((_, i) => FormatParameterName(prefix, i, "v")))
         );
         for (var i = 0; i < values.Length; i++)
         {
             var param = command.CreateParameter();
-            param.ParameterName = $"v{prefix}_{i}";
+            param.ParameterName = FormatParameterNamePlain(prefix, i, "v");
             param.Value = NormalizeValue(values[i]);
             command.Parameters.Add(param);
         }
@@ -141,13 +141,14 @@ internal abstract class TableRowsProvider
         var prefix = GetNextId();
         sb.Append(
             string.Join(" AND ",
-                conditions.Select((c, i) => $"{Quote(c.Column.Name)} {GetOperationString(c.Operation)} @cv{prefix}_{i}")
+                conditions.Select((c, i)
+                    => $"{Quote(c.Column.Name)} {GetOperationString(c.Operation)} {FormatParameterName(prefix, i, "cv")}")
             )
         );
         for (var i = 0; i < conditions.Count; i++)
         {
             var param = command.CreateParameter();
-            param.ParameterName = $"cv{prefix}_{i}";
+            param.ParameterName = FormatParameterNamePlain(prefix, i, "cv");
             param.Value = NormalizeValue(conditions[i].Value);
             command.Parameters.Add(param);
         }
@@ -161,13 +162,14 @@ internal abstract class TableRowsProvider
         var prefix = GetNextId();
         sb.Append(
             string.Join(" AND ",
-                data.KeyColumns.Select((c, i) => $"{Quote(c.Name)} {GetOperationString(VariantValue.Operation.Equals)} @k{prefix}_{i}")
+                data.KeyColumns.Select((c, i)
+                    => $"{Quote(c.Name)} {GetOperationString(VariantValue.Operation.Equals)} {FormatParameterName(prefix, i, "k")}")
             )
         );
         for (var i = 0; i < data.KeyColumns.Length; i++)
         {
             var param = command.CreateParameter();
-            param.ParameterName = $"k{prefix}_{i}";
+            param.ParameterName = FormatParameterNamePlain(prefix, i, "k");
             param.Value = NormalizeValue(data.Keys[i]);
             command.Parameters.Add(param);
         }
@@ -181,12 +183,12 @@ internal abstract class TableRowsProvider
         var prefix = GetNextId();
         sb.Append(
             string.Join(',', data.Columns.Select((c, i) =>
-                $"{Quote(c.Name)} = @p{prefix}_{i}"))
+                $"{Quote(c.Name)} = {FormatParameterName(prefix, i)}"))
             );
         for (var i = 0; i < data.Values.Length; i++)
         {
             var param = command.CreateParameter();
-            param.ParameterName = $"p{prefix}_{i}";
+            param.ParameterName = FormatParameterNamePlain(prefix, i);
             param.Value = NormalizeValue(data.Values[i]);
             command.Parameters.Add(param);
         }
@@ -207,6 +209,19 @@ internal abstract class TableRowsProvider
         }
         return ids.ToArray();
     }
+
+    /// <summary>
+    /// Adds additional formatting to SQL parameter.
+    /// </summary>
+    /// <param name="name">Parameter name.</param>
+    /// <returns>Final name.</returns>
+    protected virtual string FormatParameterName(string name) => name;
+
+    private string FormatParameterName(string prefix, int count, string type = "p")
+        => FormatParameterName(FormatParameterNamePlain(prefix, count, type));
+
+    private string FormatParameterNamePlain(string prefix, int count, string type = "p")
+        => string.Concat(type, prefix, "_", count);
 
     protected virtual string GetOperationString(VariantValue.Operation operation) => operation switch
     {

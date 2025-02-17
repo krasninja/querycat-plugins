@@ -14,6 +14,7 @@ public static class Registration
     /// <param name="functionsManager">Functions manager.</param>
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
+        functionsManager.RegisterFunction(DuckDBRowsOutput.DuckDBTableFunction);
         functionsManager.RegisterFunction(PostgresRowsInput.PostgresTableFunction);
         functionsManager.RegisterFunction(PostgresRowsOutput.PostgresTableFunction);
     }
