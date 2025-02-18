@@ -10,7 +10,7 @@ internal sealed class DuckDBRowsOutput : TableRowsOutput
 {
     [Description("Writes data to DuckDB database table.")]
     [FunctionSignature("duckdb_table_out(cs: string, table: string, keys: string = '', skip_updates: bool := false): object<IRowsOutput>")]
-    public static VariantValue DuckDBTableFunction(IExecutionThread thread)
+    public static VariantValue DuckDBTableOutFunction(IExecutionThread thread)
     {
         var connectionString = thread.Stack[0].AsString;
         var table = thread.Stack[1].AsString;

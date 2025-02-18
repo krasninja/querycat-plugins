@@ -29,6 +29,12 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
     }
 
     /// <inheritdoc />
+    public override async Task OpenAsync(CancellationToken cancellationToken = default)
+    {
+        await _dataSource.OpenAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
     public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(Column[] selectColumns, IReadOnlyList<TableSelectCondition> conditions,
         CancellationToken cancellationToken = default)
     {
@@ -45,7 +51,6 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
 #pragma warning disable CA2100
         selectCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
-        await _dataSource.OpenAsync(cancellationToken);
         return await selectCommand.ExecuteReaderAsync(cancellationToken);
     }
 
@@ -73,7 +78,6 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
 #pragma warning disable CA2100
         createDatabaseTableCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
-        await _dataSource.OpenAsync(cancellationToken);
         await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -143,6 +147,56 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
     }
 
     /// <inheritdoc />
+    protected override void AppendSelectValuesBlock(StringBuilder sb, DbCommand command, params VariantValue[] values)
+    {
+        var prefix = GetNextId();
+        sb.Append(
+            string.Join(',', values.Select((v, i) =>
+                string.Concat(
+                    FormatParameterName(prefix, i, "v"),
+                    "::",
+                    GetDatabaseDataType(v.Type))
+                )
+            )
+        );
+        for (var i = 0; i < values.Length; i++)
+        {
+            var param = command.CreateParameter();
+            param.ParameterName = FormatParameterNamePlain(prefix, i, "v");
+            param.Value = NormalizeValue(values[i]);
+            command.Parameters.Add(param);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void AppendWhereConditionsBlock(StringBuilder sb, DbCommand command, params IReadOnlyList<TableSelectCondition> conditions)
+    {
+        string FormatParameterNameWithType(string prefix, int i, string type, VariantValue value)
+        {
+            return string.Concat(
+                FormatParameterName(prefix, i, "cv"),
+                "::",
+                GetDatabaseDataType(value.Type)
+            );
+        }
+
+        var prefix = GetNextId();
+        sb.Append(
+            string.Join(" AND ",
+                conditions.Select((c, i)
+                    => $"{Quote(c.Column.Name)} {GetOperationString(c.Operation)} {FormatParameterNameWithType(prefix, i, "cv", c.Value)}")
+            )
+        );
+        for (var i = 0; i < conditions.Count; i++)
+        {
+            var param = command.CreateParameter();
+            param.ParameterName = FormatParameterNamePlain(prefix, i, "cv");
+            param.Value = NormalizeValue(conditions[i].Value);
+            command.Parameters.Add(param);
+        }
+    }
+
+    /// <inheritdoc />
     public override async ValueTask UpdateDatabaseRowAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
         await using var updateCommand = _dataSource.CreateCommand();
@@ -166,16 +220,15 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
     /// <inheritdoc />
     public override async Task<Column[]> GetDatabaseTableColumnsAsync(CancellationToken cancellationToken = default)
     {
-        using var dt = await _dataSource.GetSchemaAsync("Columns", cancellationToken);
+        var restrictions = new[]
+        {
+            null, // table_catalog
+            _table.Length == 2 ? _table[0] : null, // table_schema
+            _table[^1], // table_name
+            null, // column_name
+        };
+        using var dt = await _dataSource.GetSchemaAsync("Columns", restrictions, cancellationToken);
         var result = dt.AsEnumerable();
-        if (_table.Length == 1)
-        {
-            result = result.Where(r => (string)r["table_name"] == _table[0]);
-        }
-        if (_table.Length == 2)
-        {
-            result = result.Where(r => (string)r["schema_name"] == _table[0] && (string)r["table_name"] == _table[1]);
-        }
         return result.Select(r => new Column((string)r["column_name"], GetQueryCatDataType((string)r["data_type"])))
             .ToArray();
     }
@@ -241,6 +294,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
+        _dataSource.Close();
         _dataSource.Dispose();
     }
 }

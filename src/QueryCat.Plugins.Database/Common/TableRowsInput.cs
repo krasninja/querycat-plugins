@@ -56,6 +56,7 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
             _reader = null;
         }
 
+        await _provider.OpenAsync(cancellationToken);
         await InitializeColumnsAsync(cancellationToken);
     }
 

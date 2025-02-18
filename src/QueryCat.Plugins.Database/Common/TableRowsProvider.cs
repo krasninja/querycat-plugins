@@ -22,6 +22,12 @@ internal abstract class TableRowsProvider
     protected string GetNextId() => (++_currentId).ToString();
 
     /// <summary>
+    /// Open provider.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public abstract Task OpenAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Create the reader that selects all columns from the table.
     /// </summary>
     /// <param name="selectColumns">Column to select.</param>
@@ -102,7 +108,7 @@ internal abstract class TableRowsProvider
     /// <summary>
     /// Adds block: "column1", "column2".
     /// </summary>
-    protected void AppendSelectColumnsBlock(StringBuilder sb, Column[] selectColumns)
+    protected virtual void AppendSelectColumnsBlock(StringBuilder sb, Column[] selectColumns)
     {
         if (selectColumns.Length == 0)
         {
@@ -117,7 +123,7 @@ internal abstract class TableRowsProvider
     /// <summary>
     /// Adds block: @v1, @v2.
     /// </summary>
-    protected void AppendSelectValuesBlock(StringBuilder sb, DbCommand command, params VariantValue[] values)
+    protected virtual void AppendSelectValuesBlock(StringBuilder sb, DbCommand command, params VariantValue[] values)
     {
         var prefix = GetNextId();
         sb.Append(
@@ -135,7 +141,7 @@ internal abstract class TableRowsProvider
     /// <summary>
     /// Adds block: "column1" >= 10 AND "column2" = 'test'.
     /// </summary>
-    protected void AppendWhereConditionsBlock(StringBuilder sb, DbCommand command,
+    protected virtual void AppendWhereConditionsBlock(StringBuilder sb, DbCommand command,
         params IReadOnlyList<TableSelectCondition> conditions)
     {
         var prefix = GetNextId();
@@ -159,26 +165,16 @@ internal abstract class TableRowsProvider
     /// </summary>
     protected void AppendWhereConditionsBlock(StringBuilder sb, DbCommand command, TableRowsModification data)
     {
-        var prefix = GetNextId();
-        sb.Append(
-            string.Join(" AND ",
-                data.KeyColumns.Select((c, i)
-                    => $"{Quote(c.Name)} {GetOperationString(VariantValue.Operation.Equals)} {FormatParameterName(prefix, i, "k")}")
-            )
-        );
-        for (var i = 0; i < data.KeyColumns.Length; i++)
-        {
-            var param = command.CreateParameter();
-            param.ParameterName = FormatParameterNamePlain(prefix, i, "k");
-            param.Value = NormalizeValue(data.Keys[i]);
-            command.Parameters.Add(param);
-        }
+        var conditions = data.GetKeyValues()
+            .Select(kv => new TableSelectCondition(kv.Key, kv.Value, VariantValue.Operation.Equals))
+            .ToArray();
+        AppendWhereConditionsBlock(sb, command, conditions);
     }
 
     /// <summary>
     /// Adds block: "column1" = 'val1', "column2" = 2.
     /// </summary>
-    protected void AppendUpdateValuesBlock(StringBuilder sb, DbCommand command, TableRowsModification data)
+    protected virtual void AppendUpdateValuesBlock(StringBuilder sb, DbCommand command, TableRowsModification data)
     {
         var prefix = GetNextId();
         sb.Append(
@@ -194,7 +190,7 @@ internal abstract class TableRowsProvider
         }
     }
 
-    protected async ValueTask<long[]> ExecuteScalarsAsync(DbCommand command, CancellationToken cancellationToken)
+    protected virtual async ValueTask<long[]> ExecuteScalarsAsync(DbCommand command, CancellationToken cancellationToken)
     {
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (!reader.HasRows || reader.FieldCount < 1)
@@ -217,11 +213,25 @@ internal abstract class TableRowsProvider
     /// <returns>Final name.</returns>
     protected virtual string FormatParameterName(string name) => name;
 
-    private string FormatParameterName(string prefix, int count, string type = "p")
-        => FormatParameterName(FormatParameterNamePlain(prefix, count, type));
+    /// <summary>
+    /// Adds additional formatting to SQL parameter. For example, "@p1_1".
+    /// </summary>
+    /// <param name="prefix">Prefix.</param>
+    /// <param name="index">Current parameter number.</param>
+    /// <param name="type">Parameter type.</param>
+    /// <returns>Final name.</returns>
+    protected string FormatParameterName(string prefix, int index, string type = "p")
+        => FormatParameterName(FormatParameterNamePlain(prefix, index, type));
 
-    private string FormatParameterNamePlain(string prefix, int count, string type = "p")
-        => string.Concat(type, prefix, "_", count);
+    /// <summary>
+    /// Format parameter name without prefix character. For example, "p1_1".
+    /// </summary>
+    /// <param name="prefix">Prefix.</param>
+    /// <param name="index">Current parameter number.</param>
+    /// <param name="type">Parameter type.</param>
+    /// <returns>Final name.</returns>
+    protected string FormatParameterNamePlain(string prefix, int index, string type = "p")
+        => string.Concat(type, prefix, "_", index);
 
     protected virtual string GetOperationString(VariantValue.Operation operation) => operation switch
     {

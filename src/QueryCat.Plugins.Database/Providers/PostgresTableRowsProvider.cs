@@ -27,6 +27,12 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     }
 
     /// <inheritdoc />
+    public override async Task OpenAsync(CancellationToken cancellationToken = default)
+    {
+        await _dataSource.OpenConnectionAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
     public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(
         Column[] selectColumns,
         IReadOnlyList<TableSelectCondition> conditions,
@@ -159,7 +165,12 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     {
         await using var connection = _dataSource.CreateConnection();
         await connection.OpenAsync(cancellationToken);
-        var restrictions = new string?[3];
+        var restrictions = new string?[]
+        {
+            null, // database
+            null, // namespace
+            null, // table
+        };
         if (_table.Length == 1)
         {
             restrictions[2] = _table[0];
@@ -169,7 +180,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             restrictions[1] = _table[0];
             restrictions[2] = _table[1];
         }
-        using var dt = await connection.GetSchemaAsync("Columns", restrictions, cancellationToken); // database, namespace, table.
+        using var dt = await connection.GetSchemaAsync("Columns", restrictions, cancellationToken);
         await connection.CloseAsync();
         return dt
             .AsEnumerable()

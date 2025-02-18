@@ -42,6 +42,8 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
             return;
         }
 
+        await _provider.OpenAsync(cancellationToken);
+
         // Create the initial table with primary key.
         await _provider.CreateDatabaseTableAsync(cancellationToken);
         var columns = QueryContext.QueryInfo.Columns.ToArray();
@@ -163,6 +165,7 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
     {
         if (disposing)
         {
+            (_provider as IDisposable)?.Dispose();
         }
     }
 

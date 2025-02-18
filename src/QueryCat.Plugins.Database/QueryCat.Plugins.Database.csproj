@@ -25,8 +25,28 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Postgres -->
   <ItemGroup>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Npgsql.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <!-- DuckDB -->
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/DuckDB.NET.Bindings.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/DuckDB.NET.Data.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>

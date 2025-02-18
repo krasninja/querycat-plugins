@@ -10,7 +10,7 @@ internal sealed class PostgresRowsOutput : TableRowsOutput
 {
     [Description("Writes data to Postgres database table.")]
     [FunctionSignature("pg_table_out(cs: string, table: string, keys: string := '', skip_updates: bool := false): object<IRowsOutput>")]
-    public static VariantValue PostgresTableFunction(IExecutionThread thread)
+    public static VariantValue PostgresTableOutFunction(IExecutionThread thread)
     {
         var connectionString = thread.Stack[0].AsString;
         var table = thread.Stack[1].AsString;
