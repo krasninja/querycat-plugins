@@ -48,6 +48,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
         CancellationToken cancellationToken = default)
     {
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         await using var selectCommand = CreateCommand(connection);
 
         var sb = new StringBuilder("SELECT ");
@@ -68,6 +69,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
     public override async ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         await using var deleteCommand = CreateCommand(connection);
         var sb = new StringBuilder($"DELETE FROM {QuotedTableName} WHERE ");
         AppendWhereConditionsBlock(sb, deleteCommand, new TableSelectCondition(IdentityColumn, new VariantValue(id)));
@@ -87,6 +89,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
 
         await using var connection = new DuckDBConnection(_connectionString);
         await using var createDatabaseTableCommand = CreateCommand(connection, sb.ToString());
+        await connection.OpenAsync(cancellationToken);
         await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -102,6 +105,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
             .Append(");");
 
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         await using var createIndexCommand = CreateCommand(connection, sb.ToString());
         await createIndexCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -117,6 +121,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
         }
 
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         await using var createDatabaseColumnCommand = CreateCommand(connection, sb.ToString());
         await createDatabaseColumnCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -125,6 +130,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
     public override async ValueTask<long[]> InsertDatabaseRowsAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         await using var insertCommand = CreateCommand(connection);
 
         var sb = new StringBuilder();
@@ -206,6 +212,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
     public override async ValueTask UpdateDatabaseRowAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         await using var updateCommand = CreateCommand(connection);
 
         var sb = new StringBuilder();
@@ -235,6 +242,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
             null, // column_name
         };
         await using var connection = new DuckDBConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
         using var dt = await connection.GetSchemaAsync("Columns", restrictions, cancellationToken);
         var result = dt.AsEnumerable();
         return result.Select(r => new Column((string)r["column_name"], GetQueryCatDataType((string)r["data_type"])))
