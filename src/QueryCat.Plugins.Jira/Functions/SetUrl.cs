@@ -10,9 +10,9 @@ internal static class SetUrl
     [SafeFunction]
     [Description("Set JIRA instance URL.")]
     [FunctionSignature("jira_set_url(url: string): void")]
-    public static VariantValue JiraSetUrlFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> JiraSetUrlFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        thread.ConfigStorage.Set(General.JiraUrl, thread.Stack.Pop());
+        await thread.ConfigStorage.SetAsync(General.JiraUrl, thread.Stack.Pop(), cancellationToken);
         return VariantValue.Null;
     }
 }

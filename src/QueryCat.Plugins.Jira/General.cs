@@ -16,26 +16,28 @@ internal static class General
     public const string JiraToken = "jira-token";
     public const string JiraConfig = "jira-config";
 
-    internal static JiraConfiguration GetConfiguration(IInputConfigStorage configStorage)
+    internal static async ValueTask<JiraConfiguration> GetConfigurationAsync(IInputConfigStorage configStorage, CancellationToken cancellationToken)
     {
-        if (configStorage.Has(JiraConfig))
+        if (await configStorage.HasAsync(JiraConfig, cancellationToken))
         {
-            return configStorage.Get(JiraConfig).AsRequired<JiraConfiguration>();
+            return (await configStorage.GetAsync(JiraConfig, cancellationToken)).AsRequired<JiraConfiguration>();
         }
 
         var config = new JiraConfiguration();
-        config.BasePath = configStorage.GetOrDefault(JiraUrl, new VariantValue(DefaultJiraUrl)).AsString;
-        if (configStorage.Has(JiraUsername) && configStorage.Has(JiraPassword))
+        config.BasePath = (await configStorage.GetOrDefaultAsync(JiraUrl, new VariantValue(DefaultJiraUrl),
+            cancellationToken)).AsString;
+        if (await configStorage.HasAsync(JiraUsername, cancellationToken)
+            && await configStorage.HasAsync(JiraPassword, cancellationToken))
         {
-            config.Username = configStorage.Get(JiraUsername).AsString;
-            config.Password = configStorage.Get(JiraPassword).AsString;
+            config.Username = (await configStorage.GetAsync(JiraUsername, cancellationToken)).AsString;
+            config.Password = (await configStorage.GetAsync(JiraPassword, cancellationToken)).AsString;
         }
-        if (configStorage.Has(JiraToken))
+        if (await configStorage.HasAsync(JiraToken, cancellationToken))
         {
-            config.AccessToken = configStorage.Get(JiraToken).AsString;
+            config.AccessToken = (await configStorage.GetAsync(JiraToken, cancellationToken)).AsString;
         }
 
-        configStorage.Set(JiraConfig, VariantValue.CreateFromObject(config));
+        await configStorage.SetAsync(JiraConfig, VariantValue.CreateFromObject(config), cancellationToken);
         return config;
     }
 }

@@ -1,10 +1,11 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
+using RestSharp;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
-using RestSharp;
 using QueryCat.Plugins.Jira.Utils;
 
 namespace QueryCat.Plugins.Jira.Inputs;
@@ -45,12 +46,12 @@ internal sealed class IssueCommentsRowsInput : AsyncEnumerableRowsInput<JsonNode
     }
 
     /// <inheritdoc />
-    protected override IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
-        CancellationToken cancellationToken = default)
+    protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = General.GetConfiguration(QueryContext.InputConfigStorage);
+        var config = await General.GetConfigurationAsync(QueryContext.InputConfigStorage, cancellationToken);
         fetcher.Limit = 100;
-        return fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
+        var list = fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
         {
             var request = new RestRequest("issue/{issueIdOrKey}/comment")
                 .AddUrlSegment("issueIdOrKey", GetKeyColumnValue("issue_id").AsString)
@@ -60,5 +61,9 @@ internal sealed class IssueCommentsRowsInput : AsyncEnumerableRowsInput<JsonNode
             var json = (await config.Client.GetAsync(request, cancellationToken: ct)).ToJson();
             return json["comments"]!.AsArray().Select(n => n!);
         }, cancellationToken);
+        await foreach (var item in list)
+        {
+            yield return item;
+        }
     }
 }

@@ -19,9 +19,9 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
     [SafeFunction]
     [Description("Return GitHub pull requests of specific repository.")]
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
-    public static VariantValue GitHubPullsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> GitHubPullsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new PullRequestsRowsInput(token));
     }
 

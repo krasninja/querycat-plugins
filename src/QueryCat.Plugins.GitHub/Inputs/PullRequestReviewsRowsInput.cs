@@ -19,13 +19,13 @@ internal sealed class PullRequestReviewsRowsInput : BaseRowsInput<PullRequestRev
     [SafeFunction]
     [Description("Return GitHub reviews for the specific pull request.")]
     [FunctionSignature("github_pull_reviews(): object<IRowsInput>")]
-    public static VariantValue PullReviewsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> PullReviewsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        return VariantValue.CreateFromObject(new PullRequestReviewsRowsInput(thread));
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        return VariantValue.CreateFromObject(new PullRequestReviewsRowsInput(token));
     }
 
-    public PullRequestReviewsRowsInput(IExecutionThread thread)
-        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestReviewsRowsInput(string token) : base(token)
     {
     }
 

@@ -19,13 +19,13 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     [SafeFunction]
     [Description("Return GitHub comments for the specific issue.")]
     [FunctionSignature("github_issue_comments(): object<IRowsInput>")]
-    public static VariantValue IssueCommentsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> IssueCommentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        return VariantValue.CreateFromObject(new IssueCommentsRowsInput(thread));
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        return VariantValue.CreateFromObject(token);
     }
 
-    public IssueCommentsRowsInput(IExecutionThread thread)
-        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public IssueCommentsRowsInput(string token) : base(token)
     {
     }
 

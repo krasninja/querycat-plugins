@@ -20,9 +20,9 @@ internal sealed class CommitsRefRowsInput : CommitsRowsInput
     [SafeFunction]
     [Description("Return GitHub commit info of specific repository.")]
     [FunctionSignature("github_commits_ref(): object<IRowsInput>")]
-    public static VariantValue GitHubCommitsRefFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> GitHubCommitsRefFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new CommitsRefRowsInput(token));
     }
 

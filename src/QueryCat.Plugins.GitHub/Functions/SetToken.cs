@@ -10,10 +10,10 @@ internal static class SetToken
     [SafeFunction]
     [Description("GitHub authentication.")]
     [FunctionSignature("github_set_token(token: string): void")]
-    public static VariantValue SetTokenFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> SetTokenFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var token = thread.Stack.Pop().AsString;
-        thread.ConfigStorage.Set(General.GitHubToken, new VariantValue(token));
+        await thread.ConfigStorage.SetAsync(General.GitHubToken, new VariantValue(token), cancellationToken);
         return VariantValue.Null;
     }
 }

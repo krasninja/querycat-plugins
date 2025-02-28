@@ -19,13 +19,13 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
     [SafeFunction]
     [Description("Return GitHub commits for the specific pull request.")]
     [FunctionSignature("github_pull_commits(): object<IRowsInput>")]
-    public static VariantValue PullRequestCommitsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> PullRequestCommitsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        return VariantValue.CreateFromObject(new PullRequestCommitsRowsInput(thread));
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        return VariantValue.CreateFromObject(new PullRequestCommitsRowsInput(token));
     }
 
-    public PullRequestCommitsRowsInput(IExecutionThread thread)
-        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestCommitsRowsInput(string token) : base(token)
     {
     }
 

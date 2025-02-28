@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
@@ -35,12 +36,12 @@ internal sealed class IssuesSearchRowsInput : AsyncEnumerableRowsInput<JsonNode>
     }
 
     /// <inheritdoc />
-    protected override IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
-        CancellationToken cancellationToken = default)
+    protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = General.GetConfiguration(QueryContext.InputConfigStorage);
+        var config = await General.GetConfigurationAsync(QueryContext.InputConfigStorage, cancellationToken);
         fetcher.Limit = 100;
-        return fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
+        var list = fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
         {
             var request = new RestRequest("search")
                 .AddQueryParameter("jql", GetKeyColumnValue("jql"))
@@ -49,5 +50,9 @@ internal sealed class IssuesSearchRowsInput : AsyncEnumerableRowsInput<JsonNode>
             var json = (await config.Client.GetAsync(request, ct)).ToJson();
             return json["issues"]!.AsArray().Select(n => n!);
         }, cancellationToken);
+        await foreach (var item in list)
+        {
+            yield return item;
+        }
     }
 }

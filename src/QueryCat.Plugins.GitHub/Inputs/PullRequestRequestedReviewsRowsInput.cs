@@ -8,7 +8,7 @@ using QueryCat.Backend.Core.Types;
 namespace QueryCat.Plugins.Github.Inputs;
 
 /// <summary>
-/// List reviews for a pull request request reviews.
+/// List reviews for a pull request "request reviews".
 /// </summary>
 /// <remarks>
 /// https://docs.github.com/en/rest/pulls/review-requests.
@@ -33,13 +33,13 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
     [SafeFunction]
     [Description("Return GitHub review requests for the specific pull request.")]
     [FunctionSignature("github_pull_reviews_requests(): object<IRowsInput>")]
-    public static VariantValue PullRequestedReviewsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> PullRequestedReviewsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        return VariantValue.CreateFromObject(new PullRequestRequestedReviewsRowsInput(thread));
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        return VariantValue.CreateFromObject(new PullRequestRequestedReviewsRowsInput(token));
     }
 
-    public PullRequestRequestedReviewsRowsInput(IExecutionThread thread)
-        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestRequestedReviewsRowsInput(string token) : base(token)
     {
     }
 

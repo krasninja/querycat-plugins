@@ -10,10 +10,10 @@ internal static class SetBasicAuth
     [SafeFunction]
     [Description("Set JIRA basic authentication method.")]
     [FunctionSignature("jira_set_basic_auth(username: string, password: string): void")]
-    public static VariantValue JiraSetBasicAuthFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> JiraSetBasicAuthFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        thread.ConfigStorage.Set(General.JiraUsername, thread.Stack[0]);
-        thread.ConfigStorage.Set(General.JiraPassword, thread.Stack[1]);
+        await thread.ConfigStorage.SetAsync(General.JiraUsername, thread.Stack[0], cancellationToken);
+        await thread.ConfigStorage.SetAsync(General.JiraPassword, thread.Stack[1], cancellationToken);
         return VariantValue.Null;
     }
 }

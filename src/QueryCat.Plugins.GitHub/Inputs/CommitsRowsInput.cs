@@ -19,9 +19,9 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
     [SafeFunction]
     [Description("Return GitHub commits of specific repository.")]
     [FunctionSignature("github_commits(): object<IRowsInput>")]
-    public static VariantValue GitHubCommitsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> GitHubCommitsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new CommitsRowsInput(token));
     }
 

@@ -19,9 +19,9 @@ internal sealed class BranchesRowsInput : BaseRowsInput<Branch>
     [SafeFunction]
     [Description("Return GitHub branches of specific repository.")]
     [FunctionSignature("github_branches(): object<IRowsInput>")]
-    public static VariantValue GitHubBranchesFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> GitHubBranchesFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new BranchesRowsInput(token));
     }
 

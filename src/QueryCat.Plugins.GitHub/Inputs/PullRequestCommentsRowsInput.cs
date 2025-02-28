@@ -19,13 +19,13 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
     [SafeFunction]
     [Description("Return GitHub comments for the specific pull request.")]
     [FunctionSignature("github_pull_comments(): object<IRowsInput>")]
-    public static VariantValue PullRequestCommentsFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> PullRequestCommentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(thread));
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(token));
     }
 
-    public PullRequestCommentsRowsInput(IExecutionThread thread)
-        : base(thread.ConfigStorage.GetOrDefault(General.GitHubToken))
+    public PullRequestCommentsRowsInput(string token) : base(token)
     {
     }
 

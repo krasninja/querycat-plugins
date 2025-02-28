@@ -1,11 +1,12 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
+using RestSharp;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.Jira.Utils;
-using RestSharp;
 
 namespace QueryCat.Plugins.Jira.Inputs;
 
@@ -53,14 +54,18 @@ internal sealed class IssuesRowsInput : AsyncEnumerableRowsInput<JsonNode>
     }
 
     /// <inheritdoc />
-    protected override IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
-        CancellationToken cancellationToken = default)
+    protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = General.GetConfiguration(QueryContext.InputConfigStorage);
+        var config = await General.GetConfigurationAsync(QueryContext.InputConfigStorage, cancellationToken);
         var request = new RestRequest("issue/{key}")
             .AddUrlSegment("key", GetKeyColumnValue("key").AsString)
             .AddQueryParameter("expand", "renderedFields");
-        return fetcher.FetchOneAsync(
+        var list = fetcher.FetchOneAsync(
             async ct => (await config.Client.GetAsync(request, ct)).ToJson(), cancellationToken);
+        await foreach (var item in list)
+        {
+            yield return item;
+        }
     }
 }

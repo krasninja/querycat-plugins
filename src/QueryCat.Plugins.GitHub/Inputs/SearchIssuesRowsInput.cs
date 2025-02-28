@@ -23,9 +23,9 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     [SafeFunction]
     [Description("Search GitHub issues and pull requests.")]
     [FunctionSignature("github_search_issues(): object<IRowsInput>")]
-    public static VariantValue GitHubSearchIssuesFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> GitHubSearchIssuesFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = thread.ConfigStorage.GetOrDefault(General.GitHubToken);
+        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, string.Empty));
     }
 
