@@ -24,6 +24,7 @@ public sealed class BuildContext : FrostingContext
         "QueryCat.Plugins.Network",
         "QueryCat.Plugins.Numerology",
         "QueryCat.Plugins.PostgresSniffer",
+        "QueryCat.Plugins.Subtitles",
         "QueryCat.Plugins.System",
         "QueryCat.Plugins.VStarCam",
     };

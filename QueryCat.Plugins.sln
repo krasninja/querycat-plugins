@@ -60,11 +60,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.Core", "ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.AssemblyPlugins", "backend\src\QueryCat.Backend.AssemblyPlugins\QueryCat.Backend.AssemblyPlugins.csproj", "{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Tester", "..\querycat\src\QueryCat.Tester\QueryCat.Tester.csproj", "{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Tester", "backend\src\QueryCat.Tester\QueryCat.Tester.csproj", "{A10B7C2B-25A5-43F4-B5AF-E82D0BF7A841}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Database", "src\QueryCat.Plugins.Database\QueryCat.Plugins.Database.csproj", "{12737855-C29B-4426-B733-C8007CB7DACF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend", "backend\src\QueryCat.Backend\QueryCat.Backend.csproj", "{3737FBCF-3CD9-41DF-961B-92CC461D94FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Cli", "backend\src\QueryCat.Cli\QueryCat.Cli.csproj", "{120D4926-04BD-463D-BD50-6C9CBAF63E53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Client", "backend\sdk\dotnet-client\QueryCat.Plugins.Client.csproj", "{ECE32924-DB98-4C0F-8469-ED64D2069617}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Sdk", "backend\sdk\dotnet-sdk\QueryCat.Plugins.Sdk.csproj", "{69271BD9-7E94-4632-97D5-21265E7771CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.Addons", "backend\src\QueryCat.Backend.Addons\QueryCat.Backend.Addons.csproj", "{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Backend.ThriftPlugins", "backend\src\QueryCat.Backend.ThriftPlugins\QueryCat.Backend.ThriftPlugins.csproj", "{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Subtitles", "Subtitles", "{F5E1F3D4-1631-4782-B176-91986D8CD74C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Subtitles", "src\QueryCat.Plugins.Subtitles\QueryCat.Plugins.Subtitles.csproj", "{A47B59F7-FF86-4786-9C38-C003C61DB786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -148,6 +162,30 @@ Global
 		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3737FBCF-3CD9-41DF-961B-92CC461D94FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{120D4926-04BD-463D-BD50-6C9CBAF63E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120D4926-04BD-463D-BD50-6C9CBAF63E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120D4926-04BD-463D-BD50-6C9CBAF63E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120D4926-04BD-463D-BD50-6C9CBAF63E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECE32924-DB98-4C0F-8469-ED64D2069617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE32924-DB98-4C0F-8469-ED64D2069617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE32924-DB98-4C0F-8469-ED64D2069617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE32924-DB98-4C0F-8469-ED64D2069617}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69271BD9-7E94-4632-97D5-21265E7771CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69271BD9-7E94-4632-97D5-21265E7771CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69271BD9-7E94-4632-97D5-21265E7771CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69271BD9-7E94-4632-97D5-21265E7771CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{266010EB-9852-4B90-A772-2AA3103DAF5D} = {D417A513-C687-4D9B-A971-00B3B252C1FA}
@@ -168,5 +206,11 @@ Global
 		{B64B9CBA-03B6-4C8C-9CBB-F3A982D50B28} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 		{12737855-C29B-4426-B733-C8007CB7DACF} = {2F452030-BCA1-4979-8603-35DC30077F8B}
 		{3737FBCF-3CD9-41DF-961B-92CC461D94FF} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{120D4926-04BD-463D-BD50-6C9CBAF63E53} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{ECE32924-DB98-4C0F-8469-ED64D2069617} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{69271BD9-7E94-4632-97D5-21265E7771CB} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
+		{A47B59F7-FF86-4786-9C38-C003C61DB786} = {F5E1F3D4-1631-4782-B176-91986D8CD74C}
 	EndGlobalSection
 EndGlobal

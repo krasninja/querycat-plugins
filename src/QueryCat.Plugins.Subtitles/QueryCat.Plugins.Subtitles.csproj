@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Nullable>enable</Nullable>
+    <Title>Subtitles Functions</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>querycat subrip subtitles srt</PackageTags>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-subtitles-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <PublishAot>True</PublishAot>
+    <StripSymbols>True</StripSymbols>
+    <PublishTrimmed>True</PublishTrimmed>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QueryCat" Version="0.12.0-alpha.22" />
+    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
