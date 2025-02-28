@@ -28,6 +28,24 @@ internal abstract class TableRowsProvider
     public abstract Task OpenAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Create database command.
+    /// </summary>
+    /// <param name="dataSource">Data source.</param>
+    /// <param name="query">SQL.</param>
+    /// <returns>Instance of <see cref="DbCommand" />.</returns>
+    public virtual DbCommand CreateCommand(DbDataSource dataSource, string? query = null)
+    {
+        var command = dataSource.CreateCommand();
+        if (!string.IsNullOrEmpty(query))
+        {
+#pragma warning disable CA2100
+            command.CommandText = query;
+#pragma warning restore CA2100
+        }
+        return command;
+    }
+
+    /// <summary>
     /// Create the reader that selects all columns from the table.
     /// </summary>
     /// <param name="selectColumns">Column to select.</param>

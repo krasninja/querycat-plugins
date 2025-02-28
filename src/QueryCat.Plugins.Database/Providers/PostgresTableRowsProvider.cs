@@ -10,27 +10,24 @@ using QueryCat.Plugins.Database.Common;
 
 namespace QueryCat.Plugins.Database.Providers;
 
-internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
+internal sealed class PostgresTableRowsProvider : TableRowsProvider
 {
+    private readonly string _connectionString;
     private readonly string[] _table;
-    private readonly NpgsqlDataSource _dataSource;
     private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(PostgresTableRowsProvider));
 
     public string QuotedTableName { get; }
 
     public PostgresTableRowsProvider(string connectionString, string table)
     {
+        _connectionString = connectionString;
         _table = table.Split('.', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        _dataSource = NpgsqlDataSource.Create(connectionString);
 
         QuotedTableName = Quote(_table);
     }
 
     /// <inheritdoc />
-    public override async Task OpenAsync(CancellationToken cancellationToken = default)
-    {
-        await _dataSource.OpenConnectionAsync(cancellationToken);
-    }
+    public override Task OpenAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 
     /// <inheritdoc />
     public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(
@@ -38,7 +35,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         IReadOnlyList<TableSelectCondition> conditions,
         CancellationToken cancellationToken = default)
     {
-        await using var selectCommand = _dataSource.CreateCommand();
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var selectCommand = CreateCommand(dataSource);
 
         var sb = new StringBuilder("SELECT ");
         AppendSelectColumnsBlock(sb, selectColumns);
@@ -57,7 +55,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     /// <inheritdoc />
     public override async ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
-        await using var deleteCommand = _dataSource.CreateCommand();
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var deleteCommand = CreateCommand(dataSource);
         var sb = new StringBuilder($"DELETE FROM {QuotedTableName} WHERE ");
         AppendWhereConditionsBlock(sb, deleteCommand, new TableSelectCondition(IdentityColumn, new VariantValue(id)));
 #pragma warning disable CA2100
@@ -74,7 +73,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             .Append($"{IdentityColumnName} bigint GENERATED ALWAYS AS IDENTITY NOT NULL, ")
             .Append($"CONSTRAINT {Quote("qc_" + IdentityColumnName + "_" + _table[^1])} PRIMARY KEY ({Quote(IdentityColumnName)}));");
 
-        await using var createDatabaseTableCommand = _dataSource.CreateCommand(sb.ToString());
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var createDatabaseTableCommand = CreateCommand(dataSource, sb.ToString());
         await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -89,7 +89,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             )
             .Append(");");
 
-        await using var createIndexCommand = _dataSource.CreateCommand(sb.ToString());
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var createIndexCommand = CreateCommand(dataSource, sb.ToString());
         await createIndexCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -103,7 +104,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             sb.Append($"COMMENT ON COLUMN {QuotedTableName}.{Quote(column.Name)} IS '{column.Description.Replace("'", "''")}';");
         }
 
-        await using var createDatabaseColumnCommand = _dataSource.CreateCommand(sb.ToString());
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var createDatabaseColumnCommand = CreateCommand(dataSource, sb.ToString());
         await createDatabaseColumnCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -112,7 +114,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         TableRowsModification[] data,
         CancellationToken cancellationToken = default)
     {
-        await using var insertCommand = _dataSource.CreateCommand();
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var insertCommand = CreateCommand(dataSource);
 
         var sb = new StringBuilder();
         foreach (var item in data)
@@ -142,7 +145,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
         TableRowsModification[] data,
         CancellationToken cancellationToken = default)
     {
-        await using var updateCommand = _dataSource.CreateCommand();
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var updateCommand = CreateCommand(dataSource);
 
         var sb = new StringBuilder();
         foreach (var item in data)
@@ -163,7 +167,8 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
     /// <inheritdoc />
     public override async Task<Column[]> GetDatabaseTableColumnsAsync(CancellationToken cancellationToken = default)
     {
-        await using var connection = _dataSource.CreateConnection();
+        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        await using var connection = dataSource.CreateConnection();
         await connection.OpenAsync(cancellationToken);
         var restrictions = new string?[]
         {
@@ -257,10 +262,4 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
             "bit" => DataType.Boolean,
             _ => DataType.String,
         };
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _dataSource.Dispose();
-    }
 }
