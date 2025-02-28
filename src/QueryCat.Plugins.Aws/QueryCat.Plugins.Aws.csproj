@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.EC2" Version="3.7.430.2" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.415" />
+    <PackageReference Include="AWSSDK.EC2" Version="3.7.432.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.415.8" />
     <PackageReference Include="QueryCat" Version="0.11.0" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
