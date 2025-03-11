@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DuckDB.NET.Data.Full" Version="1.2.0" />
+    <PackageReference Include="DuckDB.NET.Data.Full" Version="1.2.1" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="QueryCat" Version="0.11.0" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
