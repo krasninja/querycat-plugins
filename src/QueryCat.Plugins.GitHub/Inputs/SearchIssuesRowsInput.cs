@@ -61,6 +61,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("url", p => p.HtmlUrl, "URL to HTML.")
             .AddProperty("closed_by_user_id", p => p.ClosedBy?.Id, "The user who closed the issue.")
             .AddProperty("closed_at", p => p.ClosedAt, "The date when issue was closed.")
+            .AddProperty("merged_at", p => p.PullRequest.MergedAt, "The date when pull request was merged.")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.")
             .AddProperty(TermKey, DataType.String, _ => GetKeyColumnValue("term"))
