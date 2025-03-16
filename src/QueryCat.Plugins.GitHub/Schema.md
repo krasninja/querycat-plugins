@@ -88,6 +88,28 @@ Return GitHub comments for the specific issue.
 | `created_at`| `Timestamp` |  |  | Date of comment creation. |
 | `updated_at`| `Timestamp` |  |  | Date of comment update. |
 
+## **github_issue_timeline**
+
+```
+github_issue_timeline(): Object<IRowsInput>
+```
+
+Return GitHub timeline for the specific issue.
+
+| Name | Type | Key | Required | Description |
+| --- | --- | --- | --- | --- |
+| `id`| `Integer` |  |  | Timeline id. |
+| `repository_full_name`| `String` | yes | yes | The full name of the repository. |
+| `event`| `String` |  |  | Event. |
+| `label_name`| `String` |  |  | Label name. |
+| `commit_id`| `String` |  |  | The related commit identifier. |
+| `actor_login`| `String` |  |  | Actor login. |
+| `actor_email`| `String` |  |  | Actor email. |
+| `assignee_login`| `String` |  |  | Assignee login. |
+| `assignee_email`| `String` |  |  | Assignee email. |
+| `number`| `Integer` | yes | yes | Issue or pull request number. |
+| `created_at`| `Timestamp` |  |  | Creation date and time. |
+
 ## **github_pull_comments**
 
 ```
@@ -231,6 +253,7 @@ Search GitHub issues and pull requests.
 | `url`| `String` |  |  | URL to HTML. |
 | `closed_by_user_id`| `Integer` |  |  | The user who closed the issue. |
 | `closed_at`| `Timestamp` | yes |  | The date when issue was closed. |
+| `merged_at`| `Timestamp` |  |  | The date when pull request was merged. |
 | `repository_full_name`| `String` |  |  |  |
 | `created_at`| `Timestamp` | yes |  | Issue creation date. |
 | `term`| `String` | yes |  |  |

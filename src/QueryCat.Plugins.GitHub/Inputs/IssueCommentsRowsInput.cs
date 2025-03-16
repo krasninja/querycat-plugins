@@ -22,7 +22,7 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     public static async ValueTask<VariantValue> IssueCommentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
-        return VariantValue.CreateFromObject(token);
+        return VariantValue.CreateFromObject(new IssueCommentsRowsInput(token));
     }
 
     public IssueCommentsRowsInput(string token) : base(token)
