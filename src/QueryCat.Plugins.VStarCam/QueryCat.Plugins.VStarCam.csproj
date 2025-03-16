@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.4.4</PackageVersion>
+    <PackageVersion>0.4.6</PackageVersion>
     <Title>VStarCam Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
-    <PackageTags>vstarcam querycat</PackageTags>
+    <PackageTags>vstarcam querycat ir</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
     <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>

@@ -14,19 +14,29 @@ internal static class SetIr
 
     [Description("Set camera IR on/off.")]
     [FunctionSignature("vstar_set_ir(login: string, password: string, camera_id: string, ir: boolean): void")]
-    public static VariantValue VStarSetIrFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> VStarSetIrFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var login = thread.Stack[0].AsString;
         var password = thread.Stack[1].AsString;
         var id = thread.Stack[2].AsString;
         var irState = thread.Stack[3].AsBoolean;
 
+        return await VStarSetIrFunctionInternal(login, password, id, irState, cancellationToken);
+    }
+
+    public static async ValueTask<VariantValue> VStarSetIrFunctionInternal(
+        string login,
+        string password,
+        string cameraId,
+        bool irState,
+        CancellationToken cancellationToken)
+    {
         using var camerasFinder = new CamerasFinder();
-        var cameras = camerasFinder.FindAsync(CancellationToken.None).GetAwaiter().GetResult();
-        var camera = cameras.FirstOrDefault(c => c.Id == id);
+        var cameras = await camerasFinder.FindAsync(cancellationToken);
+        var camera = cameras.FirstOrDefault(c => c.Id == cameraId);
         if (camera == null)
         {
-            _logger.LogError("Cannot find camera with id {Id}.", id);
+            _logger.LogError("Cannot find camera with id {Id}.", cameraId);
             return VariantValue.Null;
         }
 
@@ -34,7 +44,7 @@ internal static class SetIr
         credentials[camera.Ip] = new CameraCredentials(login, password);
         new CamerasCredentialsUpdater(silent: true).SetCredentialsByIp(camera, credentials);
 
-        camera.SetIrAsync(irState, CancellationToken.None).GetAwaiter().GetResult();
+        await camera.SetIrAsync(irState, cancellationToken);
         return VariantValue.Null;
     }
 }

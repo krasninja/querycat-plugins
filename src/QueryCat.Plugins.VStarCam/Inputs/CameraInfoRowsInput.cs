@@ -1,15 +1,18 @@
 using System.ComponentModel;
+using QueryCat.Backend.Core;
+using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.VStarCam.Domain;
+using QueryCat.Plugins.VStarCam.Functions;
 
 namespace QueryCat.Plugins.VStarCam.Inputs;
 
 internal record CameraInfo(Camera Camera, CameraParameters CameraParameters);
 
-internal sealed class CameraInfoRowsInput : AsyncEnumerableRowsInput<CameraInfo>
+internal sealed class CameraInfoRowsInput : AsyncEnumerableRowsInput<CameraInfo>, IRowsInputUpdate
 {
     [SafeFunction]
     [Description("VStar camera information.")]
@@ -59,7 +62,7 @@ internal sealed class CameraInfoRowsInput : AsyncEnumerableRowsInput<CameraInfo>
     {
         return fetch.FetchAllAsync(async ct =>
         {
-            var finder = new CamerasFinder();
+            using var finder = new CamerasFinder();
             var cameras = await finder.FindAsync(ct);
             var id = GetKeyColumnValue("id").AsString;
             var camera = cameras.FirstOrDefault(c => c.Id == id);
@@ -78,5 +81,23 @@ internal sealed class CameraInfoRowsInput : AsyncEnumerableRowsInput<CameraInfo>
                 new CameraInfo(camera, @params)
             ];
         }, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<ErrorCode> UpdateValueAsync(int columnIndex, VariantValue value,
+        CancellationToken cancellationToken = default)
+    {
+        if (Columns[columnIndex].Name.Equals(nameof(CameraParameters.Ir), StringComparison.OrdinalIgnoreCase)
+            && ReadValue(0, out var id) == ErrorCode.OK)
+        {
+            await SetIr.VStarSetIrFunctionInternal(
+                _username,
+                _password,
+                id.AsString,
+                value.AsBoolean,
+                cancellationToken);
+        }
+
+        return ErrorCode.NotSupported;
     }
 }
