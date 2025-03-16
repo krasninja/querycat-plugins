@@ -10,10 +10,10 @@ internal static class SetToken
     [SafeFunction]
     [Description("Set AWS token authentication method.")]
     [FunctionSignature("aws_set_token(access_key: string, secret_key: string): void")]
-    public static VariantValue AwsSetTokenAuthFunction(IExecutionThread thread)
+    public static async ValueTask<VariantValue> AwsSetTokenAuthFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        thread.ConfigStorage.Set(General.AwsAccessKey, thread.Stack[0]);
-        thread.ConfigStorage.Set(General.AwsSecretKey, thread.Stack[1]);
+        await thread.ConfigStorage.SetAsync(General.AwsAccessKey, thread.Stack[0], cancellationToken);
+        await thread.ConfigStorage.SetAsync(General.AwsSecretKey, thread.Stack[1], cancellationToken);
         return VariantValue.Null;
     }
 }

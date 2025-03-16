@@ -14,15 +14,15 @@ internal static class General
     public const string AwsSecretKey = "aws-secret-key";
     public const string AwsCredentials = "aws-credentials";
 
-    internal static BasicAWSCredentials GetConfiguration(IInputConfigStorage configStorage)
+    internal static async Task<BasicAWSCredentials> GetConfigurationAsync(IInputConfigStorage configStorage, CancellationToken cancellationToken)
     {
-        if (configStorage.Has(AwsCredentials))
+        if (await configStorage.HasAsync(AwsCredentials, cancellationToken))
         {
-            return configStorage.Get(AwsCredentials).AsRequired<BasicAWSCredentials>();
+            return (await configStorage.GetAsync(AwsCredentials, cancellationToken)).AsRequired<BasicAWSCredentials>();
         }
 
-        var accessKey = configStorage.GetOrDefault(AwsAccessKey);
-        var secretKey = configStorage.GetOrDefault(AwsSecretKey);
+        var accessKey = await configStorage.GetOrDefaultAsync(AwsAccessKey, cancellationToken: cancellationToken);
+        var secretKey = await configStorage.GetOrDefaultAsync(AwsSecretKey, cancellationToken: cancellationToken);
         if (string.IsNullOrEmpty(accessKey) || string.IsNullOrEmpty(secretKey))
         {
             throw new QueryCatException("Access key or secret key are not set.");
@@ -30,7 +30,7 @@ internal static class General
 
         var credentials = new BasicAWSCredentials(accessKey, secretKey);
 
-        configStorage.Set(AwsCredentials, VariantValue.CreateFromObject(credentials));
+        await configStorage.SetAsync(AwsCredentials, VariantValue.CreateFromObject(credentials), cancellationToken);
         return credentials;
     }
 }

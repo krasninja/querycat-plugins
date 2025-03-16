@@ -34,11 +34,11 @@ internal sealed class Ec2InstancesRowsInput : AsyncEnumerableRowsInput<Instance>
     }
 
     /// <inheritdoc />
-    public override Task OpenAsync(CancellationToken cancellationToken = default)
+    public override async Task OpenAsync(CancellationToken cancellationToken = default)
     {
-        var credentials = General.GetConfiguration(QueryContext.InputConfigStorage);
+        var credentials = await General.GetConfigurationAsync(QueryContext.InputConfigStorage, cancellationToken);
         _client = new AmazonEC2Client(credentials);
-        return base.OpenAsync(cancellationToken);
+        await base.OpenAsync(cancellationToken);
     }
 
     /// <inheritdoc />
