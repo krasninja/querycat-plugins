@@ -129,20 +129,23 @@ internal abstract class TableRowsOutput : IRowsOutput, IDisposable
             if (!_skipUpdateIfExists)
             {
                 await _provider.UpdateDatabaseRowAsync([modification], cancellationToken);
-                _logger.LogTrace("Updated record with keys '{Keys}'.", string.Join(',', keys));
+                _logger.LogDebug("Updated record with keys '{Keys}' in table '{TableName}'.",
+                    string.Join(',', keys), TableName);
             }
             else
             {
-                _logger.LogTrace("Skip record update.");
+                _logger.LogDebug("Skip record update with keys '{Keys}' in table '{TableName}'.",
+                    string.Join(',', keys), TableName);
             }
         }
         else
         {
             if (_logger.IsEnabled(LogLevel.Trace))
             {
-                _logger.LogTrace("Inserted record with id {Id} and keys '{Keys}'.",
+                _logger.LogDebug("Inserted record with ids '{Id}' and keys '{Keys}' in table '{TableName}'.",
                     string.Join(',', ids),
-                    string.Join(',', keys));
+                    string.Join(',', keys),
+                    TableName);
             }
         }
 
