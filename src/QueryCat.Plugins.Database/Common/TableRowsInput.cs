@@ -43,8 +43,8 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
             return ErrorCode.Closed;
         }
         var id = _reader.GetInt64(0);
-        await _provider.DeleteDatabaseRowAsync(id, cancellationToken);
-        return ErrorCode.OK;
+        var removedCount = await _provider.DeleteDatabaseRowAsync(id, cancellationToken);
+        return removedCount > 0 ? ErrorCode.OK : ErrorCode.NoData;
     }
 
     /// <inheritdoc />
@@ -58,6 +58,8 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
 
         await _provider.OpenAsync(cancellationToken);
         await InitializeColumnsAsync(cancellationToken);
+
+        _logger.LogDebug("Opened.");
     }
 
     private async Task InitializeColumnsAsync(CancellationToken cancellationToken = default)
@@ -69,6 +71,14 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
         if (requestedColumns.Length > 0)
         {
             var targetColumns = new List<Column>(capacity: requestedColumns.Length);
+
+            // Always include "_id" column.
+            var idColumn = tableColumns.FirstOrDefault(c => c.Name == TableRowsProvider.IdentityColumnName);
+            if (idColumn != null)
+            {
+                targetColumns.Add(idColumn);
+            }
+
             foreach (var requestedColumn in requestedColumns)
             {
                 var tableColumn = Array.Find(tableColumns, c => c.Name == requestedColumn.Name);
@@ -76,7 +86,10 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
                 {
                     continue;
                 }
-                targetColumns.Add(tableColumn);
+                if (targetColumns.All(c => c.Name != requestedColumn.Name))
+                {
+                    targetColumns.Add(tableColumn);
+                }
             }
             Columns = targetColumns.ToArray();
         }
@@ -95,6 +108,8 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
             await _reader.CloseAsync();
         }
         _reader = null;
+
+        _logger.LogDebug("Closed.");
     }
 
     /// <inheritdoc />
@@ -126,6 +141,7 @@ internal abstract class TableRowsInput : IRowsInputDelete, IRowsInputKeys, IDisp
     {
         if (_reader == null)
         {
+            _logger.LogDebug("Initialize reader.");
             _reader = await _provider.CreateDatabaseSelectReaderAsync(
                 Columns,
                 _keys.Select(k => k.Value with { Column = k.Key.Item1 }).ToArray(),

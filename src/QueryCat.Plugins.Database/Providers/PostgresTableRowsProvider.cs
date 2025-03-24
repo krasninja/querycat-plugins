@@ -53,7 +53,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
     }
 
     /// <inheritdoc />
-    public override async ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
+    public override async ValueTask<int> DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
         await using var dataSource = NpgsqlDataSource.Create(_connectionString);
         await using var deleteCommand = CreateCommand(dataSource);
@@ -62,7 +62,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
 #pragma warning disable CA2100
         deleteCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
-        await deleteCommand.ExecuteNonQueryAsync(cancellationToken);
+        return await deleteCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />

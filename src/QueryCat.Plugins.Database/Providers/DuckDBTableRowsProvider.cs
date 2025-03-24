@@ -66,7 +66,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
     }
 
     /// <inheritdoc />
-    public override async ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
+    public override async ValueTask<int> DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
         await using var connection = new DuckDBConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
@@ -76,7 +76,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
 #pragma warning disable CA2100
         deleteCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
-        await deleteCommand.ExecuteNonQueryAsync(cancellationToken);
+        return await deleteCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
     /// <inheritdoc />

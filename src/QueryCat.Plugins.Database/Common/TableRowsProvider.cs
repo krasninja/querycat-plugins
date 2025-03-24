@@ -62,8 +62,8 @@ internal abstract class TableRowsProvider
     /// </summary>
     /// <param name="id">Identifier of the current record.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Awaitable task.</returns>
-    public abstract ValueTask DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default);
+    /// <returns>Number of affected records.</returns>
+    public abstract ValueTask<int> DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Create database table.
