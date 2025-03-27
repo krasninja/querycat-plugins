@@ -80,6 +80,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Subtitles", "Subtitles", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Subtitles", "src\QueryCat.Plugins.Subtitles\QueryCat.Plugins.Subtitles.csproj", "{A47B59F7-FF86-4786-9C38-C003C61DB786}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsEventLog", "WindowsEventLog", "{A544FB0A-FB0A-4983-9C99-1AEB0002849A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.WindowsEventLog", "src\QueryCat.Plugins.WindowsEventLog\QueryCat.Plugins.WindowsEventLog.csproj", "{D9A26079-6C9D-4EE8-9A09-EA7C22B36A53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -186,6 +190,10 @@ Global
 		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A47B59F7-FF86-4786-9C38-C003C61DB786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9A26079-6C9D-4EE8-9A09-EA7C22B36A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9A26079-6C9D-4EE8-9A09-EA7C22B36A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9A26079-6C9D-4EE8-9A09-EA7C22B36A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9A26079-6C9D-4EE8-9A09-EA7C22B36A53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{266010EB-9852-4B90-A772-2AA3103DAF5D} = {D417A513-C687-4D9B-A971-00B3B252C1FA}
@@ -212,5 +220,6 @@ Global
 		{4DFC23E1-7D1B-4EBB-B4D8-EACF07984CA1} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 		{9AA2F7B7-BF74-4ED0-ABFE-5D1D48327964} = {801319CE-ACEC-47C4-8397-3C64EADB579C}
 		{A47B59F7-FF86-4786-9C38-C003C61DB786} = {F5E1F3D4-1631-4782-B176-91986D8CD74C}
+		{D9A26079-6C9D-4EE8-9A09-EA7C22B36A53} = {A544FB0A-FB0A-4983-9C99-1AEB0002849A}
 	EndGlobalSection
 EndGlobal

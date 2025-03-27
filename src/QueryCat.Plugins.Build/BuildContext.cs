@@ -12,8 +12,8 @@ public sealed class BuildContext : FrostingContext
 {
     public ConvertableDirectoryPath OutputDirectory => this.Directory("../../output");
 
-    public IEnumerable<string> Projects { get; } = new[]
-    {
+    public IEnumerable<string> Projects { get; } =
+    [
         "QueryCat.Plugins.Aws",
         "QueryCat.Plugins.Clipboard",
         "QueryCat.Plugins.Database",
@@ -27,7 +27,8 @@ public sealed class BuildContext : FrostingContext
         "QueryCat.Plugins.Subtitles",
         "QueryCat.Plugins.System",
         "QueryCat.Plugins.VStarCam",
-    };
+        "QueryCat.Plugins.WindowsEventLog"
+    ];
 
     public BuildContext(ICakeContext context) : base(context)
     {
