@@ -28,6 +28,11 @@
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>
