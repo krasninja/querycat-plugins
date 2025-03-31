@@ -48,6 +48,7 @@ internal sealed class EventLogRowsInput : EnumerableRowsInput<EventRecord>
             .AddProperty("related_activity_id", p => p.RelatedActivityId, "The globally unique identifier (GUID) for a related activity in a process for which an event is involved.")
             .AddProperty("log_name", p => p.LogName, "Name of the event log where this event is logged.")
             .AddProperty("user_id", p => p.UserId, "The security descriptor of the user whose context is used to publish the event.")
+            .AddProperty("message", p => p.FormatDescription(), "Event message in the current locale.")
             .AddProperty("path", _ => _path, "The provided query path.");
     }
 
