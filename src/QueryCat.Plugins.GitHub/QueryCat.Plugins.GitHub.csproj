@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>QueryCat.Plugins.Github</RootNamespace>
-    <PackageVersion>0.5.8</PackageVersion>
+    <PackageVersion>0.5.9</PackageVersion>
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>

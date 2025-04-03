@@ -12,7 +12,7 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// GitHub pull request commits input.
 /// </summary>
 /// <remarks>
-/// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-commits-on-a-pull-request.
+/// https://docs.github.com/en/rest/pulls/pulls#list-commits-on-a-pull-request.
 /// </remarks>
 internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCommit>
 {
@@ -42,8 +42,11 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
             .AddProperty("sha", p => p.Sha, "Commit SHA.")
             .AddProperty("url", p => p.HtmlUrl, "Commit URL.")
             .AddProperty("committer_login", p => p.Committer.Login, "Committer login.")
+            .AddProperty("committer_email", p => p.Committer.Email, "Committer email.")
             .AddProperty("author_login", p => p.Author.Login, "Author login.")
             .AddProperty("author_email", p => p.Author.Email, "Author email.")
+            .AddProperty("author_date", p => p.Commit.Author.Date, "Author contribution date.")
+            .AddProperty("committer_date", p => p.Commit.Committer.Date, "Committer contribution date.")
             .AddKeyColumn("repository_full_name", isRequired: true)
             .AddKeyColumn("pull_number", isRequired: true);
     }

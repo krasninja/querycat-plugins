@@ -23,6 +23,7 @@ public static class Registration
         functionsManager.RegisterFunction(IssueTimelineRowsInput.IssueTimelineFunction);
         functionsManager.RegisterFunction(PullRequestCommentsRowsInput.PullRequestCommentsFunction);
         functionsManager.RegisterFunction(PullRequestCommitsRowsInput.PullRequestCommitsFunction);
+        functionsManager.RegisterFunction(PullRequestFilesRowsInput.PullRequestFilesFunction);
         functionsManager.RegisterFunction(PullRequestRequestedReviewsRowsInput.PullRequestedReviewsFunction);
         functionsManager.RegisterFunction(PullRequestReviewsRowsInput.PullReviewsFunction);
         functionsManager.RegisterFunction(PullRequestsRowsInput.GitHubPullsFunction);
