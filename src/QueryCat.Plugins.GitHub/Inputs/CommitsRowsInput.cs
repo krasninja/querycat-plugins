@@ -40,10 +40,10 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
             .AddProperty("author_name", p => p.Commit.Author.Name, "The login name of the author of the commit.")
             .AddProperty("author_login", p => p.Commit.Author.Email, "The email name of the author of the commit.")
             .AddProperty("author_date", p => p.Commit.Author.Date, "Timestamp when the author made this commit.")
-            .AddProperty("committer_login", p => p.Committer.Login, "The login name of committer of the commit.")
+            .AddProperty("committer_login", p => p.Committer?.Login, "The login name of committer of the commit.")
             .AddProperty("verified", p => p.Commit.Verification.Verified, "True if the commit was verified with a signature.")
             .AddProperty("message", p => p.Commit.Message, "Commit message.")
-                .AddKeyColumn("repository_full_name", isRequired: true)
+            .AddKeyColumn("repository_full_name", isRequired: true)
             .AddKeyColumn("sha", operation: VariantValue.Operation.GreaterOrEquals, VariantValue.Operation.Greater)
             .AddKeyColumn("author_date",
                 operation: VariantValue.Operation.Greater,
