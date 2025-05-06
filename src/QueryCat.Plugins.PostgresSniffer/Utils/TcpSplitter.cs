@@ -22,7 +22,7 @@ public class TcpSplitter : IDisposable
 
     public sealed class SessionBuffer
     {
-        private readonly object _objLock = new();
+        private readonly Lock _objLock = new();
         private readonly DynamicBuffer<byte> _buffer = new();
 
         public Session Session { get; }
@@ -114,7 +114,7 @@ public class TcpSplitter : IDisposable
         }
 
         /// <summary>
-        /// Get the first index of any of specified delimiters.
+        /// Get the first index any of specified delimiters.
         /// </summary>
         /// <param name="delimiters">The delimiters to look for.</param>
         /// <param name="foundDelimiter">Found delimiter.</param>

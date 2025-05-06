@@ -64,7 +64,7 @@ internal class FluidTemplateRowsOutput : IRowsOutput
             var stringWriter = new StringWriter(sb);
             foreach (var statement in statements)
             {
-                statement.WriteToAsync(stringWriter, encoder, context).GetAwaiter().GetResult();
+                await statement.WriteToAsync(stringWriter, encoder, context);
             }
             var result = await executionThread.RunAsync(sb.ToString());
             var iterator = RowsIteratorConverter.Convert(result);

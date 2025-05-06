@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.5.3</PackageVersion>
+    <PackageVersion>0.5.4</PackageVersion>
     <Title>Fluid Templates</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Fluid is an open-source .NET template engine based on the Liquid template language. It's a secure template language that is also very accessible for non-programmer audiences.
@@ -16,8 +16,8 @@ Website: https://github.com/sebastienros/fluid</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.21.0" />
-    <PackageReference Include="QueryCat" Version="0.12.0" />
+    <PackageReference Include="Fluid.Core" Version="2.24.0" />
+    <PackageReference Include="QueryCat" Version="0.13.0" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
