@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <PackageVersion>0.1.4</PackageVersion>
+    <PackageVersion>0.2.0</PackageVersion>
     <Title>Database Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Database plugin.</Description>
@@ -18,6 +18,7 @@
   <ItemGroup>
     <PackageReference Include="DuckDB.NET.Data.Full" Version="1.2.1" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.5" />
     <PackageReference Include="QueryCat" Version="0.13.0" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
@@ -47,6 +48,35 @@
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/DuckDB.NET.Data.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <!-- SQLite -->
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Data.Sqlite.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/SQLitePCLRaw.batteries_v2.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/SQLitePCLRaw.core.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/SQLitePCLRaw.provider.e_sqlite3.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>

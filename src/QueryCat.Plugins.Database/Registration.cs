@@ -18,5 +18,7 @@ public static class Registration
         functionsManager.RegisterFunction(DuckDBRowsOutput.DuckDBTableOutFunction);
         functionsManager.RegisterFunction(PostgresRowsInput.PostgresTableFunction);
         functionsManager.RegisterFunction(PostgresRowsOutput.PostgresTableOutFunction);
+        functionsManager.RegisterFunction(SqliteRowsInput.SqliteTableFunction);
+        functionsManager.RegisterFunction(SqliteRowsOutput.SqliteTableOutFunction);
     }
 }
