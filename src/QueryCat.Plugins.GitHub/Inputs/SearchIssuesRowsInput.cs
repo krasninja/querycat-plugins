@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Microsoft.Extensions.Logging;
 using Octokit;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
@@ -19,6 +20,8 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
 {
     private const string TermKey = "term";
     private const string DefaultQuery = "is:open archived:false assignee:@me";
+
+    private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(typeof(SearchIssuesRowsInput));
 
     [SafeFunction]
     [Description("Search GitHub issues and pull requests.")]
@@ -107,6 +110,8 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
                 request.PerPage = limit;
                 request.Created ??= createdAtRange;
                 request.Closed ??= closedAtRange;
+                _logger.LogDebug("Get for Term = '{Term}', Page = {Page}, PerPage = {PerPage}.",
+                    request.Term, request.Page, request.PerPage);
                 var data = (await Client.Search.SearchIssues(request)).Items;
                 return data;
             }, cancellationToken);

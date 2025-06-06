@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Microsoft.Extensions.Logging;
 using Octokit;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
@@ -16,6 +17,8 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
 {
+    private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(typeof(PullRequestsRowsInput));
+
     [SafeFunction]
     [Description("Return GitHub pull requests of specific repository.")]
     [FunctionSignature("github_pulls(): object<IRowsInput>")]
@@ -74,7 +77,11 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
         if (!number.IsNull)
         {
             return fetcher.FetchOneAsync(
-                async ct => await Client.Repository.PullRequest.Get(owner, repository, number.ToInt32()), cancellationToken);
+                async ct =>
+                {
+                    _logger.LogDebug("Get for Repository = {Repository}, PullNumber = {Number}.", repository, number);
+                    return await Client.Repository.PullRequest.Get(owner, repository, number.ToInt32());
+                }, cancellationToken);
         }
         else
         {
@@ -88,7 +95,11 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
                 options.State = Enum.Parse<ItemStateFilter>(state);
             }
             return fetcher.FetchAllAsync(
-                async ct => await Client.PullRequest.GetAllForRepository(owner, repository, options), cancellationToken);
+                async ct =>
+                {
+                    _logger.LogDebug("Get for Repository = {Repository}", repository);
+                    return await Client.PullRequest.GetAllForRepository(owner, repository, options);
+                }, cancellationToken);
         }
     }
 }

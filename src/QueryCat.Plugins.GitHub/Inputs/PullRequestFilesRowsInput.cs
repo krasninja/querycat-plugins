@@ -19,7 +19,7 @@ internal sealed class PullRequestFilesRowsInput : BaseRowsInput<PullRequestFile>
     [SafeFunction]
     [Description("Return GitHub files for the specific pull request.")]
     [FunctionSignature("github_pull_files(): object<IRowsInput>")]
-    public static async ValueTask<VariantValue> PullRequestFilesFunction(IExecutionThread thread, CancellationToken cancellationToken)
+    public static async ValueTask<VariantValue> GitHubPullRequestFilesFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new PullRequestFilesRowsInput(token));

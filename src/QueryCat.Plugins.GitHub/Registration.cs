@@ -19,14 +19,15 @@ public static class Registration
         functionsManager.RegisterFunction(BranchesRowsInput.GitHubBranchesFunction);
         functionsManager.RegisterFunction(CommitsRefRowsInput.GitHubCommitsRefFunction);
         functionsManager.RegisterFunction(CommitsRowsInput.GitHubCommitsFunction);
-        functionsManager.RegisterFunction(IssueCommentsRowsInput.IssueCommentsFunction);
-        functionsManager.RegisterFunction(IssueTimelineRowsInput.IssueTimelineFunction);
-        functionsManager.RegisterFunction(PullRequestCommentsRowsInput.PullRequestCommentsFunction);
-        functionsManager.RegisterFunction(PullRequestCommitsRowsInput.PullRequestCommitsFunction);
-        functionsManager.RegisterFunction(PullRequestFilesRowsInput.PullRequestFilesFunction);
-        functionsManager.RegisterFunction(PullRequestRequestedReviewsRowsInput.PullRequestedReviewsFunction);
-        functionsManager.RegisterFunction(PullRequestReviewsRowsInput.PullReviewsFunction);
+        functionsManager.RegisterFunction(IssueCommentsRowsInput.GitHubIssueCommentsFunction);
+        functionsManager.RegisterFunction(IssueTimelineRowsInput.GitHubIssueTimelineFunction);
+        functionsManager.RegisterFunction(PullRequestCommentsRowsInput.GitHubPullRequestCommentsFunction);
+        functionsManager.RegisterFunction(PullRequestCommitsRowsInput.GitHubPullRequestCommitsFunction);
+        functionsManager.RegisterFunction(PullRequestFilesRowsInput.GitHubPullRequestFilesFunction);
+        functionsManager.RegisterFunction(PullRequestRequestedReviewsRowsInput.GitHubPullRequestedReviewsFunction);
+        functionsManager.RegisterFunction(PullRequestReviewsRowsInput.GitHubPullReviewsFunction);
         functionsManager.RegisterFunction(PullRequestsRowsInput.GitHubPullsFunction);
+        functionsManager.RegisterFunction(RateLimitsRowsInput.GitHubRateLimitsFunction);
         functionsManager.RegisterFunction(SearchIssuesRowsInput.GitHubSearchIssuesFunction);
     }
 }

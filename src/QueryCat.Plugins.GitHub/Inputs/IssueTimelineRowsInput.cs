@@ -19,7 +19,7 @@ internal sealed class IssueTimelineRowsInput : BaseRowsInput<TimelineEventInfo>
     [SafeFunction]
     [Description("Return GitHub timeline for the specific issue.")]
     [FunctionSignature("github_issue_timeline(): object<IRowsInput>")]
-    public static async ValueTask<VariantValue> IssueTimelineFunction(IExecutionThread thread, CancellationToken cancellationToken)
+    public static async ValueTask<VariantValue> GitHubIssueTimelineFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new IssueTimelineRowsInput(token));

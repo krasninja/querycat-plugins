@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Microsoft.Extensions.Logging;
 using Octokit;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
@@ -16,10 +17,12 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCommit>
 {
+    private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(typeof(PullRequestCommitsRowsInput));
+
     [SafeFunction]
     [Description("Return GitHub commits for the specific pull request.")]
     [FunctionSignature("github_pull_commits(): object<IRowsInput>")]
-    public static async ValueTask<VariantValue> PullRequestCommitsFunction(IExecutionThread thread, CancellationToken cancellationToken)
+    public static async ValueTask<VariantValue> GitHubPullRequestCommitsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new PullRequestCommitsRowsInput(token));
@@ -41,12 +44,12 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
             .AddProperty("is_verified", p => p.Commit.Verification.Verified, "Is verified.")
             .AddProperty("sha", p => p.Sha, "Commit SHA.")
             .AddProperty("url", p => p.HtmlUrl, "Commit URL.")
-            .AddProperty("committer_login", p => p.Committer.Login, "Committer login.")
-            .AddProperty("committer_email", p => p.Committer.Email, "Committer email.")
-            .AddProperty("author_login", p => p.Author.Login, "Author login.")
-            .AddProperty("author_email", p => p.Author.Email, "Author email.")
-            .AddProperty("author_date", p => p.Commit.Author.Date, "Author contribution date.")
-            .AddProperty("committer_date", p => p.Commit.Committer.Date, "Committer contribution date.")
+            .AddProperty("committer_login", p => p.Committer?.Login, "Committer login.")
+            .AddProperty("committer_email", p => p.Committer?.Email, "Committer email.")
+            .AddProperty("author_login", p => p.Author?.Login, "Author login.")
+            .AddProperty("author_email", p => p.Author?.Email, "Author email.")
+            .AddProperty("author_date", p => p.Commit.Author?.Date, "Author contribution date.")
+            .AddProperty("committer_date", p => p.Commit.Committer?.Date, "Committer contribution date.")
             .AddKeyColumn("repository_full_name", isRequired: true)
             .AddKeyColumn("pull_number", isRequired: true);
     }
@@ -56,8 +59,13 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
         CancellationToken cancellationToken = default)
     {
         var (owner, repository) = SplitFullRepositoryName(GetKeyColumnValue("repository_full_name"));
-        var pullNumber = GetKeyColumnValue("pull_number").ToInt32();
+        var number = GetKeyColumnValue("pull_number").ToInt32();
         return fetcher.FetchAllAsync(
-            async ct => await Client.PullRequest.Commits(owner, repository, pullNumber), cancellationToken);
+            async ct =>
+            {
+                _logger.LogDebug("Get for Repository = {Repository}, PullNumber = {Number}.", repository, number);
+                var result = await Client.PullRequest.Commits(owner, repository, number);
+                return result;
+            }, cancellationToken);
     }
 }

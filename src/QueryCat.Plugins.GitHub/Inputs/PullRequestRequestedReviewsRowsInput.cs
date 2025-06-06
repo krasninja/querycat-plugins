@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Microsoft.Extensions.Logging;
 using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
@@ -15,6 +16,8 @@ namespace QueryCat.Plugins.Github.Inputs;
 /// </remarks>
 internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullRequestRequestedReviewsRowsInput.ReviewRequest>
 {
+    private readonly ILogger _logger = QueryCat.Backend.Core.Application.LoggerFactory.CreateLogger(typeof(PullRequestRequestedReviewsRowsInput));
+
     internal sealed class ReviewRequest
     {
         public required string Type { get; init; }
@@ -33,7 +36,7 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
     [SafeFunction]
     [Description("Return GitHub review requests for the specific pull request.")]
     [FunctionSignature("github_pull_reviews_requests(): object<IRowsInput>")]
-    public static async ValueTask<VariantValue> PullRequestedReviewsFunction(IExecutionThread thread, CancellationToken cancellationToken)
+    public static async ValueTask<VariantValue> GitHubPullRequestedReviewsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
         var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
         return VariantValue.CreateFromObject(new PullRequestRequestedReviewsRowsInput(token));
@@ -69,6 +72,7 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
         var number = GetKeyColumnValue("pull_number").ToInt32();
         return fetcher.FetchAllAsync(async ct =>
         {
+            _logger.LogDebug("Get for Repository = {Repository}, PullNumber = {Number}.", repository, number);
             var result = await Client.Repository.PullRequest.ReviewRequest.Get(owner, repository, number);
             return Array.Empty<ReviewRequest>()
                 .Union(result.Teams.Select(t => new ReviewRequest
