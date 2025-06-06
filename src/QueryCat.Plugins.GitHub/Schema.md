@@ -7,9 +7,11 @@
 - [github_issue_timeline](#github_issue_timeline)
 - [github_pull_comments](#github_pull_comments)
 - [github_pull_commits](#github_pull_commits)
+- [github_pull_files](#github_pull_files)
 - [github_pull_reviews](#github_pull_reviews)
 - [github_pull_reviews_requests](#github_pull_reviews_requests)
 - [github_pulls](#github_pulls)
+- [github_rate_limits](#github_rate_limits)
 - [github_search_issues](#github_search_issues)
 
 ## **github_branches**
@@ -155,8 +157,35 @@ Return GitHub commits for the specific pull request.
 | `sha`| `String` |  |  | Commit SHA. |
 | `url`| `String` |  |  | Commit URL. |
 | `committer_login`| `String` |  |  | Committer login. |
+| `committer_email`| `String` |  |  | Committer email. |
 | `author_login`| `String` |  |  | Author login. |
 | `author_email`| `String` |  |  | Author email. |
+| `author_date`| `Timestamp` |  |  | Author contribution date. |
+| `committer_date`| `Timestamp` |  |  | Committer contribution date. |
+
+## **github_pull_files**
+
+```
+github_pull_files(): Object<IRowsInput>
+```
+
+Return GitHub files for the specific pull request.
+
+| Name | Type | Key | Required | Description |
+| --- | --- | --- | --- | --- |
+| `pull_number`| `Integer` | yes | yes | Pull request number. |
+| `repository_full_name`| `String` | yes | yes | The full name of the repository. |
+| `file_name`| `String` |  |  | File name. |
+| `status`| `String` |  |  | Status, one of: added, removed, modified, renamed, copied, changed, unchanged. |
+| `additions`| `Integer` |  |  | Number of additions. |
+| `deletions`| `Integer` |  |  | Number of deletions. |
+| `changes`| `Integer` |  |  | Number of changes. |
+| `patch`| `String` |  |  | File patch. |
+| `blob_url`| `String` |  |  | BLOB URL. |
+| `contents_url`| `String` |  |  | Contents URL. |
+| `raw_url`| `String` |  |  | Raw URL. |
+| `sha`| `String` |  |  | File SHA. |
+| `previous_file_name`| `String` |  |  | Previous file name. |
 
 ## **github_pull_reviews**
 
@@ -232,6 +261,21 @@ Return GitHub pull requests of specific repository.
 | `mergeable_state`| `String` |  |  | The mergeability state of the PR. |
 | `merged`| `Boolean` |  |  | If true, the PR has been merged. |
 | `merged_at`| `Timestamp` |  |  | The timestamp when the PR was merged. |
+
+## **github_rate_limits**
+
+```
+github_rate_limits(): Object<IRowsInput>
+```
+
+Return GitHub current account rate limit information.
+
+| Name | Type | Key | Required | Description |
+| --- | --- | --- | --- | --- |
+| `limit`| `Integer` |  |  | The maximum number of requests that the consumer is permitted to make per hour. |
+| `remaining`| `Integer` |  |  | The number of requests remaining in the current rate limit window. |
+| `reset`| `Timestamp` |  |  | The date and time at which the current rate limit window resets. |
+| `reset_at_utc_epoch`| `Integer` |  |  | The date and time at which the current rate limit window resets - in UTC epoch seconds. |
 
 ## **github_search_issues**
 

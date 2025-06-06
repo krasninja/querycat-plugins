@@ -28,4 +28,5 @@ The source contains all Windows event logs.
 | `related_activity_id`| `Void` |  |  | The globally unique identifier (GUID) for a related activity in a process for which an event is involved. |
 | `log_name`| `String` |  |  | Name of the event log where this event is logged. |
 | `user_id`| `Object` |  |  | The security descriptor of the user whose context is used to publish the event. |
+| `message`| `String` |  |  | Event message in the current locale. |
 | `path`| `String` |  |  | The provided query path. |
