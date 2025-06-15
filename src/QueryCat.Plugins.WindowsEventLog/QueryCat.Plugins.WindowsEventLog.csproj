@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Nullable>enable</Nullable>
     <Title>Windows Event Log</Title>
     <Authors>Ivan Kozhin</Authors>
@@ -19,7 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.4" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>
