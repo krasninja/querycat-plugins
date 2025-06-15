@@ -14,7 +14,7 @@ internal static class General
     public const string AwsSecretKey = "aws-secret-key";
     public const string AwsCredentials = "aws-credentials";
 
-    internal static async Task<BasicAWSCredentials> GetConfigurationAsync(IInputConfigStorage configStorage, CancellationToken cancellationToken)
+    internal static async Task<BasicAWSCredentials> GetConfigurationAsync(IConfigStorage configStorage, CancellationToken cancellationToken)
     {
         if (await configStorage.HasAsync(AwsCredentials, cancellationToken))
         {

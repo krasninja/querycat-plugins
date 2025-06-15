@@ -57,7 +57,7 @@ internal sealed class IssuesRowsInput : AsyncEnumerableRowsInput<JsonNode>
     protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = await General.GetConfigurationAsync(QueryContext.InputConfigStorage, cancellationToken);
+        var config = await General.GetConfigurationAsync(QueryContext.ConfigStorage, cancellationToken);
         var request = new RestRequest("issue/{key}")
             .AddUrlSegment("key", GetKeyColumnValue("key").AsString)
             .AddQueryParameter("expand", "renderedFields");

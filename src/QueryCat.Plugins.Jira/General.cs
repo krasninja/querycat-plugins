@@ -16,7 +16,7 @@ internal static class General
     public const string JiraToken = "jira-token";
     public const string JiraConfig = "jira-config";
 
-    internal static async ValueTask<JiraConfiguration> GetConfigurationAsync(IInputConfigStorage configStorage, CancellationToken cancellationToken)
+    internal static async ValueTask<JiraConfiguration> GetConfigurationAsync(IConfigStorage configStorage, CancellationToken cancellationToken)
     {
         if (await configStorage.HasAsync(JiraConfig, cancellationToken))
         {

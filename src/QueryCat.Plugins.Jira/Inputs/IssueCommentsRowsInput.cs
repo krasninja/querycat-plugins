@@ -49,7 +49,7 @@ internal sealed class IssueCommentsRowsInput : AsyncEnumerableRowsInput<JsonNode
     protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = await General.GetConfigurationAsync(QueryContext.InputConfigStorage, cancellationToken);
+        var config = await General.GetConfigurationAsync(QueryContext.ConfigStorage, cancellationToken);
         fetcher.Limit = 100;
         var list = fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
         {

@@ -374,4 +374,17 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         }
         _tcpSplitter.Dispose();
     }
+
+    /// <inheritdoc />
+    public IReadOnlyList<KeyColumn> GetKeyColumns() => [];
+
+    /// <inheritdoc />
+    public void SetKeyColumnValue(int columnIndex, VariantValue value, VariantValue.Operation operation)
+    {
+    }
+
+    /// <inheritdoc />
+    public void UnsetKeyColumnValue(int columnIndex, VariantValue.Operation operation)
+    {
+    }
 }
