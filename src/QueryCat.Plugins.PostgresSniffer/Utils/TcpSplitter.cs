@@ -30,7 +30,7 @@ public class TcpSplitter : IDisposable
         /// <summary>
         /// Buffer size.
         /// </summary>
-        public int Size
+        public long Size
         {
             get
             {

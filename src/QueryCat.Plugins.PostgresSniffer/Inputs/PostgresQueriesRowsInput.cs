@@ -161,11 +161,13 @@ internal sealed class PostgresQueriesRowsInput : IRowsInput, IDisposable
         if (!match && device is LibPcapLiveDevice libPcapLiveDevice)
         {
             match = libPcapLiveDevice.Addresses.Any(a =>
+                a.Addr != null &&
                 a.Addr.ipAddress != null &&
                 string.Equals(a.Addr.ipAddress.ToString(), address, StringComparison.OrdinalIgnoreCase));
             if (!match)
             {
                 match = libPcapLiveDevice.Addresses.Any(a =>
+                    a.Addr != null &&
                     a.Addr.hardwareAddress != null &&
                     string.Equals(a.Addr.hardwareAddress.ToString(), address, StringComparison.OrdinalIgnoreCase));
             }
