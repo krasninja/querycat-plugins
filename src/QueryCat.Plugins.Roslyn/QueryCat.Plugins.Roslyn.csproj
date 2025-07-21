@@ -1,0 +1,153 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>QueryCat.Plugins.Roslyn</RootNamespace>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Title>C# Roslyn Code Plugin</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>roslyn csharp</PackageTags>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-roslyn-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <OptimizationPreference>Size</OptimizationPreference>
+    <PublishTrimmed>false</PublishTrimmed>
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.14.0" />
+    <PackageReference Include="QueryCat" Version="0.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Humanizer.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Framework.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Locator.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Tasks.Core.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Utilities.Core.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.CodeAnalysis.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.CodeAnalysis.CSharp.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.CodeAnalysis.CSharp.Workspaces.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.CodeAnalysis.Workspaces.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.NET.StringTools.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.CodeDom.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.AttributedModel.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.Convention.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.Hosting.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.Runtime.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.TypedParts.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Diagnostics.EventLog.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Formats.Nrbf.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Reflection.MetadataLoadContext.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Resources.Extensions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
+    </Content>
+  </ItemGroup>
+
+</Project>
