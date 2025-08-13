@@ -19,16 +19,19 @@ public sealed class BuildContext : FrostingContext
         "QueryCat.Plugins.Database",
         "QueryCat.Plugins.FileSystem",
         "QueryCat.Plugins.FluidTemplates",
+        "QueryCat.Plugins.GigaChat",
         "QueryCat.Plugins.GitHub",
         "QueryCat.Plugins.Jira",
         "QueryCat.Plugins.Network",
+        "QueryCat.Plugins.Ollama",
+        "QueryCat.Plugins.OpenAI",
         "QueryCat.Plugins.Numerology",
         "QueryCat.Plugins.PostgresSniffer",
         "QueryCat.Plugins.Roslyn",
         "QueryCat.Plugins.Subtitles",
         "QueryCat.Plugins.System",
         "QueryCat.Plugins.VStarCam",
-        "QueryCat.Plugins.WindowsEventLog"
+        "QueryCat.Plugins.WindowsEventLog",
     ];
 
     public BuildContext(ICakeContext context) : base(context)

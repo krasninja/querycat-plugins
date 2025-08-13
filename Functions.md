@@ -1,4 +1,0 @@
-# Functions
-
-| Name and Description |
-| --- |

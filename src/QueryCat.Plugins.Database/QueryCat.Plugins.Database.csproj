@@ -27,6 +27,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
+    </Content>
+  </ItemGroup>
+
   <!-- Postgres -->
   <ItemGroup>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Npgsql.dll">
@@ -38,11 +46,6 @@
 
   <!-- DuckDB -->
   <ItemGroup>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
-    </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/DuckDB.NET.Bindings.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
@@ -57,11 +60,6 @@
 
   <!-- SQLite -->
   <ItemGroup>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
-    </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Data.Sqlite.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
