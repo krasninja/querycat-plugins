@@ -93,15 +93,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.OpenAI", "src\QueryCat.Plugins.OpenAI\QueryCat.Plugins.OpenAI.csproj", "{8A044471-7825-4E30-9580-FFB7CDF92D07}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ollama", "Ollama", "{0ED49D67-7061-48BB-A09F-D39949F447E5}"
-	ProjectSection(SolutionItems) = preProject
-		CHANGELOG.md = CHANGELOG.md
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.Ollama", "src\QueryCat.Plugins.Ollama\QueryCat.Plugins.Ollama.csproj", "{D635BC8C-F53F-4135-998B-E078E884F6F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GigaChat", "GigaChat", "{80894ECD-2856-4E15-A3E3-872F5CF95A47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.GigaChat", "src\QueryCat.Plugins.GigaChat\QueryCat.Plugins.GigaChat.csproj", "{76AFF862-84D1-4BE3-8B21-E0ADBF386B50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeepSeek", "DeepSeek", "{408D439E-9845-4F01-A117-256A39BB540C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryCat.Plugins.DeepSeek", "src\QueryCat.Plugins.DeepSeek\QueryCat.Plugins.DeepSeek.csproj", "{DA39E681-4565-4A70-8724-1613F3FC0DBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,6 +230,10 @@ Global
 		{76AFF862-84D1-4BE3-8B21-E0ADBF386B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76AFF862-84D1-4BE3-8B21-E0ADBF386B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76AFF862-84D1-4BE3-8B21-E0ADBF386B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA39E681-4565-4A70-8724-1613F3FC0DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA39E681-4565-4A70-8724-1613F3FC0DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA39E681-4565-4A70-8724-1613F3FC0DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA39E681-4565-4A70-8724-1613F3FC0DBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{266010EB-9852-4B90-A772-2AA3103DAF5D} = {D417A513-C687-4D9B-A971-00B3B252C1FA}
@@ -260,5 +265,6 @@ Global
 		{8A044471-7825-4E30-9580-FFB7CDF92D07} = {096795EF-1632-4006-8541-492747C99440}
 		{D635BC8C-F53F-4135-998B-E078E884F6F6} = {0ED49D67-7061-48BB-A09F-D39949F447E5}
 		{76AFF862-84D1-4BE3-8B21-E0ADBF386B50} = {80894ECD-2856-4E15-A3E3-872F5CF95A47}
+		{DA39E681-4565-4A70-8724-1613F3FC0DBA} = {408D439E-9845-4F01-A117-256A39BB540C}
 	EndGlobalSection
 EndGlobal
