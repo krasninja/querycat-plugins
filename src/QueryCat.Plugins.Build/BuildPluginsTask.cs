@@ -55,6 +55,7 @@ public class BuildPluginsTask : AsyncFrostingTask<BuildContext>
                             pag.Append(new TextArgument("-p:PublishAot=true"));
                             pag.Append(new TextArgument("-p:OptimizationPreference=Size"));
                             pag.Append(new TextArgument("-p:StripSymbols=true"));
+                            pag.Append(new TextArgument("-p:OutputType=Exe"));
                         }
                         pag.Append(new TextArgument($"-p:Runtime={platform}"));
                         pag.Append(new TextArgument("-p:UseAssemblyName=true"));
