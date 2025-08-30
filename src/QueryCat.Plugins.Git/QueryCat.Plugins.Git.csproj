@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>QueryCat.Plugins.Git</RootNamespace>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Title>Git Plugin</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <PackageTags>git querycat</PackageTags>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-git-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <PublishSingleFile>True</PublishSingleFile>
+    <SelfContained Condition=" '$(UseAssemblyName)' == 'true' ">True</SelfContained>
+    <PublishTrimmed>False</PublishTrimmed>
+    <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
+    <PublishAot>False</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QueryCat" Version="0.15.0" />
+    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>=
+
+</Project>

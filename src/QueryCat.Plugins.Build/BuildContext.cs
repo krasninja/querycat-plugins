@@ -21,6 +21,7 @@ public sealed class BuildContext : FrostingContext
         "QueryCat.Plugins.FileSystem",
         "QueryCat.Plugins.FluidTemplates",
         "QueryCat.Plugins.GigaChat",
+        "QueryCat.Plugins.Git",
         "QueryCat.Plugins.GitHub",
         "QueryCat.Plugins.Jira",
         "QueryCat.Plugins.Network",
