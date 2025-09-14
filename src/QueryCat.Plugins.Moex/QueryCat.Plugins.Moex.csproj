@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Title>Moscow Exchange Plugin</Title>
+    <Authors>Ivan Kozhin</Authors>
+    <Description>Moscow Exchange plugin.</Description>
+    <RepositoryType>moex</RepositoryType>
+    <PackageTags>moex querycat</PackageTags>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-moex-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <PublishAot>True</PublishAot>
+    <StripSymbols>True</StripSymbols>
+    <PublishTrimmed>True</PublishTrimmed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QueryCat" Version="0.15.0" />
+    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

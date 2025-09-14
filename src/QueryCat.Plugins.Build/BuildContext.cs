@@ -24,6 +24,7 @@ public sealed class BuildContext : FrostingContext
         "QueryCat.Plugins.Git",
         "QueryCat.Plugins.GitHub",
         "QueryCat.Plugins.Jira",
+        "QueryCat.Plugins.Moex",
         "QueryCat.Plugins.Network",
         "QueryCat.Plugins.Ollama",
         "QueryCat.Plugins.OpenAI",
