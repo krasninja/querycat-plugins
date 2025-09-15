@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageVersion>0.1.0</PackageVersion>
-    <Title>Moscow Exchange Plugin</Title>
+    <Title>IMDbAPI Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
-    <Description>Moscow Exchange plugin.</Description>
+    <Description>IMDbAPI plugin.</Description>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>moex querycat</PackageTags>
+    <PackageTags>imdbapi querycat</PackageTags>
     <AssemblyVersion>0.1.0</AssemblyVersion>
-    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-moex-$(PackageVersion)-$(Runtime)</AssemblyName>
+    <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-imdbapi-$(PackageVersion)-$(Runtime)</AssemblyName>
     <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
