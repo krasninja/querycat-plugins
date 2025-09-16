@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.14.0" />
-    <PackageReference Include="QueryCat" Version="0.15.0" />
+    <PackageReference Include="QueryCat" Version="0.16.0" />
   </ItemGroup>
 
   <ItemGroup>

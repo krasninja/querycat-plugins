@@ -120,7 +120,6 @@ internal class FluidTemplateRowsOutput : IRowsOutput
         var templateText = await File.ReadAllTextAsync(_templateFile, cancellationToken);
         if (_parser.TryParse(templateText, out var template, out var error))
         {
-            _executionThread.Options.DefaultRowsOutput = NullRowsOutput.Instance;
             var context = new TemplateContext(template, _templateOptions);
             context.AmbientValues[QueryCatContextKey] = _queryContext;
             context.AmbientValues[QueryCatExecutionThreadKey] = _executionThread;
