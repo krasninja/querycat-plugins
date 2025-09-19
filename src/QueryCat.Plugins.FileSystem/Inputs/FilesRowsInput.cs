@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.FileSystemGlobbing;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
@@ -39,8 +38,6 @@ internal sealed class FilesRowsInput : AsyncEnumerableRowsInput<FilesRowsInput.F
         public UnixFileMode UnixFileMode { get; set; }
     }
 
-    private readonly Matcher _matcher = new();
-
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<FileDto> builder)
     {
@@ -55,14 +52,7 @@ internal sealed class FilesRowsInput : AsyncEnumerableRowsInput<FilesRowsInput.F
             .AddProperty(p => p.LastAccessTime, "Date and time at which the file has been last accessed (in UTC).")
             .AddProperty(p => p.Attributes, "File attributes.")
             .AddProperty(p => p.UnixFileMode, "UNIX file permissions.")
-            .AddKeyColumn("path", VariantValue.Operation.Like, isRequired: true);
-    }
-
-    private void AddInclude(string path)
-    {
-        path = path.Replace('%', '*');
-        path = path.Replace("?", string.Empty);
-        _matcher.AddInclude(path);
+            .AddKeyColumn("path", VariantValue.Operation.Like, VariantValue.Operation.Equals);
     }
 
     /// <inheritdoc />
@@ -70,8 +60,25 @@ internal sealed class FilesRowsInput : AsyncEnumerableRowsInput<FilesRowsInput.F
         Fetcher<FileDto> fetch,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        AddInclude(GetKeyColumnValue("path").AsString);
-        var files = _matcher.GetResultsInFullPath("/");
+        var path = OperatingSystem.IsWindows() ? @"C:\" : "/";
+        var recursive = false;
+        if (TryGetKeyColumnValue("path", VariantValue.Operation.Equals, out var likePathValue))
+        {
+            path = likePathValue.AsString;
+            var firstPatternChar = path.IndexOfAny(['%', '?']);
+            if (firstPatternChar > -1)
+            {
+                path = path.Substring(0, firstPatternChar);
+                recursive = true;
+            }
+        }
+        else if (TryGetKeyColumnValue("path", VariantValue.Operation.Like, out var pathValue))
+        {
+            path = pathValue.AsString;
+        }
+
+        var files = Directory.EnumerateFiles(path, string.Empty,
+            recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         foreach (var file in files)
         {
             var fi = new FileInfo(file);

@@ -16,6 +16,7 @@ public static class Registration
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
         functionsManager.RegisterFunction(GetDir.GetDirFunction);
+        functionsManager.RegisterFunction(DirectoriesRowsInput.DirectoriesFunction);
         functionsManager.RegisterFunction(FilesRowsInput.FilesFunction);
     }
 }
