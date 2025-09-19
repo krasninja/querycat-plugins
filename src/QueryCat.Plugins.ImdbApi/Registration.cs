@@ -14,6 +14,9 @@ public static class Registration
     /// <param name="functionsManager">Functions manager.</param>
     public static void RegisterFunctions(IFunctionsManager functionsManager)
     {
+        functionsManager.RegisterFunction(EpisodesRowsInput.ImdbEpisodesFunction);
+        functionsManager.RegisterFunction(InterestsRowsInput.ImdbInterestsFunction);
+        functionsManager.RegisterFunction(NamesRowsInput.ImdbNamesFunction);
         functionsManager.RegisterFunction(TitlesRowsInput.ImdbTitlesFunction);
     }
 }

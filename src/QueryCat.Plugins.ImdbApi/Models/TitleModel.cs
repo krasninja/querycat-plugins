@@ -41,6 +41,12 @@ public class TitleModel
     public int RuntimeSeconds { get; set; }
 
     /// <summary>
+    /// The genres field contains a list of genres associated with the title.
+    /// </summary>
+    [Description("The genres field contains a list of genres associated with the title.")]
+    public List<string> Genres { get; set; } = [];
+
+    /// <summary>
     /// The start_year field is used for titles that have a defined start, such as movies or TV series.
     /// </summary>
     [Description("The start_year field is used for titles that have a defined start, such as movies or TV series.")]
@@ -56,4 +62,10 @@ public class TitleModel
     /// The Rating message represents the aggregate rating and votes count for a title.
     /// </summary>
     public RatingModel Rating { get; set; } = new();
+
+    /// <summary>
+    /// The plot field contains a brief summary or description of the title's storyline.
+    /// </summary>
+    [Description("The plot field contains a brief summary or description of the title's storyline.")]
+    public string Plot { get; set; } = string.Empty;
 }

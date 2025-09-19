@@ -1,25 +1,32 @@
 using System.ComponentModel;
+using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using QueryCat.Backend.Core;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.ImdbApi.Models;
+using RestSharp;
 
 namespace QueryCat.Plugins.ImdbApi.Inputs;
 
-internal class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
+internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
 {
     [SafeFunction]
-    [Description("Imdb titles table.")]
+    [Description("IMDb titles table.")]
     [FunctionSignature("imdb_title(): object<IRowsIterator>")]
     public static VariantValue ImdbTitlesFunction(IExecutionThread thread)
     {
         return VariantValue.CreateFromObject(new TitlesRowsInput());
     }
 
+    private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(TitlesRowsInput));
+
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<TitleModel> builder)
     {
+        builder.NamingConvention = NamingConventionStyle.SnakeCase;
         builder
             .AddProperty(p => p.Id)
             .AddProperty(p => p.Type)
@@ -31,13 +38,92 @@ internal class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
             .AddProperty(p => p.EndYear)
             .AddProperty(p => p.Rating.AggregateRating)
             .AddProperty(p => p.Rating.VoteCount)
-            .AddKeyColumn("type");
+            .AddProperty(p => p.Plot)
+            .AddKeyColumn(p => p.PrimaryTitle)
+            .AddKeyColumn(p => p.Id)
+            .AddKeyColumn(p => p.Type)
+            .AddKeyColumn(p => p.StartYear)
+            .AddKeyColumn(p => p.EndYear)
+            .AddKeyColumn(p => p.Rating.VoteCount, VariantValue.Operation.GreaterOrEquals)
+            .AddKeyColumn(p => p.Rating.VoteCount, VariantValue.Operation.LessOrEquals)
+            .AddKeyColumn(p => p.Rating.AggregateRating, VariantValue.Operation.GreaterOrEquals)
+            .AddKeyColumn(p => p.Rating.AggregateRating, VariantValue.Operation.LessOrEquals);
     }
 
     /// <inheritdoc />
     protected override IAsyncEnumerable<TitleModel> GetDataAsync(Fetcher<TitleModel> fetcher, CancellationToken cancellationToken = default)
     {
-        var nextPageToken = string.Empty;
-        return null;
+        var currentPageToken = string.Empty;
+
+        return fetcher.FetchUntilHasMoreAsync(
+            async ct =>
+            {
+                var request = new RestRequest("titles")
+                    .AddParameter("pageToken", currentPageToken);
+
+                // Select by id case.
+                if (TryGetKeyColumnValue("id", VariantValue.Operation.Equals, out var idValue))
+                {
+                    request = new RestRequest($"titles/{idValue.AsString}");
+                    var idResponse = await ImdbConnection.Client.GetAsync<TitleModel>(request, ct);
+                    if (idResponse == null)
+                    {
+                        return ([], false);
+                    }
+                    return ([idResponse], false);
+                }
+
+                // Search
+                if (TryGetKeyColumnValue("primary_title", VariantValue.Operation.Equals, out var titleValue))
+                {
+                    request = new RestRequest("search/titles")
+                        .AddParameter("query", titleValue.AsString);
+                    var searchResponse = await ImdbConnection.Client.GetAsync(request, ct);
+                    var searchNode = JsonSerializer.Deserialize(searchResponse.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
+                    var searchResult = searchNode.GetProperty("titles").Deserialize(SourceGenerationContext.Default.IListTitleModel);
+                    return (searchResult ?? [], false);
+                }
+
+                if (TryGetKeyColumnValue("type", VariantValue.Operation.Equals, out var typeValue))
+                {
+                    request.AddParameter("type", typeValue.AsString);
+                }
+                if (TryGetKeyColumnValue("start_year", VariantValue.Operation.Equals, out var startYearValue))
+                {
+                    request.AddParameter("startYear", startYearValue.AsString);
+                }
+                if (TryGetKeyColumnValue("end_year", VariantValue.Operation.Equals, out var endYearValue))
+                {
+                    request.AddParameter("endYear", endYearValue.AsString);
+                }
+                if (TryGetKeyColumnValue("vote_count", VariantValue.Operation.GreaterOrEquals, out var voteGteValue))
+                {
+                    request.AddParameter("minVoteCount", voteGteValue.AsString);
+                }
+                if (TryGetKeyColumnValue("vote_count", VariantValue.Operation.LessOrEquals, out var voteLteValue))
+                {
+                    request.AddParameter("maxVoteCount", voteLteValue.AsString);
+                }
+                if (TryGetKeyColumnValue("aggregate_rating", VariantValue.Operation.GreaterOrEquals, out var ratingGteValue))
+                {
+                    request.AddParameter("minAggregateRating", ratingGteValue.AsString);
+                }
+                if (TryGetKeyColumnValue("aggregate_rating", VariantValue.Operation.LessOrEquals, out var ratingLteValue))
+                {
+                    request.AddParameter("maxAggregateRating", ratingLteValue.AsString);
+                }
+
+                var args = string.Join('&', request.Parameters.Select(p => p.ToString()));
+                _logger.LogDebug("Get titles, filter: {Filter}.", args);
+                var response = await ImdbConnection.Client.GetAsync(request, ct);
+                var node = JsonSerializer.Deserialize(response.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
+                if (!node.TryGetProperty("titles", out var titlesNode))
+                {
+                    return ([], false);
+                }
+                currentPageToken = node.GetProperty("nextPageToken").GetString();
+                var result = titlesNode.Deserialize(SourceGenerationContext.Default.IListTitleModel) ?? [];
+                return (result, result.Count > 0);
+            }, cancellationToken);
     }
 }

@@ -14,7 +14,7 @@ namespace QueryCat.Plugins.ImdbApi.Inputs;
 internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
 {
     [SafeFunction]
-    [Description("Imdb episodes table.")]
+    [Description("IMDb episodes table.")]
     [FunctionSignature("imdb_episode(): object<IRowsIterator>")]
     public static VariantValue ImdbEpisodesFunction(IExecutionThread thread)
     {
@@ -31,6 +31,7 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
         builder
             .AddProperty(p => p.Id)
             .AddProperty(p => p.Title)
+            .AddProperty(p => p.Season)
             .AddProperty("title_id", _ => _titleId, "The ID of the parent title (series) of the episode.")
             .AddProperty(p => p.EpisodeNumber)
             .AddProperty(p => p.RuntimeSeconds)
@@ -38,33 +39,36 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
             .AddProperty(p => p.Rating.AggregateRating)
             .AddProperty(p => p.Rating.VoteCount)
             .AddProperty(p => p.Plot)
-            .AddKeyColumn(p => p.Id, isRequired: true)
+            .AddKeyColumn("title_id", isRequired: true)
             .AddKeyColumn(p => p.Season);
     }
 
     /// <inheritdoc />
     protected override IAsyncEnumerable<EpisodeModel> GetDataAsync(Fetcher<EpisodeModel> fetcher, CancellationToken cancellationToken = default)
     {
-        var currentPageToken = string.Empty;
         _titleId = GetKeyColumnValue("title_id");
 
         return fetcher.FetchUntilHasMoreAsync(
             async ct =>
             {
-                var request = new RestRequest($"titles/{_titleId.AsString}/episodes")
-                    .AddParameter("pageToken", currentPageToken);
+                var request = new RestRequest("titles/{titleId}/episodes")
+                    .AddUrlSegment("titleId", _titleId.AsString);
 
-                if (TryGetKeyColumnValue("season", VariantValue.Operation.Equals, out var typeValue))
+                if (TryGetKeyColumnValue("season", VariantValue.Operation.Equals, out var typeValue)
+                    && !typeValue.IsNull)
                 {
                     request.AddParameter("season", typeValue.AsString);
                 }
 
                 var args = string.Join('&', request.Parameters.Select(p => p.ToString()));
-                _logger.LogDebug("Get title {TitleID} episodes, filter: {Filter}.", _titleId, args);
+                _logger.LogDebug("Get title {TitleId} episodes, filter: {Filter}.", _titleId, args);
                 var response = await ImdbConnection.Client.GetAsync(request, ct);
                 var node = JsonSerializer.Deserialize(response.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
-                currentPageToken = node.GetProperty("nextPageToken").GetString();
-                var result = node.GetProperty("episodes").Deserialize(SourceGenerationContext.Default.IListEpisodeModel);
+                if (!node.TryGetProperty("episodes", out var episodesNode))
+                {
+                    return ([], false);
+                }
+                var result = episodesNode.Deserialize(SourceGenerationContext.Default.IListEpisodeModel);
                 if (result == null || result.Count < 1)
                 {
                     return ([], false);

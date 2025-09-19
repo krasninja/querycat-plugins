@@ -1,4 +1,4 @@
-# Moscow Exchange Plugin for QueryCat
+# IMDb API Plugin for QueryCat
 
 - [Functions](Functions.md)
 - [Schema](Schema.md)

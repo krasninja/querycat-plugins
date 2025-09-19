@@ -19,6 +19,10 @@ public class EpisodeModel
     [Description("Title.")]
     public string Title { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Season number.
+    /// </summary>
+    [Description("Season number")]
     public string Season { get; set; } = string.Empty;
 
     /// <summary>
@@ -31,7 +35,7 @@ public class EpisodeModel
     /// The runtime_seconds field contains the total runtime of the episode in minutes.
     /// </summary>
     [Description("The runtime_seconds field contains the total runtime of the episode in minutes.")]
-    public int RuntimeSeconds { get; set; }
+    public int? RuntimeSeconds { get; set; }
 
     /// <summary>
     /// The plot field contains a brief summary or description of the episode's storyline.
