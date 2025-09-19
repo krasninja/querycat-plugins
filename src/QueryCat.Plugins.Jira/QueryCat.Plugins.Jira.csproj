@@ -21,4 +21,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/RestSharp.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+  </ItemGroup>
+
 </Project>
