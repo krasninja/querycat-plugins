@@ -7,6 +7,7 @@ using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.ImdbApi.Models;
+using QueryCat.Plugins.ImdbApi.Utils;
 using RestSharp;
 
 namespace QueryCat.Plugins.ImdbApi.Inputs;
@@ -39,7 +40,8 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
             .AddProperty(p => p.Rating.AggregateRating)
             .AddProperty(p => p.Rating.VoteCount)
             .AddProperty(p => p.Plot)
-            .AddKeyColumn(p => p.PrimaryTitle)
+            .AddKeyColumn(p => p.PrimaryTitle, VariantValue.Operation.Like)
+            .AddKeyColumn(p => p.PrimaryTitle, VariantValue.Operation.Equals)
             .AddKeyColumn(p => p.Id)
             .AddKeyColumn(p => p.Type)
             .AddKeyColumn(p => p.StartYear)
@@ -64,7 +66,9 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
                 // Select by id case.
                 if (TryGetKeyColumnValue("id", VariantValue.Operation.Equals, out var idValue))
                 {
-                    request = new RestRequest($"titles/{idValue.AsString}");
+                    request = new RestRequest("titles/{titleId}")
+                        .AddUrlSegment("titleId", idValue.AsString);
+                    _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                     var idResponse = await ImdbConnection.Client.GetAsync<TitleModel>(request, ct);
                     if (idResponse == null)
                     {
@@ -74,10 +78,14 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
                 }
 
                 // Search
-                if (TryGetKeyColumnValue("primary_title", VariantValue.Operation.Equals, out var titleValue))
+                if (TryGetKeyColumnValue("primary_title", VariantValue.Operation.Equals, out var titleValue)
+                    || TryGetKeyColumnValue("primary_title", VariantValue.Operation.Like, out titleValue))
                 {
+                    var titleToSearch = titleValue.AsString
+                        .Replace("%", string.Empty).Replace("?", string.Empty);
                     request = new RestRequest("search/titles")
-                        .AddParameter("query", titleValue.AsString);
+                        .AddParameter("query", titleToSearch);
+                    _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                     var searchResponse = await ImdbConnection.Client.GetAsync(request, ct);
                     var searchNode = JsonSerializer.Deserialize(searchResponse.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
                     var searchResult = searchNode.GetProperty("titles").Deserialize(SourceGenerationContext.Default.IListTitleModel);
@@ -113,8 +121,7 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
                     request.AddParameter("maxAggregateRating", ratingLteValue.AsString);
                 }
 
-                var args = string.Join('&', request.Parameters.Select(p => p.ToString()));
-                _logger.LogDebug("Get titles, filter: {Filter}.", args);
+                _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                 var response = await ImdbConnection.Client.GetAsync(request, ct);
                 var node = JsonSerializer.Deserialize(response.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
                 if (!node.TryGetProperty("titles", out var titlesNode))

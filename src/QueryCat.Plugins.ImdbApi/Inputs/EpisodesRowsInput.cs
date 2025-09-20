@@ -7,6 +7,7 @@ using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.ImdbApi.Models;
+using QueryCat.Plugins.ImdbApi.Utils;
 using RestSharp;
 
 namespace QueryCat.Plugins.ImdbApi.Inputs;
@@ -60,8 +61,7 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
                     request.AddParameter("season", typeValue.AsString);
                 }
 
-                var args = string.Join('&', request.Parameters.Select(p => p.ToString()));
-                _logger.LogDebug("Get title {TitleId} episodes, filter: {Filter}.", _titleId, args);
+                _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                 var response = await ImdbConnection.Client.GetAsync(request, ct);
                 var node = JsonSerializer.Deserialize(response.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
                 if (!node.TryGetProperty("episodes", out var episodesNode))

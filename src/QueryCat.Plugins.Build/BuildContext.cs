@@ -23,6 +23,7 @@ public sealed class BuildContext : FrostingContext
         "QueryCat.Plugins.GigaChat",
         "QueryCat.Plugins.Git",
         "QueryCat.Plugins.GitHub",
+        "QueryCat.Plugins.ImdbApi",
         "QueryCat.Plugins.Jira",
         "QueryCat.Plugins.Moex",
         "QueryCat.Plugins.Network",

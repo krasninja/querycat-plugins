@@ -6,6 +6,7 @@ using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.ImdbApi.Models;
+using QueryCat.Plugins.ImdbApi.Utils;
 using RestSharp;
 
 namespace QueryCat.Plugins.ImdbApi.Inputs;
@@ -47,9 +48,10 @@ internal sealed class NamesRowsInput : AsyncEnumerableRowsInput<NameModel>
         return fetcher.FetchUntilHasMoreAsync(
             async ct =>
             {
-                var request = new RestRequest($"names/{_nameId.AsString}");
+                var request = new RestRequest("names/{nameId}")
+                    .AddUrlSegment("nameId", _nameId.AsString);
 
-                _logger.LogDebug("Get name {NameId}.", _nameId);
+                _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                 var response = await ImdbConnection.Client.GetAsync<NameModel>(request, ct);
                 return ([response!], false);
             }, cancellationToken);

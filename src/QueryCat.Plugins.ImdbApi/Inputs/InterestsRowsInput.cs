@@ -8,6 +8,7 @@ using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
 using QueryCat.Backend.Core.Types;
 using QueryCat.Plugins.ImdbApi.Models;
+using QueryCat.Plugins.ImdbApi.Utils;
 
 namespace QueryCat.Plugins.ImdbApi.Inputs;
 
@@ -43,7 +44,7 @@ internal sealed class InterestsRowsInput : AsyncEnumerableRowsInput<InterestMode
             {
                 var request = new RestRequest("interests");
 
-                _logger.LogDebug("Get interests.");
+                _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                 var response = await ImdbConnection.Client.GetAsync(request, ct);
                 var node = JsonSerializer.Deserialize(response.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
                 if (!node.TryGetProperty("categories", out var categoriesNode))
