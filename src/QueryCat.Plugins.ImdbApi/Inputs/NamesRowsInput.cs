@@ -22,7 +22,7 @@ internal sealed class NamesRowsInput : AsyncEnumerableRowsInput<NameModel>
     }
 
     private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(NamesRowsInput));
-    private VariantValue _nameId = VariantValue.Null;
+    private VariantValue _nameId = new(string.Empty);
 
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<NameModel> builder)

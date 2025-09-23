@@ -70,11 +70,7 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
                         .AddUrlSegment("titleId", idValue.AsString);
                     _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                     var idResponse = await ImdbConnection.Client.GetAsync<TitleModel>(request, ct);
-                    if (idResponse == null)
-                    {
-                        return ([], false);
-                    }
-                    return ([idResponse], false);
+                    return (idResponse != null ? [idResponse] : [], false);
                 }
 
                 // Search
@@ -84,12 +80,14 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
                     var titleToSearch = titleValue.AsString
                         .Replace("%", string.Empty).Replace("?", string.Empty);
                     request = new RestRequest("search/titles")
-                        .AddParameter("query", titleToSearch);
+                        .AddParameter("query", titleToSearch)
+                        .AddParameter("pageToken", currentPageToken);
                     _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                     var searchResponse = await ImdbConnection.Client.GetAsync(request, ct);
                     var searchNode = JsonSerializer.Deserialize(searchResponse.Content ?? "{}", SourceGenerationContext.Default.JsonElement);
                     var searchResult = searchNode.GetProperty("titles").Deserialize(SourceGenerationContext.Default.IListTitleModel);
-                    return (searchResult ?? [], false);
+                    currentPageToken = ImdbConnection.GetNextPageToken(searchNode);
+                    return (searchResult ?? [], currentPageToken.Length > 0);
                 }
 
                 if (TryGetKeyColumnValue("type", VariantValue.Operation.Equals, out var typeValue))
@@ -128,9 +126,9 @@ internal sealed class TitlesRowsInput : AsyncEnumerableRowsInput<TitleModel>
                 {
                     return ([], false);
                 }
-                currentPageToken = node.GetProperty("nextPageToken").GetString();
+                currentPageToken = ImdbConnection.GetNextPageToken(node);
                 var result = titlesNode.Deserialize(SourceGenerationContext.Default.IListTitleModel) ?? [];
-                return (result, result.Count > 0);
+                return (result, currentPageToken.Length > 0);
             }, cancellationToken);
     }
 }

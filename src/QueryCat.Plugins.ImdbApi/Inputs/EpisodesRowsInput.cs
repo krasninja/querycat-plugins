@@ -23,7 +23,7 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
     }
 
     private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(EpisodesRowsInput));
-    private VariantValue _titleId = VariantValue.Null;
+    private VariantValue _titleId = new(string.Empty);
 
     /// <inheritdoc />
     protected override void Initialize(ClassRowsFrameBuilder<EpisodeModel> builder)
@@ -33,7 +33,7 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
             .AddProperty(p => p.Id)
             .AddProperty(p => p.Title)
             .AddProperty(p => p.Season)
-            .AddProperty("title_id", _ => _titleId, "The ID of the parent title (series) of the episode.")
+            .AddProperty("title_id", DataType.String, _ => _titleId, "The ID of the parent title (series) of the episode.")
             .AddProperty(p => p.EpisodeNumber)
             .AddProperty(p => p.RuntimeSeconds)
             .AddProperty("date", p => p.Date.ToDate(), "The release date of the episode.")
@@ -47,13 +47,15 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
     /// <inheritdoc />
     protected override IAsyncEnumerable<EpisodeModel> GetDataAsync(Fetcher<EpisodeModel> fetcher, CancellationToken cancellationToken = default)
     {
+        var currentPageToken = string.Empty;
         _titleId = GetKeyColumnValue("title_id");
 
         return fetcher.FetchUntilHasMoreAsync(
             async ct =>
             {
                 var request = new RestRequest("titles/{titleId}/episodes")
-                    .AddUrlSegment("titleId", _titleId.AsString);
+                    .AddUrlSegment("titleId", _titleId.AsString)
+                    .AddParameter("pageToken", currentPageToken);
 
                 if (TryGetKeyColumnValue("season", VariantValue.Operation.Equals, out var typeValue)
                     && !typeValue.IsNull)
@@ -68,12 +70,9 @@ internal sealed class EpisodesRowsInput : AsyncEnumerableRowsInput<EpisodeModel>
                 {
                     return ([], false);
                 }
-                var result = episodesNode.Deserialize(SourceGenerationContext.Default.IListEpisodeModel);
-                if (result == null || result.Count < 1)
-                {
-                    return ([], false);
-                }
-                return (result, true);
+                currentPageToken = ImdbConnection.GetNextPageToken(node);
+                var result = episodesNode.Deserialize(SourceGenerationContext.Default.IListEpisodeModel) ?? [];
+                return (result, currentPageToken.Length > 0);
             }, cancellationToken);
     }
 }

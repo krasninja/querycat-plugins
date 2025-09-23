@@ -39,10 +39,13 @@ internal sealed class InterestsRowsInput : AsyncEnumerableRowsInput<InterestMode
     /// <inheritdoc />
     protected override IAsyncEnumerable<InterestModel> GetDataAsync(Fetcher<InterestModel> fetcher, CancellationToken cancellationToken = default)
     {
+        var currentPageToken = string.Empty;
+
         return fetcher.FetchUntilHasMoreAsync(
             async ct =>
             {
-                var request = new RestRequest("interests");
+                var request = new RestRequest("interests")
+                    .AddParameter("pageToken", currentPageToken);
 
                 _logger.LogDebug("Request: {Request}.", request.Dump(ImdbConnection.Client));
                 var response = await ImdbConnection.Client.GetAsync(request, ct);
@@ -60,7 +63,9 @@ internal sealed class InterestsRowsInput : AsyncEnumerableRowsInput<InterestMode
                         interest.Category = item.Category;
                     }
                 }
-                return (result.SelectMany(c => c.Interests), result.Count > 0);
+
+                currentPageToken = ImdbConnection.GetNextPageToken(node);
+                return (result.SelectMany(c => c.Interests), currentPageToken.Length > 0);
             }, cancellationToken);
     }
 }
