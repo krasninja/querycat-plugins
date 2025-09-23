@@ -63,11 +63,11 @@ internal class CommitsRowsInput : BaseRowsInput<GitHubCommit>
         {
             request.Author = value.AsString;
         }
-        if (TryGetKeyColumnValue("author_date", VariantValue.Operation.Greater, out value))
+        if (TryGetKeyColumnValue("author_date", VariantValue.Operation.GreaterOrEquals, out value))
         {
             request.Since = value.AsTimestamp;
         }
-        if (TryGetKeyColumnValue("author_date", VariantValue.Operation.Less, out value))
+        if (TryGetKeyColumnValue("author_date", VariantValue.Operation.LessOrEquals, out value))
         {
             request.Until = value.AsTimestamp;
         }
