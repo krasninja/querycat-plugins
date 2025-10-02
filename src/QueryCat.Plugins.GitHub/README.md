@@ -4,7 +4,10 @@
 - [Schema](Schema.md)
 - [Changelog](CHANGELOG.md)
 
-GitHub API plugin.
+GitHub API plugin. To begin using it:
+
+1. generate GitHub token: https://github.com/settings/tokens;
+2. call `github_set_token` function before using plugin functions: `github_set_token('XXX')`;
 
 ## Example Queries
 
