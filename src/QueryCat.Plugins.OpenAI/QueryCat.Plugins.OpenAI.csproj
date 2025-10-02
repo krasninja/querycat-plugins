@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenAI" Version="2.4.0" />
-    <PackageReference Include="QueryCat" Version="0.16.0" />
+    <PackageReference Include="QueryCat" Version="0.16.1" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
