@@ -14,7 +14,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.11.1" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.11.1" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build" Version="18.0.2" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="18.0.2" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.0.0" />
@@ -23,31 +25,6 @@
 
   <ItemGroup>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Humanizer.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Framework.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Locator.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Tasks.Core.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Build.Utilities.Core.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
@@ -77,22 +54,12 @@
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.NET.StringTools.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Newtonsoft.Json.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
 
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.CodeDom.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.AttributedModel.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
@@ -117,32 +84,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Diagnostics.EventLog.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Formats.Nrbf.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Reflection.MetadataLoadContext.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Resources.Extensions.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
-
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/runtimes/">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)/runtimes</PackagePath>
     </Content>
   </ItemGroup>
 
