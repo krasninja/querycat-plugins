@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <PackageVersion>0.3.2</PackageVersion>
     <Title>Network Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
@@ -17,10 +17,6 @@
 
   <ItemGroup>
     <PackageReference Include="QueryCat" Version="0.16.1" />
-    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>
