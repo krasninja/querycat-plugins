@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <PackageVersion>1.0.2</PackageVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageVersion>1.0.3</PackageVersion>
     <Nullable>enable</Nullable>
     <Title>Windows Event Log</Title>
     <Authors>Ivan Kozhin</Authors>
@@ -15,11 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="QueryCat" Version="0.16.1" />
-    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.9" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
