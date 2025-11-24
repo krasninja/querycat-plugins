@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.2.1</PackageVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageVersion>0.2.2</PackageVersion>
     <Title>Numerology</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat numerology</PackageTags>
@@ -14,10 +14,6 @@
 
   <ItemGroup>
     <PackageReference Include="QueryCat" Version="0.16.1" />
-    <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>
