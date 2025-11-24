@@ -4,18 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-## [0.4.6] - 2025-03-16
+## [0.4.7]
 
-### Added
+- Update to .NET 10.
+
+## [0.4.6]
 
 - "vstar_camera_info" can be used for Update command.
-
-### Fixed
-
 - Fix resources leak.
 
 ## [0.4.4]
-
-### Added
 
 - The first release with ability to query VStar cameras in local network and set IR state.
