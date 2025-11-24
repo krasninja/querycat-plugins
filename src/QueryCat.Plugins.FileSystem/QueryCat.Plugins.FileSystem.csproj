@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.3.0</PackageVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageVersion>0.3.1</PackageVersion>
     <Title>File system Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>File system plugin.</Description>
@@ -16,10 +16,6 @@
 
   <ItemGroup>
     <PackageReference Include="QueryCat" Version="0.16.1" />
-    <PackageReference Update="StyleCop.An alyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>
