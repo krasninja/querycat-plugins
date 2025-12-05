@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="QueryCat" Version="0.16.1" />
-    <PackageReference Include="RestSharp" Version="112.1.0" />
+    <PackageReference Include="QueryCat" Version="0.17.0" />
+    <PackageReference Include="RestSharp" Version="113.0.0" />
   </ItemGroup>
 
   <ItemGroup>

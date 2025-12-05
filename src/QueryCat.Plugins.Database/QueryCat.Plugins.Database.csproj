@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.0" />
     <PackageReference Include="Npgsql" Version="10.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0" />
-    <PackageReference Include="QueryCat" Version="0.16.1" />
+    <PackageReference Include="QueryCat" Version="0.17.0" />
   </ItemGroup>
 
   <ItemGroup>

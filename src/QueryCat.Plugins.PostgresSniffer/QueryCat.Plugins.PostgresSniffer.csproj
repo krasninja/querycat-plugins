@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="SharpPcap" Version="6.3.1" />
-    <PackageReference Include="QueryCat" Version="0.16.1" />
+    <PackageReference Include="QueryCat" Version="0.17.0" />
   </ItemGroup>
 
   <ItemGroup>
