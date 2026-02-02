@@ -7,14 +7,13 @@
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat openaio</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-openai-$(PackageVersion)-$(Runtime)</AssemblyName>
-    <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="OpenAI" Version="2.7.0" />
-    <PackageReference Include="QueryCat" Version="0.17.0" />
+    <PackageReference Include="QueryCat" Version="0.17.3" />
   </ItemGroup>
 
   <ItemGroup>

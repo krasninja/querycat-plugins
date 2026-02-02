@@ -8,13 +8,12 @@
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat windows event log</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-windows-eventlog-$(PackageVersion)-$(Runtime)</AssemblyName>
-    <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="QueryCat" Version="0.17.0" />
+    <PackageReference Include="QueryCat" Version="0.17.3" />
     <PackageReference Include="System.Diagnostics.EventLog" Version="10.0.0" />
   </ItemGroup>
 

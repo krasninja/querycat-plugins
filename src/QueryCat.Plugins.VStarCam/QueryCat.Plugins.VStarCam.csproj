@@ -7,14 +7,13 @@
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>vstarcam querycat ir</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-vstarcam-$(PackageVersion)-$(Runtime)</AssemblyName>
-    <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="113.0.0" />
-    <PackageReference Include="QueryCat" Version="0.17.0" />
+    <PackageReference Include="QueryCat" Version="0.17.3" />
   </ItemGroup>
 
   <ItemGroup>

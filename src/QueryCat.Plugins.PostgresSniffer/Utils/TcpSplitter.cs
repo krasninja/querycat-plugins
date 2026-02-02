@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.Net;
 using PacketDotNet;
-using QueryCat.Backend.Core.Utils;
 using SharpPcap;
+using QueryCat.Backend.Core.Utils;
 
 namespace QueryCat.Plugins.PostgresSniffer.Utils;
 
@@ -120,7 +120,7 @@ public class TcpSplitter : IDisposable
         /// <param name="foundDelimiter">Found delimiter.</param>
         /// <param name="skip">Start index to search from. Default is 0.</param>
         /// <returns>The delimiter index or -1 if not found.</returns>
-        public int IndexOfAny(ReadOnlySpan<byte> delimiters, out byte foundDelimiter, int skip = 0)
+        public long IndexOfAny(ReadOnlySpan<byte> delimiters, out byte foundDelimiter, int skip = 0)
         {
             lock (_objLock)
             {

@@ -8,14 +8,13 @@
     <Description>File system plugin.</Description>
     <PackageTags>file directory path querycat</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-filesystem-$(PackageVersion)-$(Runtime)</AssemblyName>
-    <PublishAot>True</PublishAot>
     <StripSymbols>True</StripSymbols>
     <PublishTrimmed>True</PublishTrimmed>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="QueryCat" Version="0.17.0" />
+    <PackageReference Include="QueryCat" Version="0.17.3" />
   </ItemGroup>
 
 </Project>
