@@ -16,9 +16,9 @@
 
   <ItemGroup>
     <PackageReference Include="DuckDB.NET.Data.Full" Version="1.4.4" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.3" />
     <PackageReference Include="Npgsql" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.3" />
     <PackageReference Include="QueryCat" Version="0.17.3" />
   </ItemGroup>
 
