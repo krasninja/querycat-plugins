@@ -23,7 +23,14 @@ public sealed class JiraConfiguration : IDisposable
             {
                 _client = new RestClient($"{BasePath}/rest/api/3/", options =>
                 {
-                    options.Authenticator = new HttpBasicAuthenticator(Username, Password);
+                    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                    {
+                        options.Authenticator = new HttpBasicAuthenticator(Username, Password);
+                    }
+                    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(AccessToken))
+                    {
+                        options.Authenticator = new HttpBasicAuthenticator(Username, AccessToken);
+                    }
                 });
             }
             return _client;

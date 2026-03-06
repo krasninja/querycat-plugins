@@ -36,12 +36,15 @@ internal sealed class IssuesRowsInput : AsyncEnumerableRowsInput<JsonNode>
             .AddProperty("project_key", p => p.GetValueByPath("fields.project.key").AsString, "The issue project key.")
             .AddProperty("project_name", p => p.GetValueByPath("fields.project.name").AsString, "The issue project name.")
             .AddProperty("status", p => p.GetValueByPath("fields.status.name").AsString, "The issue status.")
-            .AddProperty("created", p => p.GetValueByPath("fields.created").AsTimestamp,
-                "The issue creation date and time.")
+            .AddProperty("status_id", p => p.GetValueByPath("fields.status.id").AsString, "The issue status identifier.")
+            .AddProperty("created", p => p.GetValueByPath("fields.created").AsTimestamp, "The issue creation date and time.")
             .AddProperty("creator_account_id", p => p.GetValueByPath("fields.creator.accountId").AsString, "The issue creator account identifier.")
             .AddProperty("creator_display_name", p => p.GetValueByPath("fields.creator.displayName").AsString, "The issue creator name.")
+            .AddProperty("reporter_account_id", p => p.GetValueByPath("fields.reporter.accountId").AsString, "The issue reporter account identifier.")
+            .AddProperty("reporter_display_name", p => p.GetValueByPath("fields.reporter.displayName").AsString, "The issue reporter name.")
             .AddProperty("summary", p => p.GetValueByPath("fields.summary").AsString, "The issue summary.")
-            .AddProperty("priority", p => p.GetValueByPath("fields.priority.name").AsString, "The issue priority.");
+            .AddProperty("priority", p => p.GetValueByPath("fields.priority.name").AsString, "The issue priority.")
+            .AddProperty("priority_id", p => p.GetValueByPath("fields.priority.id").AsString, "The issue priority identifier.");
     }
 
     /// <inheritdoc />

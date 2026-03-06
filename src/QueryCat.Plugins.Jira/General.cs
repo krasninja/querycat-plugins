@@ -34,6 +34,7 @@ internal static class General
         }
         if (await configStorage.HasAsync(JiraToken, cancellationToken))
         {
+            config.Username = (await configStorage.GetAsync(JiraUsername, cancellationToken)).AsString;
             config.AccessToken = (await configStorage.GetAsync(JiraToken, cancellationToken)).AsString;
         }
 

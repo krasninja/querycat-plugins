@@ -20,14 +20,7 @@ public static class JsonUtils
         var currentNode = node;
         foreach (var part in path.Split('.'))
         {
-            if (int.TryParse(part, out var indexPart))
-            {
-                currentNode = currentNode[indexPart];
-            }
-            else
-            {
-                currentNode = currentNode[part];
-            }
+            currentNode = int.TryParse(part, out var indexPart) ? currentNode[indexPart] : currentNode[part];
 
             if (currentNode == null)
             {
