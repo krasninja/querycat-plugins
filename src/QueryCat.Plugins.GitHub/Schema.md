@@ -242,6 +242,7 @@ Return GitHub pull requests of specific repository.
 | `repository_full_name`| `String` | yes | yes | The full name of the repository. |
 | `number`| `Integer` | yes |  | The pull request issue number. |
 | `title`| `String` |  |  | Pull request title. |
+| `author_name`| `String` |  |  | The name of the user that submitted the PR. |
 | `author_login`| `String` |  |  | The login name of the user that submitted the PR. |
 | `state`| `String` | yes |  | The state or the PR (open, closed). |
 | `body`| `String` |  |  | Pull request title. |

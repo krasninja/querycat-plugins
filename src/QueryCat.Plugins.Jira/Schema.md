@@ -19,11 +19,15 @@ Issues are the building blocks of any Jira project.
 | `project_key`| `String` |  |  | The issue project key. |
 | `project_name`| `String` |  |  | The issue project name. |
 | `status`| `String` |  |  | The issue status. |
+| `status_id`| `String` |  |  | The issue status identifier. |
 | `created`| `Timestamp` |  |  | The issue creation date and time. |
 | `creator_account_id`| `String` |  |  | The issue creator account identifier. |
 | `creator_display_name`| `String` |  |  | The issue creator name. |
+| `reporter_account_id`| `String` |  |  | The issue reporter account identifier. |
+| `reporter_display_name`| `String` |  |  | The issue reporter name. |
 | `summary`| `String` |  |  | The issue summary. |
 | `priority`| `String` |  |  | The issue priority. |
+| `priority_id`| `String` |  |  | The issue priority identifier. |
 | `description`| `String` |  |  | The issue description. |
 
 ## **jira_issue_comments**
@@ -63,9 +67,13 @@ Search issues using JQL.
 | `project_key`| `String` |  |  | The issue project key. |
 | `project_name`| `String` |  |  | The issue project name. |
 | `status`| `String` |  |  | The issue status. |
+| `status_id`| `String` |  |  | The issue status identifier. |
 | `created`| `Timestamp` |  |  | The issue creation date and time. |
 | `creator_account_id`| `String` |  |  | The issue creator account identifier. |
 | `creator_display_name`| `String` |  |  | The issue creator name. |
+| `reporter_account_id`| `String` |  |  | The issue reporter account identifier. |
+| `reporter_display_name`| `String` |  |  | The issue reporter name. |
 | `summary`| `String` |  |  | The issue summary. |
 | `priority`| `String` |  |  | The issue priority. |
+| `priority_id`| `String` |  |  | The issue priority identifier. |
 | `jql`| `Void` | yes | yes | JQL. |

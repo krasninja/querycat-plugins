@@ -41,6 +41,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             .AddProperty("repository_full_name", DataType.String, _ => GetKeyColumnValue("repository_full_name"), "The full name of the repository.")
             .AddProperty("number", p => p.Number, "The pull request issue number.")
             .AddProperty("title", p => p.Title, "Pull request title.")
+            .AddProperty("author_name", p => p.User.Name, "The name of the user that submitted the PR.")
             .AddProperty("author_login", p => p.User.Login, "The login name of the user that submitted the PR.")
             .AddProperty("state", p => p.State.Value, "The state or the PR (open, closed).")
             .AddProperty("body", p => p.Body, "Pull request title.")
