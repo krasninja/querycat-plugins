@@ -1,4 +1,5 @@
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Plugins.Database.Functions;
 using QueryCat.Plugins.Database.Providers;
 
 namespace QueryCat.Plugins.Database;
@@ -16,6 +17,7 @@ public static class Registration
     {
         functionsManager.RegisterFunction(DuckDBRowsInput.DuckDBTableFunction);
         functionsManager.RegisterFunction(DuckDBRowsOutput.DuckDBTableOutFunction);
+        functionsManager.RegisterFunction(DuckDBRepack.DuckDBRepackFunction);
         functionsManager.RegisterFunction(PostgresRowsInput.PostgresTableFunction);
         functionsManager.RegisterFunction(PostgresRowsOutput.PostgresTableOutFunction);
         functionsManager.RegisterFunction(SqliteRowsInput.SqliteTableFunction);

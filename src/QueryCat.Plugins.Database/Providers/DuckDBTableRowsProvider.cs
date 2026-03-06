@@ -224,6 +224,7 @@ internal sealed class DuckDBTableRowsProvider : TableRowsProvider
             AppendWhereConditionsBlock(sb, updateCommand, item);
             sb.Append(';');
         }
+        sb.Append("CHECKPOINT;");
 
 #pragma warning disable CA2100
         updateCommand.CommandText = sb.ToString();

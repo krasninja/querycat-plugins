@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <PackageVersion>0.3.1</PackageVersion>
+    <PackageVersion>0.3.2</PackageVersion>
     <Title>Database Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <Description>Database plugin.</Description>
