@@ -55,11 +55,6 @@
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
-    <Content Include="bin/$(Configuration)/$(TargetFramework)/Newtonsoft.Json.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
-    </Content>
 
     <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Composition.AttributedModel.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
