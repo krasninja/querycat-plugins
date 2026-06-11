@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>QueryCat.Plugins.Roslyn</RootNamespace>
-    <PackageVersion>0.1.1</PackageVersion>
+    <PackageVersion>0.1.2</PackageVersion>
     <Title>C# Roslyn Code Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>roslyn csharp</PackageTags>
@@ -15,11 +15,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Locator" Version="1.11.2" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build" Version="18.0.2" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="18.0.2" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Build" Version="18.7.1" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="18.7.1" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.NET.StringTools" Version="18.7.1" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.3.0" />
     <PackageReference Include="QueryCat" Version="0.17.4" />
   </ItemGroup>
 
