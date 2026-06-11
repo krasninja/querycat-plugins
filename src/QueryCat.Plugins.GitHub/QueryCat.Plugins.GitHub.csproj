@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Octokit" Version="14.0.0" />
-    <PackageReference Include="QueryCat" Version="0.17.3" />
+    <PackageReference Include="QueryCat" Version="0.17.4" />
   </ItemGroup>
 
   <ItemGroup>

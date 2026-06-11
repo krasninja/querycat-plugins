@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenAI" Version="2.7.0" />
-    <PackageReference Include="QueryCat" Version="0.17.3" />
+    <PackageReference Include="QueryCat" Version="0.17.4" />
   </ItemGroup>
 
   <ItemGroup>
