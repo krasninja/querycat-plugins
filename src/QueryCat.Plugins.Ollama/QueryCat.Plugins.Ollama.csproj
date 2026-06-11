@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <PackageVersion>0.1.1</PackageVersion>
+    <PackageVersion>0.1.2</PackageVersion>
     <Title>Ollama</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>querycat ollama</PackageTags>
@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OllamaSharp" Version="5.4.12" />
+    <PackageReference Include="OllamaSharp" Version="5.4.25" />
     <PackageReference Include="QueryCat" Version="0.17.4" />
   </ItemGroup>
 
