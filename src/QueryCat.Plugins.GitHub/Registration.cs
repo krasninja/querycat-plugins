@@ -29,5 +29,6 @@ public static class Registration
         functionsManager.RegisterFunction(PullRequestsRowsInput.GitHubPullsFunction);
         functionsManager.RegisterFunction(RateLimitsRowsInput.GitHubRateLimitsFunction);
         functionsManager.RegisterFunction(SearchIssuesRowsInput.GitHubSearchIssuesFunction);
+        functionsManager.RegisterFunction(TeamsRowsInput.GitHubTeamsFunction);
     }
 }

@@ -16,3 +16,4 @@
 | `github_rate_limits(): Object<IRowsInput>`<br /><br /> Return GitHub current account rate limit information. |
 | `github_search_issues(): Object<IRowsInput>`<br /><br /> Search GitHub issues and pull requests. |
 | `github_set_token(token: String): Void`<br /><br /> GitHub authentication. |
+| `github_teams(): Object<IRowsInput>`<br /><br /> Return GitHub teams of specific organization. |

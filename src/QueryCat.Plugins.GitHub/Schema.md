@@ -13,6 +13,7 @@
 - [github_pulls](#github_pulls)
 - [github_rate_limits](#github_rate_limits)
 - [github_search_issues](#github_search_issues)
+- [github_teams](#github_teams)
 
 ## **github_branches**
 
@@ -302,3 +303,25 @@ Search GitHub issues and pull requests.
 | `repository_full_name`| `String` |  |  |  |
 | `created_at`| `Timestamp` | yes |  | Issue creation date. |
 | `term`| `String` | yes |  |  |
+
+## **github_teams**
+
+```
+github_teams(): Object<IRowsInput>
+```
+
+Return GitHub teams of specific organization.
+
+| Name | Type | Key | Required | Description |
+| --- | --- | --- | --- | --- |
+| `organization`| `String` | yes | yes | The organization login name. |
+| `id`| `Integer` |  |  | Team id. |
+| `node_id`| `String` |  |  | Team node id. |
+| `name`| `String` |  |  | Team name. |
+| `slug`| `String` |  |  | Team slug. |
+| `description`| `String` |  |  | Team description. |
+| `privacy`| `String` |  |  | Team privacy (secret or closed). |
+| `permission`| `String` |  |  | Team permission. |
+| `members_count`| `Integer` |  |  | Number of team members. |
+| `repos_count`| `Integer` |  |  | Number of repositories. |
+| `url`| `String` |  |  | Team URL. |
