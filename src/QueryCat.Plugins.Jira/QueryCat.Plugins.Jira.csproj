@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="114.0.0" />
-    <PackageReference Include="QueryCat" Version="0.17.4" />
+    <PackageReference Include="QueryCat" Version="0.17.5" />
   </ItemGroup>
 
   <ItemGroup>

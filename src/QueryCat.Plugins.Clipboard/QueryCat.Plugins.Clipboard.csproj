@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="TextCopy" Version="6.2.1" />
-    <PackageReference Include="QueryCat" Version="0.17.4" />
+    <PackageReference Include="QueryCat" Version="0.17.5" />
     <PackageReference Update="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
