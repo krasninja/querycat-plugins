@@ -10,13 +10,15 @@ using QueryCat.Plugins.Database.Common;
 
 namespace QueryCat.Plugins.Database.Providers;
 
-internal sealed class PostgresTableRowsProvider : TableRowsProvider
+internal sealed class PostgresTableRowsProvider : TableRowsProvider, IDisposable
 {
     private readonly string _connectionString;
     private readonly string[] _table;
     private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(PostgresTableRowsProvider));
 
     public string QuotedTableName { get; }
+
+    private NpgsqlDataSource? _dataSource;
 
     public PostgresTableRowsProvider(string connectionString, string table)
     {
@@ -29,14 +31,23 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
     /// <inheritdoc />
     public override Task OpenAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 
+    private Task<NpgsqlDataSource> GetSourceAsync(CancellationToken cancellationToken)
+    {
+        if (_dataSource == null)
+        {
+            _dataSource = NpgsqlDataSource.Create(_connectionString);
+        }
+        return Task.FromResult(_dataSource);
+    }
+
     /// <inheritdoc />
     public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(
         Column[] selectColumns,
         IReadOnlyList<TableSelectCondition> conditions,
         CancellationToken cancellationToken = default)
     {
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
-        await using var selectCommand = CreateCommand(dataSource);
+        var dataSource = await GetSourceAsync(cancellationToken);
+        var selectCommand = CreateCommand(dataSource);
 
         var sb = new StringBuilder("SELECT ");
         AppendSelectColumnsBlock(sb, selectColumns);
@@ -55,7 +66,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
     /// <inheritdoc />
     public override async ValueTask<int> DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var deleteCommand = CreateCommand(dataSource);
         var sb = new StringBuilder($"DELETE FROM {QuotedTableName} WHERE ");
         AppendWhereConditionsBlock(sb, deleteCommand, new TableSelectCondition(IdentityColumn, new VariantValue(id)));
@@ -73,7 +84,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
             .Append($"{IdentityColumnName} bigint GENERATED ALWAYS AS IDENTITY NOT NULL, ")
             .Append($"CONSTRAINT {Quote("qc_" + IdentityColumnName + "_" + _table[^1])} PRIMARY KEY ({Quote(IdentityColumnName)}));");
 
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var createDatabaseTableCommand = CreateCommand(dataSource, sb.ToString());
         await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -89,7 +100,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
             )
             .Append(");");
 
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var createIndexCommand = CreateCommand(dataSource, sb.ToString());
         await createIndexCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -104,7 +115,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
             sb.Append($"COMMENT ON COLUMN {QuotedTableName}.{Quote(column.Name)} IS '{column.Description.Replace("'", "''")}';");
         }
 
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var createDatabaseColumnCommand = CreateCommand(dataSource, sb.ToString());
         await createDatabaseColumnCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -114,7 +125,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
         TableRowsModification[] data,
         CancellationToken cancellationToken = default)
     {
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var insertCommand = CreateCommand(dataSource);
 
         var sb = new StringBuilder();
@@ -145,7 +156,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
         TableRowsModification[] data,
         CancellationToken cancellationToken = default)
     {
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var updateCommand = CreateCommand(dataSource);
 
         var sb = new StringBuilder();
@@ -167,7 +178,7 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
     /// <inheritdoc />
     public override async Task<Column[]> GetDatabaseTableColumnsAsync(CancellationToken cancellationToken = default)
     {
-        await using var dataSource = NpgsqlDataSource.Create(_connectionString);
+        var dataSource = await GetSourceAsync(cancellationToken);
         await using var connection = dataSource.CreateConnection();
         await connection.OpenAsync(cancellationToken);
         var restrictions = new string?[]
@@ -262,4 +273,10 @@ internal sealed class PostgresTableRowsProvider : TableRowsProvider
             "bit" => DataType.Boolean,
             _ => DataType.String,
         };
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _dataSource?.Dispose();
+    }
 }

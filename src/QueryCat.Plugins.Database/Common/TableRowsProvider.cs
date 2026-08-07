@@ -19,7 +19,7 @@ internal abstract class TableRowsProvider
     /// Get the next id.
     /// </summary>
     /// <returns></returns>
-    protected string GetNextId() => (++_currentId).ToString();
+    protected string GetNextId() => Interlocked.Increment(ref _currentId).ToString();
 
     /// <summary>
     /// Open provider.
@@ -285,7 +285,12 @@ internal abstract class TableRowsProvider
         _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
     };
 
-    public static object NormalizeValue(in VariantValue value)
+    /// <summary>
+    /// Get object safer from variant value.
+    /// </summary>
+    /// <param name="value">Variant value.</param>
+    /// <returns>Object instance.</returns>
+    protected static object NormalizeValue(in VariantValue value)
     {
         var v = Converter.ConvertValue(value, typeof(object));
         if (v == null)

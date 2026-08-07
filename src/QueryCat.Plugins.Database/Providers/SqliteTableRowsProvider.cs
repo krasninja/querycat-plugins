@@ -10,13 +10,15 @@ using QueryCat.Plugins.Database.Common;
 
 namespace QueryCat.Plugins.Database.Providers;
 
-internal sealed class SqliteTableRowsProvider : TableRowsProvider
+internal sealed class SqliteTableRowsProvider : TableRowsProvider, IDisposable
 {
     private readonly string _connectionString;
     private readonly string[] _table;
     private readonly ILogger _logger = Application.LoggerFactory.CreateLogger(nameof(SqliteTableRowsProvider));
 
     public string QuotedTableName { get; }
+
+    private SqliteConnection? _connection;
 
     public SqliteTableRowsProvider(string connectionString, string table)
     {
@@ -41,12 +43,21 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
         return command;
     }
 
+    private async Task<SqliteConnection> GetConnectionAsync(CancellationToken cancellationToken)
+    {
+        if (_connection == null)
+        {
+            _connection = new SqliteConnection(_connectionString);
+            await _connection.OpenAsync(cancellationToken);
+        }
+        return _connection;
+    }
+
     /// <inheritdoc />
     public override async Task<DbDataReader> CreateDatabaseSelectReaderAsync(Column[] selectColumns, IReadOnlyList<TableSelectCondition> conditions,
         CancellationToken cancellationToken = default)
     {
-        var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         var selectCommand = CreateCommand(connection);
 
         var sb = new StringBuilder("SELECT ");
@@ -60,14 +71,13 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
 #pragma warning disable CA2100
         selectCommand.CommandText = sb.ToString();
 #pragma warning restore CA2100
-        return await selectCommand.ExecuteReaderAsync(CommandBehavior.CloseConnection, cancellationToken);
+        return await selectCommand.ExecuteReaderAsync(cancellationToken);
     }
 
     /// <inheritdoc />
     public override async ValueTask<int> DeleteDatabaseRowAsync(long id, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var deleteCommand = CreateCommand(connection);
         var sb = new StringBuilder($"DELETE FROM {QuotedTableName} WHERE ");
         AppendWhereConditionsBlock(sb, deleteCommand, new TableSelectCondition(IdentityColumn, new VariantValue(id)));
@@ -84,9 +94,8 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
             .Append($"CREATE TABLE IF NOT EXISTS {QuotedTableName} (")
             .Append($"{IdentityColumnName} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);");
 
-        await using var connection = new SqliteConnection(_connectionString);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var createDatabaseTableCommand = CreateCommand(connection, sb.ToString());
-        await connection.OpenAsync(cancellationToken);
         await createDatabaseTableCommand.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -101,8 +110,7 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
             )
             .Append(");");
 
-        await using var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var createIndexCommand = CreateCommand(connection, sb.ToString());
         await createIndexCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -113,8 +121,7 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
         var sb = new StringBuilder();
         sb.Append($"ALTER TABLE {QuotedTableName} ADD COLUMN {Quote(column.Name)} {GetDatabaseDataType(column.DataType)} NULL;");
 
-        await using var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var createDatabaseColumnCommand = CreateCommand(connection, sb.ToString());
         await createDatabaseColumnCommand.ExecuteNonQueryAsync(cancellationToken);
     }
@@ -122,8 +129,7 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
     /// <inheritdoc />
     public override async ValueTask<long[]> InsertDatabaseRowsAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var insertCommand = CreateCommand(connection);
 
         var sb = new StringBuilder();
@@ -189,8 +195,7 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
     /// <inheritdoc />
     public override async ValueTask UpdateDatabaseRowAsync(TableRowsModification[] data, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var updateCommand = CreateCommand(connection);
 
         var sb = new StringBuilder();
@@ -212,8 +217,7 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
     /// <inheritdoc />
     public override async Task<Column[]> GetDatabaseTableColumnsAsync(CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqliteConnection(_connectionString);
-        await connection.OpenAsync(cancellationToken);
+        var connection = await GetConnectionAsync(cancellationToken);
         await using var command = CreateCommand(connection, $"PRAGMA table_info('{_table[^1]}');");
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         var columns = new List<Column>();
@@ -269,4 +273,10 @@ internal sealed class SqliteTableRowsProvider : TableRowsProvider
             "BLOB" => DataType.Blob,
             _ => DataType.String,
         };
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _connection?.Dispose();
+    }
 }
