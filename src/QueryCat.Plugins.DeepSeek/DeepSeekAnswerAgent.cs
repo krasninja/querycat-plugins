@@ -18,7 +18,7 @@ internal sealed class DeepSeekAnswerAgent : IAnswerAgent, IDisposable
     {
         public string Model { get; set; } = "deepseek-chat";
 
-        public QuestionMessage[] Messages { get; set; } = [];
+        public ChatMessage[] Messages { get; set; } = [];
 
         public bool Stream { get; set; }
     }
@@ -44,7 +44,7 @@ internal sealed class DeepSeekAnswerAgent : IAnswerAgent, IDisposable
     {
         public int Index { get; set; }
 
-        public QuestionMessage Message { get; set; } = new(string.Empty);
+        public ChatMessage Message { get; set; } = new(string.Empty);
     }
 
     public DeepSeekAnswerAgent(string apiKey, string model = "deepseek-chat")
@@ -55,7 +55,7 @@ internal sealed class DeepSeekAnswerAgent : IAnswerAgent, IDisposable
     }
 
     /// <inheritdoc />
-    public async Task<QuestionResponse> AskAsync(QuestionRequest request, CancellationToken cancellationToken = default)
+    public async Task<ChatResponse> AskAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, CompletionsUrl);
         requestMessage.Headers.Add("Accept", "application/json");
@@ -63,7 +63,7 @@ internal sealed class DeepSeekAnswerAgent : IAnswerAgent, IDisposable
         var json = JsonSerializer.Serialize(new CompletionsModel
         {
             Model = _model,
-            Messages = request.Messages,
+            Messages = request.Messages.ToArray(),
         }, SourceGenerationContext.Default.CompletionsModel);
         requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -87,7 +87,7 @@ internal sealed class DeepSeekAnswerAgent : IAnswerAgent, IDisposable
         }
 
         var message = promptResponse.Choices[0].Message.Content;
-        return new QuestionResponse(message);
+        return new ChatResponse(message);
     }
 
     /// <inheritdoc />

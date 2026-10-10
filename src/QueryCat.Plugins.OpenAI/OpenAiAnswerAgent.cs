@@ -2,6 +2,9 @@ using System.ClientModel;
 using OpenAI;
 using OpenAI.Chat;
 using QueryCat.Backend.Core.Execution;
+using QChatMessage = QueryCat.Backend.Core.Execution.ChatMessage;
+using QChatRequest = QueryCat.Backend.Core.Execution.ChatRequest;
+using QChatResponse = QueryCat.Backend.Core.Execution.ChatResponse;
 
 namespace QueryCat.Plugins.OpenAI;
 
@@ -20,17 +23,17 @@ public sealed class OpenAiAnswerAgent : IAnswerAgent
         _chatClient = client.GetChatClient(model);
     }
 
-    private static ChatMessage CreateMessage(QuestionMessage message)
+    private static global::OpenAI.Chat.ChatMessage CreateMessage(QChatMessage message)
     {
         switch (message.Role)
         {
-            case QuestionMessage.RoleSystem:
+            case QChatMessage.RoleSystem:
                 return new SystemChatMessage(message.Content);
-            case QuestionMessage.RoleUser:
+            case QChatMessage.RoleUser:
                 return new UserChatMessage(message.Content);
-            case QuestionMessage.RoleAssistant:
+            case QChatMessage.RoleAssistant:
                 return new AssistantChatMessage(message.Content);
-            case QuestionMessage.RoleTool:
+            case QChatMessage.RoleTool:
                 return new ToolChatMessage(message.Content);
             default:
                 return new UserChatMessage(message.Content);
@@ -38,11 +41,11 @@ public sealed class OpenAiAnswerAgent : IAnswerAgent
     }
 
     /// <inheritdoc />
-    public async Task<QuestionResponse> AskAsync(QuestionRequest request, CancellationToken cancellationToken = default)
+    public async Task<QChatResponse> AskAsync(QChatRequest request, CancellationToken cancellationToken = default)
     {
         var messages = request.Messages.Select(CreateMessage);
         var response = await _chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
         var content = string.Join('\n', response.Value.Content.Select(c => c.Text.Trim()));
-        return new QuestionResponse(content, response.Value.Id);
+        return new QChatResponse(content, response.Value.Id);
     }
 }

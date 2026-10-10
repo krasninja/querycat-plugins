@@ -1,11 +1,13 @@
 using System.Text;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
-using QueryCat.Backend.Core.Execution;
+using QChatMessage = QueryCat.Backend.Core.Execution.ChatMessage;
+using QChatRequest = QueryCat.Backend.Core.Execution.ChatRequest;
+using QChatResponse = QueryCat.Backend.Core.Execution.ChatResponse;
 
 namespace QueryCat.Plugins.Ollama;
 
-internal sealed class OllamaAnswerAgent : IAnswerAgent, IDisposable
+internal sealed class OllamaAnswerAgent : QueryCat.Backend.Core.Execution.IAnswerAgent, IDisposable
 {
     private readonly OllamaApiClient _client;
     private readonly HttpClient _httpClient = new();
@@ -19,7 +21,7 @@ internal sealed class OllamaAnswerAgent : IAnswerAgent, IDisposable
     }
 
     /// <inheritdoc />
-    public async Task<QuestionResponse> AskAsync(QuestionRequest request, CancellationToken cancellationToken = default)
+    public async Task<QChatResponse> AskAsync(QChatRequest request, CancellationToken cancellationToken = default)
     {
         var chatRequest = new ChatRequest
         {
@@ -39,16 +41,16 @@ internal sealed class OllamaAnswerAgent : IAnswerAgent, IDisposable
             sb.Append(chat.Message.Content);
         }
 
-        return new QuestionResponse(sb.ToString());
+        return new QChatResponse(sb.ToString());
     }
 
     private static ChatRole ConvertChatRole(string role)
     {
         return role switch
         {
-            QuestionMessage.RoleSystem => ChatRole.System,
-            QuestionMessage.RoleAssistant => ChatRole.Assistant,
-            QuestionMessage.RoleTool => ChatRole.Tool,
+            QChatMessage.RoleSystem => ChatRole.System,
+            QChatMessage.RoleAssistant => ChatRole.Assistant,
+            QChatMessage.RoleTool => ChatRole.Tool,
             _ => ChatRole.User,
         };
     }

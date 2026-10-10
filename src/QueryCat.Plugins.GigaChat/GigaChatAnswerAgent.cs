@@ -49,7 +49,7 @@ internal sealed class GigaChatAnswerAgent : IAnswerAgent, IDisposable
     {
         public string Model { get; set; } = "GigaChat";
 
-        public QuestionMessage[] Messages { get; set; } = [];
+        public ChatMessage[] Messages { get; set; } = [];
 
         public bool Stream { get; set; }
 
@@ -114,14 +114,14 @@ internal sealed class GigaChatAnswerAgent : IAnswerAgent, IDisposable
         _httpClient = new HttpClient(handler);
     }
 
-    private PromptRequestModel ConvertRequest(QuestionRequest request)
+    private PromptRequestModel ConvertRequest(ChatRequest request)
     {
-        var systemMessage = new QuestionMessage(
-            string.Join('\n', request.Messages.Where(m => m.Role == QuestionMessage.RoleSystem).Select(m => m.Content)),
-            QuestionMessage.RoleSystem);
-        var userMessage = new QuestionMessage(
-            string.Join('\n', request.Messages.Where(m => m.Role == QuestionMessage.RoleUser).Select(m => m.Content)),
-            QuestionMessage.RoleUser);
+        var systemMessage = new ChatMessage(
+            string.Join('\n', request.Messages.Where(m => m.Role == ChatMessage.RoleSystem).Select(m => m.Content)),
+            ChatMessage.RoleSystem);
+        var userMessage = new ChatMessage(
+            string.Join('\n', request.Messages.Where(m => m.Role == ChatMessage.RoleUser).Select(m => m.Content)),
+            ChatMessage.RoleUser);
         return new PromptRequestModel
         {
             Messages =
@@ -133,7 +133,7 @@ internal sealed class GigaChatAnswerAgent : IAnswerAgent, IDisposable
     }
 
     /// <inheritdoc />
-    public async Task<QuestionResponse> AskAsync(QuestionRequest request, CancellationToken cancellationToken = default)
+    public async Task<ChatResponse> AskAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
         var accessToken = await AuthorizeAsync(cancellationToken);
 
@@ -161,7 +161,7 @@ internal sealed class GigaChatAnswerAgent : IAnswerAgent, IDisposable
         }
         var message = promptResponse.Choices[0].Message.Content;
 
-        return new QuestionResponse(message);
+        return new ChatResponse(message);
     }
 
     private async Task<string> AuthorizeAsync(CancellationToken cancellationToken)

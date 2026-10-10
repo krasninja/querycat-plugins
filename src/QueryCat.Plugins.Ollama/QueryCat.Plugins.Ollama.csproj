@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OllamaSharp" Version="5.4.25" />
-    <PackageReference Include="QueryCat" Version="0.17.5" />
+    <PackageReference Include="OllamaSharp" Version="5.5.0" />
+    <PackageReference Include="QueryCat" Version="0.19.0" />
   </ItemGroup>
 
   <ItemGroup>
