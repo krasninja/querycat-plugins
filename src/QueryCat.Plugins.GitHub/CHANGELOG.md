@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.5.15]
 
+- Add `github_gists` function.
 - Fix `author_login` property mapping in `github_commits` (was incorrectly mapped to email).
 - Fix `body` property description in `github_pulls`.
 - Fix typo in `original_commit_id` description in `github_pull_comments`.

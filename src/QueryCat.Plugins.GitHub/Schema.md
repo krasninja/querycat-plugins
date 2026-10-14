@@ -3,6 +3,7 @@
 - [github_branches](#github_branches)
 - [github_commits](#github_commits)
 - [github_commits_ref](#github_commits_ref)
+- [github_gists](#github_gists)
 - [github_issue_comments](#github_issue_comments)
 - [github_issue_timeline](#github_issue_timeline)
 - [github_pull_comments](#github_pull_comments)
@@ -70,6 +71,32 @@ Return GitHub commit info of specific repository.
 | `message`| `String` |  |  | Commit message. |
 | `additions`| `Integer` |  |  | The number of additions in the commit. |
 | `deletions`| `Integer` |  |  | The number of deletions in the commit. |
+
+## **github_gists**
+
+```
+github_gists(): Object<IRowsInput>
+```
+
+Return GitHub gists.
+
+| Name | Type | Key | Required | Description |
+| --- | --- | --- | --- | --- |
+| `id`| `String` | yes |  | The unique id of the gist. |
+| `description`| `String` |  |  | The gist description. |
+| `public`| `Boolean` |  |  | If true, the gist is public, otherwise it is private. |
+| `html_url`| `String` |  |  | The HTML URL of the gist. |
+| `comments`| `Integer` |  |  | The number of comments for the gist. |
+| `created_at`| `Timestamp` |  |  | The timestamp when the gist was created. |
+| `git_pull_url`| `String` |  |  | The https url to pull or clone the gist. |
+| `git_push_url`| `String` |  |  | The https url to push the gist. |
+| `node_id`| `String` |  |  | The Node ID of the gist. |
+| `owner_id`| `Integer` |  |  | The user id (number) of the gist owner. |
+| `owner_login`| `String` |  |  | The user login name of the gist owner. |
+| `owner_type`| `String` |  |  | The type of the gist owner (User or Organization). |
+| `updated_at`| `Timestamp` |  |  | The timestamp when the gist was last updated. |
+| `files`| `Object` |  |  | Files in the gist. |
+| `user_login`| `String` | yes |  | The user login to list gists for. |
 
 ## **github_issue_comments**
 

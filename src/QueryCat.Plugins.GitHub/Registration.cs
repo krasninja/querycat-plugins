@@ -19,6 +19,7 @@ public static class Registration
         functionsManager.RegisterFunction(BranchesRowsInput.GitHubBranchesFunction);
         functionsManager.RegisterFunction(CommitsRefRowsInput.GitHubCommitsRefFunction);
         functionsManager.RegisterFunction(CommitsRowsInput.GitHubCommitsFunction);
+        functionsManager.RegisterFunction(GistsRowsInput.GitHubGistsFunction);
         functionsManager.RegisterFunction(IssueCommentsRowsInput.GitHubIssueCommentsFunction);
         functionsManager.RegisterFunction(IssueTimelineRowsInput.GitHubIssueTimelineFunction);
         functionsManager.RegisterFunction(PullRequestCommentsRowsInput.GitHubPullRequestCommentsFunction);

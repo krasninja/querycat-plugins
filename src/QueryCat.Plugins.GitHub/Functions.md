@@ -5,6 +5,7 @@
 | `github_branches(): Object<IRowsInput>`<br /><br /> Return GitHub branches of specific repository. |
 | `github_commits(): Object<IRowsInput>`<br /><br /> Return GitHub commits of specific repository. |
 | `github_commits_ref(): Object<IRowsInput>`<br /><br /> Return GitHub commit info of specific repository. |
+| `github_gists(): Object<IRowsInput>`<br /><br /> Return GitHub gists. |
 | `github_issue_comments(): Object<IRowsInput>`<br /><br /> Return GitHub comments for the specific issue. |
 | `github_issue_timeline(): Object<IRowsInput>`<br /><br /> Return GitHub timeline for the specific issue. |
 | `github_pull_comments(): Object<IRowsInput>`<br /><br /> Return GitHub comments for the specific pull request. |
