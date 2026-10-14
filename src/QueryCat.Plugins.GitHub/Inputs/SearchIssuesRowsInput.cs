@@ -79,11 +79,11 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     protected override IAsyncEnumerable<Issue> GetDataAsync(Fetcher<Issue> fetcher,
         CancellationToken cancellationToken = default)
     {
-        var request = !string.IsNullOrEmpty(_term) ? new SearchIssuesRequest(_term) : new SearchIssuesRequest(DefaultQuery);
-        if (this.TryGetKeyColumnValue(TermKey, VariantValue.Operation.Equals, out var term))
-        {
-            request = new SearchIssuesRequest(term);
-        }
+        var request = TryGetKeyColumnValue(TermKey, VariantValue.Operation.Equals, out var term)
+            ? new SearchIssuesRequest(term)
+            : !string.IsNullOrEmpty(_term)
+                ? new SearchIssuesRequest(_term)
+                : new SearchIssuesRequest(DefaultQuery);
         fetcher.PageStart = 1;
 
         DateRange? createdAtRange = null;
@@ -110,7 +110,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
                 request.PerPage = limit;
                 request.Created ??= createdAtRange;
                 request.Closed ??= closedAtRange;
-                _logger.LogDebug("Get for Term = '{Term}', Page = {Page}, PerPage = {PerPage}.",
+                _logger.LogDebug("Get for term = '{Term}', page = {Page}, per page = {PerPage}.",
                     request.Term, request.Page, request.PerPage);
                 var data = (await Client.Search.SearchIssues(request)).Items;
                 return data;

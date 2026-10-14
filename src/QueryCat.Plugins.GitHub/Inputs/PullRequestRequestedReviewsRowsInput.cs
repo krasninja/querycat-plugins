@@ -72,27 +72,26 @@ internal sealed class PullRequestRequestedReviewsRowsInput : BaseRowsInput<PullR
         var number = GetKeyColumnValue("pull_number").ToInt32();
         return fetcher.FetchAllAsync(async ct =>
         {
-            _logger.LogDebug("Get for Repository = {Repository}, PullNumber = {Number}.", repository, number);
+            _logger.LogDebug("Get for repository = {Repository}, pull number = {PullNumber}.", repository, number);
             var result = await Client.Repository.PullRequest.ReviewRequest.Get(owner, repository, number);
-            return Array.Empty<ReviewRequest>()
-                .Union(result.Teams.Select(t => new ReviewRequest
-                {
-                    Type = "team",
-                    Id = t.Id,
-                    Name = t.Name,
-                    LdapName = t.LdapDistinguishedName,
-                    UserLogin = string.Empty,
-                    HtmlUrl = t.HtmlUrl,
-                }))
-                .Union(result.Users.Select(u => new ReviewRequest
-                {
-                    Type = "user",
-                    Id = u.Id,
-                    Name = u.Name,
-                    LdapName = u.LdapDistinguishedName,
-                    UserLogin = u.Login,
-                    HtmlUrl = u.HtmlUrl,
-                }));
+            return result.Teams.Select(t => new ReviewRequest
+            {
+                Type = "team",
+                Id = t.Id,
+                Name = t.Name,
+                LdapName = t.LdapDistinguishedName ?? string.Empty,
+                UserLogin = string.Empty,
+                HtmlUrl = t.HtmlUrl,
+            })
+            .Concat(result.Users.Select(u => new ReviewRequest
+            {
+                Type = "user",
+                Id = u.Id,
+                Name = u.Name ?? u.Login,
+                LdapName = u.LdapDistinguishedName ?? string.Empty,
+                UserLogin = u.Login,
+                HtmlUrl = u.HtmlUrl,
+            }));
         }, cancellationToken);
     }
 }

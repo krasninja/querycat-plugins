@@ -63,7 +63,7 @@ internal sealed class PullRequestCommitsRowsInput : BaseRowsInput<PullRequestCom
         return fetcher.FetchAllAsync(
             async ct =>
             {
-                _logger.LogDebug("Get for Repository = {Repository}, PullNumber = {Number}.", repository, number);
+                _logger.LogDebug("Get for repository = {Repository}, pull number = {PullNumber}.", repository, number);
                 var result = await Client.PullRequest.Commits(owner, repository, number);
                 return result;
             }, cancellationToken);

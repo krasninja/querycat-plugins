@@ -44,7 +44,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             .AddProperty("author_name", p => p.User.Name, "The name of the user that submitted the PR.")
             .AddProperty("author_login", p => p.User.Login, "The login name of the user that submitted the PR.")
             .AddProperty("state", p => p.State.Value, "The state or the PR (open, closed).")
-            .AddProperty("body", p => p.Body, "Pull request title.")
+            .AddProperty("body", p => p.Body, "Pull request body.")
             .AddProperty("additions", p => p.Additions, "The number of additions in this PR.")
             .AddProperty("deletions", p => p.Deletions, "The number of deletions in this PR.")
             .AddProperty("changed_files", p => p.ChangedFiles, "The number of changed files.")
@@ -80,7 +80,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             return fetcher.FetchOneAsync(
                 async ct =>
                 {
-                    _logger.LogDebug("Get for Repository = {Repository}, PullNumber = {Number}.", repository, number);
+                    _logger.LogDebug("Get for repository = {Repository}, pull number = {PullNumber}.", repository, number);
                     return await Client.Repository.PullRequest.Get(owner, repository, number.ToInt32());
                 }, cancellationToken);
         }
@@ -98,7 +98,7 @@ internal sealed class PullRequestsRowsInput : BaseRowsInput<PullRequest>
             return fetcher.FetchAllAsync(
                 async ct =>
                 {
-                    _logger.LogDebug("Get for Repository = {Repository}", repository);
+                    _logger.LogDebug("Get for repository = {Repository}.", repository);
                     return await Client.PullRequest.GetAllForRepository(owner, repository, options);
                 }, cancellationToken);
         }

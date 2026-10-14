@@ -42,7 +42,7 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
             .AddProperty("url", p => p.HtmlUrl, "Comment URL.")
             .AddProperty("path", p => p.Path, "Relative path of the file the comment is about.")
             .AddProperty("commit_id", p => p.CommitId, "Commit id.")
-            .AddProperty("original_commit_id", p => p.OriginalCommitId, "Original commit it.")
+            .AddProperty("original_commit_id", p => p.OriginalCommitId, "Original commit id.")
             .AddProperty("diff_hunk", p => p.DiffHunk, "Diff hunk the comment is about.")
             .AddProperty("in_reply_to_id", p => p.InReplyToId, "Id of the comment this comment replies to.")
             .AddProperty("position", p => p.Position, "Comment position.")

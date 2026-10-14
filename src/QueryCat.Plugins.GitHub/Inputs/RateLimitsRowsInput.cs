@@ -8,6 +8,12 @@ using QueryCat.Backend.Core.Types;
 
 namespace QueryCat.Plugins.Github.Inputs;
 
+/// <summary>
+/// GitHub rate limits input.
+/// </summary>
+/// <remarks>
+/// https://docs.github.com/en/rest/rate-limit.
+/// </remarks>
 internal sealed class RateLimitsRowsInput : BaseRowsInput<MiscellaneousRateLimit>
 {
     [SafeFunction]
