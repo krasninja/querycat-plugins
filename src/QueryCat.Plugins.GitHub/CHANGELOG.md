@@ -2,6 +2,30 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0]
+
+- Add `github_team_members` function.
+- Add `github_team_repositories` function.
+- Add `github_tree` function.
+- Add `github_user` function.
+- Add `github_workflows` function.
+- Add `github_repository_collaborators` function.
+- Add `github_repository_contents` function.
+- Add `github_repository_deployments` function.
+- Add `github_repository_environments` function.
+- Add `github_tags` function.
+- Add `github_repositories` function.
+- Add `github_packages` function.
+- Add `github_package_versions` function.
+
+## [0.5.17]
+
+- Add `github_organization_members` function.
+
+## [0.5.16]
+
+- Add `github_organizations` function.
+
 ## [0.5.15]
 
 - Add `github_gists` function.
