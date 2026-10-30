@@ -16,5 +16,5 @@ delete from pg_table('Server=host;Database=db;Uid=postgres;Pwd=password;', 'tabl
 ### SQLite
 
 ```
-select * from sqlite_table('Data Source=/home/ivan/test.db');
+select * from sqlite_table('Data Source=/home/ivan/test.db', 'table');
 ```
