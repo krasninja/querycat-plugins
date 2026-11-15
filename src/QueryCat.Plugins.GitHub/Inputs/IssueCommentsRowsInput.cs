@@ -21,7 +21,7 @@ internal sealed class IssueCommentsRowsInput : BaseRowsInput<IssueComment>
     [FunctionSignature("github_issue_comments(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubIssueCommentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new IssueCommentsRowsInput(token));
     }
 

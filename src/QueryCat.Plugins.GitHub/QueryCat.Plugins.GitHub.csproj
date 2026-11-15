@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>QueryCat.Plugins.Github</RootNamespace>
-    <PackageVersion>0.6.0</PackageVersion>
+    <PackageVersion>0.6.1</PackageVersion>
     <Title>GitHub Plugin</Title>
     <Authors>Ivan Kozhin</Authors>
     <PackageTags>github querycat</PackageTags>
@@ -15,8 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="11.0.0" />
     <PackageReference Include="Octokit" Version="14.0.0" />
-    <PackageReference Include="QueryCat" Version="0.19.0" />
+    <PackageReference Include="QueryCat" Version="0.20.0-alpha.46" />
   </ItemGroup>
 
   <ItemGroup>

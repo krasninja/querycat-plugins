@@ -21,7 +21,7 @@ internal sealed class RepositoryContentsRowsInput : BaseRowsInput<RepositoryCont
     [FunctionSignature("github_repository_contents(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubRepositoryContentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new RepositoryContentsRowsInput(token));
     }
 

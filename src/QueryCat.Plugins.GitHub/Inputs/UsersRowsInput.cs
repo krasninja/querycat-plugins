@@ -21,7 +21,7 @@ internal sealed class UsersRowsInput : BaseRowsInput<User>
     [FunctionSignature("github_user(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubUserFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new UsersRowsInput(token));
     }
 

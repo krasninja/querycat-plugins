@@ -1,8 +1,10 @@
 using QueryCat.Backend.Core.Functions;
+using QueryCat.Backend.Core.Plugins.Auth;
+using QueryCat.Plugins.Github;
 using QueryCat.Plugins.Github.Functions;
 using QueryCat.Plugins.Github.Inputs;
 
-namespace QueryCat.Plugins.Github;
+namespace QueryCat.Plugins.GitHub;
 
 /// <summary>
 /// The special registration class that is called by plugin loader.
@@ -46,5 +48,24 @@ public static class Registration
         functionsManager.RegisterFunction(TreeRowsInput.GitHubTreeFunction);
         functionsManager.RegisterFunction(UsersRowsInput.GitHubUserFunction);
         functionsManager.RegisterFunction(WorkflowsRowsInput.GitHubWorkflowsFunction);
+    }
+
+    /// <summary>
+    /// Register authentication providers. QueryCat host performs login and token refresh.
+    /// </summary>
+    /// <param name="registry">Authentication providers registry.</param>
+    public static void RegisterAuthProviders(IAuthProvidersRegistry registry)
+    {
+        registry.Register(new AuthProviderInfo
+        {
+            Id = General.AuthProviderId,
+            DisplayName = "GitHub",
+            AuthorizationUrl = "https://github.com/login/oauth/authorize",
+            TokenUrl = "https://github.com/login/oauth/access_token",
+            DeviceAuthorizationUrl = "https://github.com/login/device/code",
+            Scopes = ["repo", "read:org", "read:packages"],
+            PreferDeviceFlow = true,
+            AllowApiKey = true,
+        });
     }
 }

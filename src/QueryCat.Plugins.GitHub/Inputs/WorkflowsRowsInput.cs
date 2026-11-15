@@ -21,7 +21,7 @@ internal sealed class WorkflowsRowsInput : BaseRowsInput<Workflow>
     [FunctionSignature("github_workflows(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubWorkflowsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new WorkflowsRowsInput(token));
     }
 

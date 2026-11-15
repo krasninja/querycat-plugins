@@ -21,7 +21,7 @@ internal sealed class IssueTimelineRowsInput : BaseRowsInput<TimelineEventInfo>
     [FunctionSignature("github_issue_timeline(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubIssueTimelineFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new IssueTimelineRowsInput(token));
     }
 

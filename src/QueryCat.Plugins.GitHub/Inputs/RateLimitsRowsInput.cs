@@ -21,7 +21,7 @@ internal sealed class RateLimitsRowsInput : BaseRowsInput<MiscellaneousRateLimit
     [FunctionSignature("github_rate_limits(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubRateLimitsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new RateLimitsRowsInput(token));
     }
 

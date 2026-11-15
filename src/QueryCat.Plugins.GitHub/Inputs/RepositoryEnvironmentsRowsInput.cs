@@ -22,7 +22,7 @@ internal sealed class RepositoryEnvironmentsRowsInput : BaseRowsInput<Deployment
     [FunctionSignature("github_repository_environments(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubRepositoryEnvironmentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new RepositoryEnvironmentsRowsInput(token));
     }
 

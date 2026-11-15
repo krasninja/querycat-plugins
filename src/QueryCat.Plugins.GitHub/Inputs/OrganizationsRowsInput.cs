@@ -24,7 +24,7 @@ internal sealed class OrganizationsRowsInput : BaseRowsInput<Organization>
     [FunctionSignature("github_organizations(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubOrganizationsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new OrganizationsRowsInput(token));
     }
 

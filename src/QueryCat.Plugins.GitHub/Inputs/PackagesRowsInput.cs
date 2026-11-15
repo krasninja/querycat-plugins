@@ -24,7 +24,7 @@ internal sealed class PackagesRowsInput : BaseRowsInput<Package>
     [FunctionSignature("github_packages(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubPackagesFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new PackagesRowsInput(token));
     }
 

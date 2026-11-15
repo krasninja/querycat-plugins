@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using Octokit;
-using QueryCat.Backend.Core.Data;
 using QueryCat.Backend.Core.Execution;
 using QueryCat.Backend.Core.Fetch;
 using QueryCat.Backend.Core.Functions;
@@ -28,7 +27,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
     [FunctionSignature("github_search_issues(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubSearchIssuesFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new SearchIssuesRowsInput(token, string.Empty));
     }
 
@@ -67,7 +66,7 @@ internal sealed class SearchIssuesRowsInput : BaseRowsInput<Issue>
             .AddProperty("merged_at", p => p.PullRequest.MergedAt, "The date when pull request was merged.")
             .AddProperty("repository_full_name", p => Utils.ExtractRepositoryFullNameFromUrl(p.Url))
             .AddProperty("created_at", p => p.CreatedAt, "Issue creation date.")
-            .AddProperty(TermKey, DataType.String, _ => GetKeyColumnValue("term"))
+            .AddProperty(TermKey, DataType.String, _ => GetKeyColumnValue(TermKey))
             .AddKeyColumn("created_at", VariantValue.Operation.GreaterOrEquals)
             .AddKeyColumn("created_at", VariantValue.Operation.LessOrEquals)
             .AddKeyColumn("closed_at", VariantValue.Operation.GreaterOrEquals)

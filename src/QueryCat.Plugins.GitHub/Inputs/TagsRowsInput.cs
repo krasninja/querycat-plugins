@@ -21,7 +21,7 @@ internal sealed class TagsRowsInput : BaseRowsInput<RepositoryTag>
     [FunctionSignature("github_tags(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubTagsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new TagsRowsInput(token));
     }
 

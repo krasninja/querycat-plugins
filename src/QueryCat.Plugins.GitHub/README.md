@@ -4,10 +4,23 @@
 - [Schema](Schema.md)
 - [Changelog](CHANGELOG.md)
 
-GitHub API plugin. To begin using it:
+GitHub API plugin.
 
-1. generate GitHub token: https://github.com/settings/tokens;
-2. call `github_set_token` function before using plugin functions: `github_set_token('XXX')`;
+## Authentication
+
+To use OAuth2, create a [GitHub OAuth app](https://github.com/settings/developers), enable **Device Flow**, and log in with its client ID:
+
+```shell
+qcat plugin auth login github --client-id <client-id>
+```
+
+The host requests the `repo`, `read:org`, and `read:packages` scopes and manages the access token. To use a personal access token instead, run:
+
+```shell
+qcat plugin auth login github --api-key
+```
+
+The legacy `github_set_token('XXX')` function remains available as a fallback.
 
 ## Example Queries
 

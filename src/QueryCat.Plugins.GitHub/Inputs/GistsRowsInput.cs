@@ -24,7 +24,7 @@ internal sealed class GistsRowsInput : BaseRowsInput<Gist>
     [FunctionSignature("github_gists(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubGistsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new GistsRowsInput(token));
     }
 

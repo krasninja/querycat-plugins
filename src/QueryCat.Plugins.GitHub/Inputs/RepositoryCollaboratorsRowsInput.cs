@@ -21,7 +21,7 @@ internal sealed class RepositoryCollaboratorsRowsInput : BaseRowsInput<User>
     [FunctionSignature("github_repository_collaborators(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubRepositoryCollaboratorsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new RepositoryCollaboratorsRowsInput(token));
     }
 

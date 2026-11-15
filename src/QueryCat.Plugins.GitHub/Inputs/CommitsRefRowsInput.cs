@@ -22,7 +22,7 @@ internal sealed class CommitsRefRowsInput : CommitsRowsInput
     [FunctionSignature("github_commits_ref(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubCommitsRefFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new CommitsRefRowsInput(token));
     }
 

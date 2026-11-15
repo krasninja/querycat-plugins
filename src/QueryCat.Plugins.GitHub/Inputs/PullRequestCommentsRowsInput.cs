@@ -21,7 +21,7 @@ internal sealed class PullRequestCommentsRowsInput : BaseRowsInput<PullRequestRe
     [FunctionSignature("github_pull_comments(): object<IRowsInput>")]
     public static async ValueTask<VariantValue> GitHubPullRequestCommentsFunction(IExecutionThread thread, CancellationToken cancellationToken)
     {
-        var token = await thread.ConfigStorage.GetOrDefaultAsync(General.GitHubToken, cancellationToken: cancellationToken);
+        var token = await General.GetTokenAsync(thread, cancellationToken);
         return VariantValue.CreateFromObject(new PullRequestCommentsRowsInput(token));
     }
 
