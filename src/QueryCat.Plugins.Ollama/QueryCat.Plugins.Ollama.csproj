@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <PackageVersion>0.1.2</PackageVersion>
+    <PackageVersion>0.1.3</PackageVersion>
     <Title>Ollama</Title>
     <Authors>Ivan Kozhin</Authors>
+    <Description>Provides an Ollama answer agent for QueryCat.</Description>
     <PackageTags>querycat ollama</PackageTags>
     <AssemblyName Condition=" '$(UseAssemblyName)' == 'true' ">qcat-plugins-ollama-$(PackageVersion)-$(Runtime)</AssemblyName>
     <StripSymbols>True</StripSymbols>
@@ -12,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OllamaSharp" Version="5.5.0" />
-    <PackageReference Include="QueryCat" Version="0.19.0" />
+    <PackageReference Include="OllamaSharp" Version="5.5.2" />
+    <PackageReference Include="QueryCat" Version="0.20.0-alpha.57" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,12 +28,32 @@
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Extensions.AI.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Extensions.Caching.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Extensions.DependencyInjection.Abstractions.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
     </Content>
     <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Extensions.Logging.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/Microsoft.Extensions.Primitives.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+    </Content>
+    <Content Include="bin/$(Configuration)/$(TargetFramework)/System.Numerics.Tensors.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath>lib/$(TargetFramework)</PackagePath>

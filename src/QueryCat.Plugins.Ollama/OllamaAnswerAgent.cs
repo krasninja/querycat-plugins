@@ -1,6 +1,7 @@
 using System.Text;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
+using QueryCat.Backend.Core;
 using QChatMessage = QueryCat.Backend.Core.Execution.ChatMessage;
 using QChatRequest = QueryCat.Backend.Core.Execution.ChatRequest;
 using QChatResponse = QueryCat.Backend.Core.Execution.ChatResponse;
@@ -14,10 +15,24 @@ internal sealed class OllamaAnswerAgent : QueryCat.Backend.Core.Execution.IAnswe
 
     public OllamaAnswerAgent(string model, string uri)
     {
+        if (string.IsNullOrWhiteSpace(model))
+        {
+            throw new QueryCatException("Ollama model name cannot be empty.");
+        }
+        if (!Uri.TryCreate(uri, UriKind.Absolute, out var baseUri) ||
+            (baseUri.Scheme != Uri.UriSchemeHttp && baseUri.Scheme != Uri.UriSchemeHttps))
+        {
+            throw new QueryCatException($"Invalid Ollama URL: '{uri}'.");
+        }
+        // OllamaSharp uses relative URIs, so the base address must end with a slash
+        // to preserve sub-paths when the server is behind a reverse proxy.
+        if (!baseUri.AbsolutePath.EndsWith('/'))
+        {
+            baseUri = new Uri(baseUri, baseUri.AbsolutePath + "/");
+        }
         _httpClient.Timeout = TimeSpan.FromHours(1);
-        _httpClient.BaseAddress = new Uri(uri);
-        _client = new OllamaApiClient(_httpClient);
-        _client.SelectedModel = model;
+        _httpClient.BaseAddress = baseUri;
+        _client = new OllamaApiClient(_httpClient, model);
     }
 
     /// <inheritdoc />
@@ -32,13 +47,19 @@ internal sealed class OllamaAnswerAgent : QueryCat.Backend.Core.Execution.IAnswe
         };
 
         var sb = new StringBuilder();
-        await foreach (var chat in _client.ChatAsync(chatRequest, cancellationToken))
+        try
         {
-            if (chat == null || string.IsNullOrEmpty(chat.Message.Content))
+            await foreach (var chat in _client.ChatAsync(chatRequest, cancellationToken))
             {
-                continue;
+                if (chat?.Message?.Content is { Length: > 0 } content)
+                {
+                    sb.Append(content);
+                }
             }
-            sb.Append(chat.Message.Content);
+        }
+        catch (HttpRequestException e)
+        {
+            throw new QueryCatException($"Cannot access Ollama server at '{_httpClient.BaseAddress}': {e.Message}", e);
         }
 
         return new QChatResponse(sb.ToString());
@@ -55,6 +76,7 @@ internal sealed class OllamaAnswerAgent : QueryCat.Backend.Core.Execution.IAnswe
         };
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _client.Dispose();
