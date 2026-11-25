@@ -27,12 +27,12 @@ internal static class General
     /// <summary>
     /// Plugin configuration option: Jira instance URL.
     /// </summary>
-    public const string UrlOption = "url";
+    public const string UrlOption = "jira:url";
 
     /// <summary>
     /// Plugin configuration option: username (email) for Jira Cloud API token.
     /// </summary>
-    public const string UsernameOption = "username";
+    public const string UsernameOption = "jira:username";
 
     /// <summary>
     /// Create plugin configuration options.
