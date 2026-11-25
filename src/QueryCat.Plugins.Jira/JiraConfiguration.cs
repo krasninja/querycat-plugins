@@ -11,9 +11,11 @@ public sealed class JiraConfiguration : IDisposable
 
     public string Username { get; set; } = string.Empty;
 
-    public string Password { get; set; } = string.Empty;
-
     public string AccessToken { get; set; } = string.Empty;
+
+    public string OAuthAccessToken { get; set; } = string.Empty;
+
+    public string CloudId { get; set; } = string.Empty;
 
     public RestClient Client
     {
@@ -21,15 +23,22 @@ public sealed class JiraConfiguration : IDisposable
         {
             if (_client == null)
             {
-                _client = new RestClient($"{BasePath}/rest/api/3/", options =>
+                var baseUrl = !string.IsNullOrEmpty(OAuthAccessToken)
+                    ? $"https://api.atlassian.com/ex/jira/{CloudId}/rest/api/3/"
+                    : $"{BasePath.TrimEnd('/')}/rest/api/3/";
+                _client = new RestClient(baseUrl, options =>
                 {
-                    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+                    if (!string.IsNullOrEmpty(OAuthAccessToken))
                     {
-                        options.Authenticator = new HttpBasicAuthenticator(Username, Password);
+                        options.Authenticator = new JwtAuthenticator(OAuthAccessToken);
                     }
-                    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(AccessToken))
+                    else if (!string.IsNullOrEmpty(AccessToken))
                     {
-                        options.Authenticator = new HttpBasicAuthenticator(Username, AccessToken);
+                        // With username it is a Jira Cloud API token (basic authentication),
+                        // without username it is a personal access token (bearer authentication).
+                        options.Authenticator = string.IsNullOrEmpty(Username)
+                            ? new JwtAuthenticator(AccessToken)
+                            : new HttpBasicAuthenticator(Username, AccessToken);
                     }
                 });
             }

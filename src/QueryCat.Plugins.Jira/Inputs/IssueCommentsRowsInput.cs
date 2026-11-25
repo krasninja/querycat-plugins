@@ -18,12 +18,19 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 internal sealed class IssueCommentsRowsInput : AsyncEnumerableRowsInput<JsonNode>
 {
+    private readonly IExecutionThread _thread;
+
+    private IssueCommentsRowsInput(IExecutionThread thread)
+    {
+        _thread = thread;
+    }
+
     [SafeFunction]
     [Description("Get issue comments.")]
     [FunctionSignature("jira_issue_comments(): object<IRowsInput>")]
     public static VariantValue JiraIssueCommentsFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new IssueCommentsRowsInput());
+        return VariantValue.CreateFromObject(new IssueCommentsRowsInput(thread));
     }
 
     /// <inheritdoc />
@@ -49,7 +56,7 @@ internal sealed class IssueCommentsRowsInput : AsyncEnumerableRowsInput<JsonNode
     protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = await General.GetConfigurationAsync(QueryContext.ConfigStorage, cancellationToken);
+        using var config = await General.GetConfigurationAsync(_thread, cancellationToken);
         fetcher.Limit = 100;
         var list = fetcher.FetchLimitOffsetAsync(async (limit, offset, ct) =>
         {

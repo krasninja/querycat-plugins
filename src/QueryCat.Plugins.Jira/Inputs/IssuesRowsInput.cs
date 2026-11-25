@@ -19,12 +19,19 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 internal sealed class IssuesRowsInput : AsyncEnumerableRowsInput<JsonNode>
 {
+    private readonly IExecutionThread _thread;
+
+    private IssuesRowsInput(IExecutionThread thread)
+    {
+        _thread = thread;
+    }
+
     [SafeFunction]
     [Description("Issues are the building blocks of any Jira project.")]
     [FunctionSignature("jira_issue(): object<IRowsInput>")]
     public static VariantValue JiraIssueFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new IssuesRowsInput());
+        return VariantValue.CreateFromObject(new IssuesRowsInput(thread));
     }
 
     public static void InitializeBasicFields(ClassRowsFrameBuilder<JsonNode> builder)
@@ -60,7 +67,7 @@ internal sealed class IssuesRowsInput : AsyncEnumerableRowsInput<JsonNode>
     protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = await General.GetConfigurationAsync(QueryContext.ConfigStorage, cancellationToken);
+        using var config = await General.GetConfigurationAsync(_thread, cancellationToken);
         var request = new RestRequest("issue/{key}")
             .AddUrlSegment("key", GetKeyColumnValue("key").AsString)
             .AddQueryParameter("expand", "renderedFields");

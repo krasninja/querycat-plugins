@@ -18,12 +18,19 @@ namespace QueryCat.Plugins.Jira.Inputs;
 /// </remarks>
 internal sealed class IssuesSearchRowsInput : AsyncEnumerableRowsInput<JsonNode>
 {
+    private readonly IExecutionThread _thread;
+
+    private IssuesSearchRowsInput(IExecutionThread thread)
+    {
+        _thread = thread;
+    }
+
     [SafeFunction]
     [Description("Search issues using JQL.")]
     [FunctionSignature("jira_issue_search(): object<IRowsInput>")]
     public static VariantValue JiraIssueSearchFunction(IExecutionThread thread)
     {
-        return VariantValue.CreateFromObject(new IssuesSearchRowsInput());
+        return VariantValue.CreateFromObject(new IssuesSearchRowsInput(thread));
     }
 
     /// <inheritdoc />
@@ -39,7 +46,7 @@ internal sealed class IssuesSearchRowsInput : AsyncEnumerableRowsInput<JsonNode>
     protected override async IAsyncEnumerable<JsonNode> GetDataAsync(Fetcher<JsonNode> fetcher,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var config = await General.GetConfigurationAsync(QueryContext.ConfigStorage, cancellationToken);
+        using var config = await General.GetConfigurationAsync(_thread, cancellationToken);
         var nextPageToken = string.Empty;
         var list = fetcher.FetchUntilHasMoreAsync(async (ct) =>
         {
