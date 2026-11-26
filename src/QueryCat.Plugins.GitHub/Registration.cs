@@ -59,9 +59,10 @@ public static class Registration
         registry.Register(new AuthProviderInfo
         {
             Id = General.AuthProviderId,
+            ClientId = "Ov23lifPhvb98T5wE5K1",
             DisplayName = "GitHub",
             AuthorizationUrl = "https://github.com/login/oauth/authorize",
-            TokenUrl = "https://github.com/login/oauth/access_token",
+            TokenUrl = "https://querycat-auth-broker.anti-soft.ru/oauth/github/token",
             DeviceAuthorizationUrl = "https://github.com/login/device/code",
             Scopes = ["repo", "read:org", "read:packages"],
             PreferDeviceFlow = true,
