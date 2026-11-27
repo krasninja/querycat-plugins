@@ -1,0 +1,87 @@
+<Solution>
+  <Folder Name="/Aws/">
+    <Project Path="src/QueryCat.Plugins.Aws/QueryCat.Plugins.Aws.csproj" />
+  </Folder>
+  <Folder Name="/Clipboard/">
+    <Project Path="src/QueryCat.Plugins.Clipboard/QueryCat.Plugins.Clipboard.csproj" />
+  </Folder>
+  <Folder Name="/Database/">
+    <Project Path="src/QueryCat.Plugins.Database/QueryCat.Plugins.Database.csproj" />
+  </Folder>
+  <Folder Name="/DeepSeek/">
+    <Project Path="src/QueryCat.Plugins.DeepSeek/QueryCat.Plugins.DeepSeek.csproj" />
+  </Folder>
+  <Folder Name="/FileSystem/">
+    <Project Path="src/QueryCat.Plugins.FileSystem/QueryCat.Plugins.FileSystem.csproj" />
+  </Folder>
+  <Folder Name="/FluidTemplates/">
+    <Project Path="src/QueryCat.Plugins.FluidTemplates/QueryCat.Plugins.FluidTemplates.csproj" />
+  </Folder>
+  <Folder Name="/GigaChat/">
+    <Project Path="src/QueryCat.Plugins.GigaChat/QueryCat.Plugins.GigaChat.csproj" />
+  </Folder>
+  <Folder Name="/Git/">
+    <Project Path="src/QueryCat.Plugins.Git/QueryCat.Plugins.Git.csproj" />
+  </Folder>
+  <Folder Name="/GitHub/">
+    <Project Path="src/QueryCat.Plugins.GitHub/QueryCat.Plugins.GitHub.csproj" />
+  </Folder>
+  <Folder Name="/IMDbAPI/">
+    <Project Path="src/QueryCat.Plugins.ImdbApi/QueryCat.Plugins.ImdbApi.csproj" />
+  </Folder>
+  <Folder Name="/JIRA/">
+    <Project Path="src/QueryCat.Plugins.Jira/QueryCat.Plugins.Jira.csproj" />
+  </Folder>
+  <Folder Name="/Moex/">
+    <Project Path="src/QueryCat.Plugins.Moex/QueryCat.Plugins.Moex.csproj" />
+  </Folder>
+  <Folder Name="/Network/">
+    <Project Path="src/QueryCat.Plugins.Network/QueryCat.Plugins.Network.csproj" />
+  </Folder>
+  <Folder Name="/Numerology/">
+    <Project Path="src/QueryCat.Plugins.Numerology/QueryCat.Plugins.Numerology.csproj" />
+  </Folder>
+  <Folder Name="/Ollama/">
+    <Project Path="src/QueryCat.Plugins.Ollama/QueryCat.Plugins.Ollama.csproj" />
+  </Folder>
+  <Folder Name="/OpenAI/">
+    <Project Path="src/QueryCat.Plugins.OpenAI/QueryCat.Plugins.OpenAI.csproj" />
+  </Folder>
+  <Folder Name="/PostgresSniffer/">
+    <Project Path="src/QueryCat.Plugins.PostgresSniffer/QueryCat.Plugins.PostgresSniffer.csproj" />
+  </Folder>
+  <Folder Name="/Roslyn/">
+    <Project Path="src/QueryCat.Plugins.Roslyn/QueryCat.Plugins.Roslyn.csproj" />
+  </Folder>
+  <Folder Name="/Subtitles/">
+    <Project Path="src/QueryCat.Plugins.Subtitles/QueryCat.Plugins.Subtitles.csproj" />
+  </Folder>
+  <Folder Name="/System/">
+    <Project Path="src/QueryCat.Plugins.System/QueryCat.Plugins.System.csproj" />
+  </Folder>
+  <Folder Name="/VisualParadigm/">
+    <Project Path="src/QueryCat.Plugins.VisualParadigm/QueryCat.Plugins.VisualParadigm.csproj" />
+  </Folder>
+  <Folder Name="/VStarCam/">
+    <Project Path="src/QueryCat.Plugins.VStarCam/QueryCat.Plugins.VStarCam.csproj" />
+  </Folder>
+  <Folder Name="/WindowsEventLog/">
+    <Project Path="src/QueryCat.Plugins.WindowsEventLog/QueryCat.Plugins.WindowsEventLog.csproj" />
+  </Folder>
+  <Folder Name="/_Build/">
+    <Project Path="backend/sdk/dotnet-client/QueryCat.Plugins.Client.csproj" />
+    <Project Path="backend/sdk/dotnet-sdk/QueryCat.Plugins.Sdk.csproj" />
+    <Project Path="backend/src/QueryCat.Backend.Addons/QueryCat.Backend.Addons.csproj" />
+    <Project Path="backend/src/QueryCat.Backend.AssemblyPlugins/QueryCat.Backend.AssemblyPlugins.csproj" />
+    <Project Path="backend/src/QueryCat.Backend.Core/QueryCat.Backend.Core.csproj" />
+    <Project Path="backend/src/QueryCat.Backend.ThriftPlugins/QueryCat.Backend.ThriftPlugins.csproj" />
+    <Project Path="backend/src/QueryCat.Backend/QueryCat.Backend.csproj" />
+    <Project Path="backend/src/QueryCat.Build/QueryCat.Build.csproj" />
+    <Project Path="backend/src/QueryCat.Cli/QueryCat.Cli.csproj" />
+    <Project Path="backend/src/QueryCat.Mcp/QueryCat.Mcp.csproj" />
+    <Project Path="backend/src/QueryCat.OAuth/QueryCat.OAuth.csproj" />
+    <Project Path="backend/src/QueryCat.WebServer/QueryCat.WebServer.csproj" />
+    <Project Path="src/QueryCat.Plugins.Build/QueryCat.Plugins.Build.csproj" />
+  </Folder>
+  <Project Path="backend/src/QueryCat.Tester/QueryCat.Tester.csproj" />
+</Solution>
